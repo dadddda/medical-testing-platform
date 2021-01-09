@@ -1,1 +1,3 @@
-# medical-testing-platform
+# Medical Testing Platform
+
+Firebase based web project
