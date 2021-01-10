@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Register</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../css/authentication.css'>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-auth.js"></script>
+</head>
+<body>
+    <div class="mainContent">
+        <div class="titleWindow">
+            <text class="titleText">Medical Testing Platform</text>
+            <text class="infoText">
+                Register for medical testing in a nearest clinic in just a seconds!
+            </text>
+        </div>
+
+        <div class="formWindow">
+            <div class="formHeader">
+                <text class="headerText">Register</text>
+            </div>
+    
+            <div class="formContent">
+                <form class="form" id="registerForm">
+                    <div class="inputLabel">
+                        <label id="emailLabel" for="email">Enter email:</label>
+                    </div>
+                    <input class="inputField" id="email" type="email">
+                    <div class="inputLabel">
+                        <label id="passwordLabel" for="password">Enter password:</label>
+                    </div>
+                    <input class="inputField" id="password" type="password">
+                    <div class="checkboxField">
+                        <input id="agreement" type="checkbox">
+                        <label class="checkboxLabel" id="agreementLabel" for="agreement">
+                            I agree to user licence and terms
+                        </label>
+                    </div>
+                    <button class="inputBtn" type="submit">Register</button>
+                </form>
+            </div>
+    
+            <div class="formFooter">
+                <button class="redirectBtn" id="loginBtn">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script src='../javascript/firebase.js'></script>
+    <script src='../javascript/authentication.js'></script>
+    <script src='../javascript/register.js'></script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+}
+
+html, body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-image: url(../images/background.png);
+    background-size: cover;
+    background-color: rgb(255, 250, 250);
+}
+
+.mainContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 900px;
+    height: 500px;
+}
+
+.titleWindow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 400px;
+    height: 500px;
+}
+
+.titleText {
+    font-size: 48px;
+}
+
+.infoText {
+    margin-top: 20px;
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.formWindow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 400px;
+    height: 500px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(0, 0, 0, 0.14);
+    background-color: rgb(255, 200, 200);
+}
+
+.formHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 20%;
+}
+
+.headerText {
+    font-size: 36px;
+}
+
+.formContent {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    height: 60%;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.inputLabel {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 300px;
+    height: 30px;
+}
+
+.inputField {
+    width: 300px;
+    height: 30px;
+    outline: none;
+}
+
+.checkboxField {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 300px;
+    height: 30px;
+}
+
+.checkboxLabel {
+    margin-left: 10px;
+}
+
+.inputBtn {
+    width: 300px;
+    height: 30px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: all .2s ease-in-out;
+}
+
+.inputBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: all .2s ease-in-out;
+}
+
+.inputBtn:focus {
+    background-color: rgb(255, 219, 219);
+    transition: all .2s ease-in-out;
+}
+
+.formFooter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 20%;
+}
+
+.redirectBtn {
+    width: 300px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: all .2s ease-in-out;
+}
+
+.redirectBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: all .2s ease-in-out;
+}
+
+.redirectBtn:focus {
+    background-color: rgb(255, 219, 219);
+    transition: all .2s ease-in-out;
+}
