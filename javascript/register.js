@@ -17,15 +17,15 @@ document.getElementById("loginBtn").addEventListener("click", function() {
 function registerUser(event) {
     event.preventDefault();
 
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-    var checkbox = document.getElementById("agreement").checked;
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    let checkbox = document.getElementById("agreement").checked;
 
     // validate...
     answer = true;
     answer = validateInput(email, password);
 
-    var agreementLabelClasses = document.getElementById("agreementLabel").classList;
+    let agreementLabelClasses = document.getElementById("agreementLabel").classList;
 
     if (agreementLabelClasses.contains("error")) {
         assignNormal(agreementLabelClasses, "agreementLabel", "I agree to user licence and terms");
@@ -42,8 +42,11 @@ function registerUser(event) {
         window.location.assign("index.html");
     })
     .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
+        let errorCode = error.code;
+        let errorMessage = error.message;
+
+        console.log(errorCode);
+        console.log(errorMessage);
 
         document.getElementById("errorText").style.visibility = "visible";
     });

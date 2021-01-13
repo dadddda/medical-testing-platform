@@ -4,8 +4,8 @@
  * @param {string} password 
  */
 function validateInput(email, password) {
-    var emailLabelClasses = document.getElementById("emailLabel").classList;
-    var passwordLabelClasses = document.getElementById("passwordLabel").classList;
+    let emailLabelClasses = document.getElementById("emailLabel").classList;
+    let passwordLabelClasses = document.getElementById("passwordLabel").classList;
 
     if (emailLabelClasses.contains("error")) {
         assignNormal(emailLabelClasses, "emailLabel", "Enter email:");
