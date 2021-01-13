@@ -20,9 +20,6 @@ function loginUser(event) {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
 
-    // validate...
-    if (!validateInput(email, password)) return;
-
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then((user) => {
         window.location.assign("index.html");
@@ -31,7 +28,6 @@ function loginUser(event) {
         var errorCode = error.code;
         var errorMessage = error.message;
         
-        console.log(errorCode);
-        console.log(errorMessage);
+        document.getElementById("errorText").style.visibility = "visible";
     });
 }

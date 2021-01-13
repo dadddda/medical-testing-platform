@@ -22,13 +22,20 @@ function registerUser(event) {
     var checkbox = document.getElementById("agreement").checked;
 
     // validate...
-    validateInput(email, password);
+    answer = true;
+    answer = validateInput(email, password);
+
+    var agreementLabelClasses = document.getElementById("agreementLabel").classList;
+
+    if (agreementLabelClasses.contains("error")) {
+        assignNormal(agreementLabelClasses, "agreementLabel", "I agree to user licence and terms");
+    }
 
     if (checkbox === false) {
-        document.getElementById("agreementLabel").innerText = "Check this to register!";
-        document.getElementById("agreementLabel").style.color = "red";
-        return;
+        assignError(agreementLabelClasses, "agreementLabel", "Check this to register!");
+        answer = false;
     }
+    if (!answer) return;
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((user) => {
@@ -37,8 +44,7 @@ function registerUser(event) {
     .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
-        
-        console.log(errorCode);
-        console.log(errorMessage);
+
+        document.getElementById("errorText").style.visibility = "visible";
     });
 }

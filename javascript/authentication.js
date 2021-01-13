@@ -4,17 +4,25 @@
  * @param {string} password 
  */
 function validateInput(email, password) {
-    answer = true;
+    var emailLabelClasses = document.getElementById("emailLabel").classList;
+    var passwordLabelClasses = document.getElementById("passwordLabel").classList;
 
+    if (emailLabelClasses.contains("error")) {
+        assignNormal(emailLabelClasses, "emailLabel", "Enter email:");
+    }
+
+    if (passwordLabelClasses.contains("error")) {
+        assignNormal(passwordLabelClasses, "passwordLabel", "Enter password:");
+    }
+    
+    answer = true;
     if (!validateEmail(email)) {
-        document.getElementById("emailLabel").innerText = "Email invalid!";
-        document.getElementById("emailLabel").style.color = "red";
+        assignError(emailLabelClasses, "emailLabel", "Email invalid!");
         answer = false;
     }
 
     if (!validatePassword(password)) {
-        document.getElementById("passwordLabel").innerText = "Password invalid!";
-        document.getElementById("passwordLabel").style.color = "red";
+        assignError(passwordLabelClasses, "passwordLabel", "Use A-Z, a-z and 0-9!");
         answer = false;
     }
 
@@ -39,4 +47,30 @@ function validatePassword(password) {
            /[a-z]/       .test(password) &&
            /[0-9]/       .test(password) &&
            password.length >= 8;
+}
+
+/**
+ * Assigns 'error' class from "authentication.css" CSS to given object
+ * and replaces it's inner text with given text using object's ID.
+ * @param classes 
+ * @param {string} id
+ * @param {string} text 
+ */
+function assignNormal(classes, id, text) {
+    classes.remove("error");
+    classes.add("normal");
+    document.getElementById(id).innerText = text;
+}
+
+/**
+ * Assigns 'normal' class from "authentication.css" CSS to given object
+ * and replaces it's inner text with given text using object's ID.
+ * @param classes 
+ * @param {string} id
+ * @param {string} text 
+ */
+function assignError(classes, id, text) {
+    classes.remove("normal");
+    classes.add("error");
+    document.getElementById(id).innerText = text;
 }
