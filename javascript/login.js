@@ -17,16 +17,19 @@ document.getElementById("registerBtn").addEventListener("click", function() {
 function loginUser(event) {
     event.preventDefault();
 
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
 
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then((user) => {
         window.location.assign("index.html");
     })
     .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
+        let errorCode = error.code;
+        let errorMessage = error.message;
+
+        console.log(errorCode);
+        console.log(errorMessage);
         
         document.getElementById("errorText").style.visibility = "visible";
     });

@@ -1,3 +1,9 @@
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -147,11 +153,17 @@ div.rightPanel {
     height: 100%;
 }
 
+div.rightPanel.hidden {
+    opacity: 0;
+    transition: all .2s ease-in-out;
+}
+
 div.rightPanel.welcomeScreen {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    animation: fade 1s ease-in-out;
 }
 
 div.rightPanelTextBox {

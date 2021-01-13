@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Medical Testing</title>
+    <title>News Feed</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../css/index.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='../css/news-feed.css'>
@@ -14,7 +14,7 @@
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-firestore.js"></script>
 </head>
 <body>
     <div class="header">
@@ -41,22 +41,7 @@
             <button class="leftPanelBtn">About Us</button>
         </div>
 
-        <div class="rightPanel newsFeed" id="rightPanel">
-            <!-- <div class="news">
-                <div class="newsHeader">
-                    <div class="newsTitle">
-                        Title
-                    </div>
-                    <div class="newsDate">
-                        00:00 - 00.00.0000
-                    </div>
-                </div>
-
-                <div class="newsContent">
-                    Content
-                </div>
-            </div> -->
-        </div>
+        <div class="rightPanel newsFeed" id="rightPanel"></div>
     </div>
 
     <div class="footer">
@@ -68,6 +53,5 @@
     <script src='../javascript/firebase.js'></script>
     <script src='../javascript/index.js'></script>
     <script src='../javascript/news-feed.js'></script>
-
 </body>
 </html>
