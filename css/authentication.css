@@ -1,4 +1,5 @@
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: 'Quicksand', sans-serif;
@@ -6,16 +7,24 @@
 
 html, body {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(250, 250, 250);
+}
+
+div.mainContent {
+    display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
-    background-image: url(../images/background.png);
-    background-size: cover;
-    background-color: rgb(255, 250, 250);
+    min-height: 716px;
 }
 
-.mainContent {
+div.contentWindow {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -23,7 +32,7 @@ html, body {
     height: 500px;
 }
 
-.titleWindow {
+div.titleWindow {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -32,28 +41,31 @@ html, body {
     height: 500px;
 }
 
-.titleText {
-    font-size: 48px;
+text.titleText {
+    font-size: 3rem;
+    color: rgb(10, 10, 10);
 }
 
-.infoText {
+text.infoText {
     margin-top: 20px;
-    font-size: 24px;
-    color: rgba(0, 0, 0, 0.6);
+    font-size: 1.5rem;
+    color: rgb(120, 120, 120);
 }
 
-.formWindow {
+div.formWindow {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
     width: 400px;
     height: 500px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(0, 0, 0, 0.14);
-    background-color: rgb(255, 200, 200);
+    border-radius: 2.5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    background: rgb(175, 0, 0);
+    background: linear-gradient(135deg, rgb(175, 0, 0) 0%, rgb(245, 35, 35) 100%);
 }
 
-.formHeader {
+div.formHeader {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -61,26 +73,27 @@ html, body {
     height: 20%;
 }
 
-.headerText {
-    font-size: 36px;
+text.headerText {
+    font-size: 2.5rem;
+    color: rgb(235, 235, 235);
 }
 
-.formContent {
+div.formContent {
     display: flex;
     align-items: flex-start;
     justify-content: center;
     width: 100%;
-    height: 60%;
+    height: 70%;
 }
 
-.form {
+form.form {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
 }
 
-.inputLabel {
+label.inputLabel {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -88,71 +101,85 @@ html, body {
     height: 30px;
 }
 
-.inputField {
+input.inputField {
     width: 300px;
-    height: 30px;
+    height: 35px;
+    padding: 0 5px 0 5px;
     outline: none;
+    border: none;
+    border-radius: 2.5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: all .2s ease-in-out;
 }
 
-.checkboxField {
+div.checkboxField {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     width: 300px;
     height: 30px;
+    color: rgb(235, 235, 235);
 }
 
-.checkboxLabel {
+label.checkboxLabel {
     margin-left: 10px;
 }
 
-.inputBtn {
+label.normal {
+    color: rgb(235, 235, 235);
+}
+
+label.error {
+    color: red;
+}
+
+div.btnGroup {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
     width: 300px;
-    height: 30px;
-    margin-top: 20px;
+    margin-top: 40px;
+}
+
+button.formBtn {
+    width: 125px;
+    height: 40px;
+    outline: none;
     border: none;
     border-radius: 5px;
-    outline: none;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    font-size: 1.1rem;
+    color: rgb(235, 235, 235);
     transition: all .2s ease-in-out;
 }
 
-.inputBtn:hover {
+button.formBtn.transparent {
+    background-color: transparent;
+}
+
+button.formBtn.focused {
+    background-color: rgb(245, 50, 50);
+}
+
+button.formBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: all .2s ease-in-out;
 }
 
-.inputBtn:focus {
-    background-color: rgb(255, 219, 219);
-    transition: all .2s ease-in-out;
+text.errorText {
+    visibility: hidden;
+    margin-top: 20px;
+    color: red;
 }
 
-.formFooter {
+div.formFooter {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 20%;
+    height: 10%;
 }
 
-.redirectBtn {
-    width: 300px;
-    height: 30px;
-    border: none;
-    border-radius: 5px;
-    outline: none;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
-    transition: all .2s ease-in-out;
-}
-
-.redirectBtn:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    transition: all .2s ease-in-out;
-}
-
-.redirectBtn:focus {
-    background-color: rgb(255, 219, 219);
-    transition: all .2s ease-in-out;
+text.footerText {
+    font-size: 0.75rem;
+    color: rgb(235, 235, 235);
 }
