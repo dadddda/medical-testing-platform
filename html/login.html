@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Login</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../css/authentication.css'>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-auth.js"></script>
+</head>
+<body>
+    <div class="mainContent">
+        <div class="contentWindow">
+            <div class="titleWindow">
+                <text class="titleText">Medical Testing Platform</text>
+                <text class="infoText">
+                    Register for medical testing in the nearest clinic in just a second!
+                </text>
+            </div>
+    
+            <div class="formWindow">
+                <div class="formHeader">
+                    <text class="headerText">Login</text>
+                </div>
+        
+                <div class="formContent">
+                    <form class="form" id="loginForm" novalidate>
+                        <label class="inputLabel normal" id="emailLabel" for="email">Enter email:</label>
+                        <input class="inputField" id="email" type="email">
+                        <label class="inputLabel normal" id="passwordLabel" for="password">Enter password:</label>
+                        <input class="inputField" id="password" type="password">
+                        <div class="btnGroup">
+                            <button class="formBtn transparent" id="registerBtn" type="button">Register</button>
+                            <button class="formBtn focused" type="submit">Login</button>
+                        </div>
+                        <text class="errorText" id="errorText">
+                            Entered email or password is incorrect!
+                        </text>
+                    </form>
+                </div>
+                
+                <div class="formFooter">
+                    <text class="footerText">
+                        Copyright © 2021 Medical Testing Platform
+                    </text>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src='../javascript/firebase.js'></script>
+    <script src='../javascript/login.js'></script>
+</body>
+</html>
