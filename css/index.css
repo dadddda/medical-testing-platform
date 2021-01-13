@@ -1,0 +1,193 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+}
+
+html, body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(250, 250, 250);
+}
+
+div.header {
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 10%;
+    min-width: 976px;
+    min-height: 75px;
+    background: rgb(175, 0, 0);
+    background: linear-gradient(135deg, rgb(175, 0, 0) 0%, rgb(245, 35, 35) 100%);
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
+}
+
+button.headerLeft {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 40px;
+    width: fit-content;
+    height: fit-content;
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
+
+button.headerLeft:hover {
+    cursor: pointer;
+}
+
+img.headerImg {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+text.headerText {
+    font-size: 2rem;
+    color: rgb(235, 235, 235);
+}
+
+div.headerRight {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+    width: 50%;
+    height: 100%;
+}
+
+button.redirectBtn {
+    width: 110px;
+    height: 35px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    font-size: 1.1rem;
+    color: rgb(235, 235, 235);
+    transition: all .2s ease-in-out;
+}
+
+button.redirectBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: all .2s ease-in-out;
+}
+
+button.redirectBtn:focus {
+    background-color: rgb(245, 50, 50);
+    transition: all .2s ease-in-out;
+}
+
+div.mainContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 85%;
+    min-height: 640px;
+}
+
+div.leftPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px 0 0 0;
+    width: 15%;
+    height: 100%;
+    min-width: 216px;
+    background: rgb(200, 200, 200);
+    background: linear-gradient(135deg, rgb(200, 200, 200) 0%, rgb(230, 230, 230) 100%);
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
+}
+
+button.leftPanelBtn {
+    width: 170px;
+    height: 35px;
+    margin: 5px 0 5px 0;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    font-size: 1.1rem;
+    color: rgb(10, 10, 10);
+    transition: all .2s ease-in-out;
+}
+
+button.leftPanelBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: all .2s ease-in-out;
+}
+
+button.leftPanelBtn.active {
+    color: rgb(235, 235, 235);
+    background-color: rgb(245, 50, 50);
+    transition: all .2s ease-in-out;
+}
+
+hr.solid {
+    display: block;
+    width: 85%;
+    margin: 5px 0 5px 0;
+    border: 0;
+    border-top: 2px solid rgb(180, 180, 180);
+}
+
+div.rightPanel {
+    width: 85%;
+    height: 100%;
+}
+
+div.rightPanel.welcomeScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+div.rightPanelTextBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    height: fit-content;
+    margin: 5px;
+}
+
+text.greetings {
+    font-size: 3rem;
+    color: rgb(10, 10, 10);
+    text-align: center;
+}
+
+text.info {
+    font-size: 1.5rem;
+    color: rgb(120, 120, 120);
+    text-align: center;
+}
+
+div.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 5%;
+    min-width: 976px;
+    min-height: 37px;
+    background: linear-gradient(135deg, rgb(170, 170, 170) 0%, rgb(200, 200, 200) 100%);
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
+}
+
+text.footerText {
+    font-size: 0.75rem;
+    color: rgb(10, 10, 10);
+}
