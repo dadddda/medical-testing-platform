@@ -1,25 +1,18 @@
 class newsFeed {
-    constructor(newsFeed) {
-        this.newsFeed = newsFeed;
+
+    /**
+     * Constructs new 'newsFeed' object with given 'newsFeedElem'
+     * element.
+     * @param newsFeedElem 
+     */
+    constructor(newsFeedElem) {
+        this.newsFeedElem = newsFeedElem;
         this.newsRef = firebase.firestore().collection("news");
         this.latestInit = false;
         this.latestDoc = null;
 
-        this.handleScrollRef = this.handleScroll.bind(this);
-        this.newsFeed.addEventListener("scroll", this.handleScrollRef);
-
-        this.getNews();
-    }
-
-    /**
-     * Handles scroll events and if necessary calls getNews() function
-     * to fetch additional data.
-     */
-    handleScroll() {
-        let triggerHeight = this.newsFeed.scrollTop + this.newsFeed.offsetHeight;
-        if (triggerHeight >= this.newsFeed.scrollHeight) {
-            this.getNews();
-        }
+        this.scrollHandlerRef = this.scrollHandler.bind(this);
+        this.newsFeedElem.addEventListener("scroll", this.scrollHandlerRef);
     }
 
     /**
@@ -59,17 +52,16 @@ class newsFeed {
             content = content.replaceAll("\\n", "<br><br>");
             
             let formattedDate = this.createDate(timestamp);
-            let template = this.buildNews(title, formattedDate, content);
-            this.appendNews(template);
+            this.buildAndAppendNews(title, formattedDate, content);
         });
             
         this.latestDoc = data.docs[data.docs.length - 1];
 
         if (data.empty) {
-            this.newsFeed.removeEventListener("scroll", this.handleScrollRef);
+            this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
         } else {
-            let triggerHeight = this.newsFeed.scrollTop + this.newsFeed.offsetHeight;
-            if (triggerHeight >= this.newsFeed.scrollHeight) {
+            let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
+            if (triggerHeight >= this.newsFeedElem.scrollHeight) {
                 this.getNews();
             }
         }
@@ -98,12 +90,13 @@ class newsFeed {
 
     /**
      * Builds new template of HTML element of news feed 
-     * according to given data and returns it.
+     * according to given data and calls this.appendNews()
+     * function.
      * @param {string} title 
      * @param {string} date 
      * @param {string} content 
      */
-    buildNews(title, date, content) {
+    buildAndAppendNews(title, date, content) {
         let html = `
             <div class="news">
                 <div class="newsHeader">
@@ -124,14 +117,25 @@ class newsFeed {
         let template = document.createElement("template");
         html = html.trim();
         template.innerHTML = html;
-        return template.content.firstChild;
+        this.appendNews(template.content.firstChild);
     }
 
     /**
-     * Appends given template element to 'newsFeed'.
+     * Appends given template element to 'newsFeedElem'.
      * @param template
      */
     appendNews(template) {
-        this.newsFeed.appendChild(template);
+        this.newsFeedElem.appendChild(template);
+    }
+
+    /**
+     * Handles scroll events and if necessary calls getNews() function
+     * to fetch additional data.
+     */
+    scrollHandler() {
+        let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
+        if (triggerHeight >= this.newsFeedElem.scrollHeight) {
+            this.getNews();
+        }
     }
 }
