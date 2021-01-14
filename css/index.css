@@ -21,6 +21,16 @@ html, body {
     background-color: rgb(250, 250, 250);
 }
 
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(245, 50, 50);
+    border-radius: 5px;
+}
+
 div.header {
     z-index: 1;
     display: flex;
@@ -149,8 +159,12 @@ hr.solid {
 }
 
 div.rightPanel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 85%;
     height: 100%;
+    transition: all .2s ease-in-out;
 }
 
 div.rightPanel.hidden {
@@ -158,12 +172,14 @@ div.rightPanel.hidden {
     transition: all .2s ease-in-out;
 }
 
-div.rightPanel.welcomeScreen {
+div.welcomeScreen {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    animation: fade 1s ease-in-out;
+    width: 100%;
+    height: 100%;
+    animation: fade .2s ease-in-out;
 }
 
 div.rightPanelTextBox {
