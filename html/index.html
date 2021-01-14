@@ -6,6 +6,7 @@
     <title>Medical Testing</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../css/index.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../css/news-feed.css'>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
@@ -13,6 +14,7 @@
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-firestore.js"></script>
 </head>
 <body>
     <div class="header">
@@ -30,26 +32,28 @@
     <div class="mainContent">
         <div class="leftPanel" id="leftPanel">
             <button class="leftPanelBtn" id="newsFeedBtn">News Feed</button>
-            <button class="leftPanelBtn">Clinics</button>
-            <button class="leftPanelBtn">Supported Tests</button>
+            <button class="leftPanelBtn" id="clinicsBtn">Clinics</button>
+            <button class="leftPanelBtn" id="supportedTestsBtn">Supported Tests</button>
             <hr class="solid">
-            <button class="leftPanelBtn">Testing Results</button>
+            <button class="leftPanelBtn" id="testingResultsBtn">Testing Results</button>
             <hr class="solid">
-            <button class="leftPanelBtn">Contact Us</button>
-            <button class="leftPanelBtn">About Us</button>
+            <button class="leftPanelBtn" id="contactUsBtn">Contact Us</button>
+            <button class="leftPanelBtn" id="aboutUsBtn">About Us</button>
         </div>
 
-        <div class="rightPanel welcomeScreen" id="rightPanel">
-            <div class="rightPanelTextBox">
-                <text class="greetings">
-                    Welcome to the Medical Testing Platform
-                </text>
-            </div>
-            <div class="rightPanelTextBox">
-                <text class="info">
-                    where you can register for a wide range of medical tests
-                    in your nearest clinic.
-                </text>
+        <div class="rightPanel" id="rightPanel">
+            <div class="welcomeScreen">
+                <div class="rightPanelTextBox">
+                    <text class="greetings">
+                        Welcome to the Medical Testing Platform
+                    </text>
+                </div>
+                <div class="rightPanelTextBox">
+                    <text class="info">
+                        where you can register for a wide range of medical tests
+                        in your nearest clinic.
+                    </text>
+                </div>
             </div>
         </div>
     </div>
@@ -62,5 +66,6 @@
 
     <script src='../javascript/firebase.js'></script>
     <script src='../javascript/index.js'></script>
+    <script src='../javascript/news-feed.js'></script>
 </body>
 </html>
