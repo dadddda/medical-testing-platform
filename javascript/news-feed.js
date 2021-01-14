@@ -1,141 +1,137 @@
-// variables and constants
-const newsRef = firebase.firestore().collection("news");
-let latestInit = false;
-let latestDoc = null;
+class newsFeed {
+    constructor(newsFeed) {
+        this.newsFeed = newsFeed;
+        this.newsRef = firebase.firestore().collection("news");
+        this.latestInit = false;
+        this.latestDoc = null;
 
-/**
- * getNext() is called after pageload.
- */
-window.addEventListener("DOMContentLoaded", getNext);
+        this.handleScrollRef = this.handleScroll.bind(this);
+        this.newsFeed.addEventListener("scroll", this.handleScrollRef);
 
-/**
- * handleScroll() is called at each scroll event.
- */
-rightPanel.addEventListener("scroll", handleScroll);
-
-/**
- * Handles scroll events and if necessary calls getNext() function
- * to fetch additional data.
- */
-function handleScroll() {
-    let triggerHeight = rightPanel.scrollTop + rightPanel.offsetHeight;
-    if (triggerHeight >= rightPanel.scrollHeight) {
-        getNext();
+        this.getNews();
     }
-}
 
-/**
- * Fetches data from Firestore database. Calls appropriate
- * functions to build and append HTML elements. Manages scroll
- * event listener and ensures that the whole page will be covered
- * with news articles at the initial startup and after scroll events.
- */
-async function getNext() {
-    let data = null;
-
-    if (!latestInit) {
-        data = await newsRef
-            .orderBy("date", "desc")
-            .get();
-
-        latestDoc = data.docs[0];
-        latestInit = true;
-
-        data = await newsRef
-            .orderBy("date", "desc")
-            .startAt(latestDoc)
-            .limit(2)
-            .get();
-    } else {
-        data = await newsRef
-            .orderBy("date", "desc")
-            .startAfter(latestDoc)
-            .limit(2)
-            .get();
-    }
- 
-    data.docs.forEach(doc => {
-        let title = doc.data().title;
-        let timestamp = doc.data().date.toMillis();
-        let content = doc.data().content;
-        
-        content = content.replaceAll("\\n", "<br><br>");
-        
-        let formattedDate = createDate(timestamp);
-        let template = buildNews(title, formattedDate, content);
-        appendNews(template);
-        latestDoc = doc;
-    });
-        
-    latestDoc = data.docs[data.docs.length - 1];
-
-    if (data.empty) {
-        rightPanel.removeEventListener("scroll", handleScroll);
-    } else {
-        let triggerHeight = rightPanel.scrollTop + rightPanel.offsetHeight;
-        if (triggerHeight >= rightPanel.scrollHeight) {
-            getNext();
+    /**
+     * Handles scroll events and if necessary calls getNews() function
+     * to fetch additional data.
+     */
+    handleScroll() {
+        let triggerHeight = this.newsFeed.scrollTop + this.newsFeed.offsetHeight;
+        if (triggerHeight >= this.newsFeed.scrollHeight) {
+            this.getNews();
         }
     }
-}
 
-/**
- * Formats input timestamp number into string and
- * returns it.
- * @param {number} timestamp 
- */
-function createDate(timestamp) {
-    let dateObj = new Date(timestamp);
+    /**
+     * Fetches data from Firestore database. Calls appropriate
+     * functions to build and append HTML elements. Manages scroll
+     * event listener and ensures that the whole page will be covered
+     * with news articles at the initial startup and after scroll events.
+     */
+    async getNews() {
+        let data = null;
+        if (!this.latestInit) {
+            data = await this.newsRef
+                .orderBy("date", "desc")
+                .get();
 
-    let hours = dateObj.getHours();
-    let minutes = dateObj.getMinutes();
-    minutes = (minutes < 10 ? "0" : "") + minutes;
-    let date = dateObj.getDate();
-    let month = dateObj.getMonth() + 1;
-    let year = dateObj.getFullYear();
+            this.latestDoc = data.docs[0];
+            this.latestInit = true;
 
-    let formattedDate = hours + ":" + minutes + " - ";
-    formattedDate += date + "." + month + "." + year;
+            data = await this.newsRef
+                .orderBy("date", "desc")
+                .startAt(this.latestDoc)
+                .limit(2)
+                .get();
+        } else {
+            data = await this.newsRef
+                .orderBy("date", "desc")
+                .startAfter(this.latestDoc)
+                .limit(2)
+                .get();
+        }
+    
+        data.docs.forEach(doc => {
+            let title = doc.data().title;
+            let timestamp = doc.data().date.toMillis();
+            let content = doc.data().content;
+            
+            content = content.replaceAll("\\n", "<br><br>");
+            
+            let formattedDate = this.createDate(timestamp);
+            let template = this.buildNews(title, formattedDate, content);
+            this.appendNews(template);
+        });
+            
+        this.latestDoc = data.docs[data.docs.length - 1];
 
-    return formattedDate;
-}
+        if (data.empty) {
+            this.newsFeed.removeEventListener("scroll", this.handleScrollRef);
+        } else {
+            let triggerHeight = this.newsFeed.scrollTop + this.newsFeed.offsetHeight;
+            if (triggerHeight >= this.newsFeed.scrollHeight) {
+                this.getNews();
+            }
+        }
+    }
 
-/**
- * Builds new template of HTML element of news feed 
- * according to given data and returns it.
- * @param {string} title 
- * @param {string} date 
- * @param {string} content 
- */
-function buildNews(title, date, content) {
-    let html = `
-        <div class="news">
-            <div class="newsHeader">
-                <div class="newsTitle">
-                    ${title}
+    /**
+     * Formats input timestamp number into string and
+     * returns it.
+     * @param {number} timestamp 
+     */
+    createDate(timestamp) {
+        let dateObj = new Date(timestamp);
+
+        let hours = dateObj.getHours();
+        let minutes = dateObj.getMinutes();
+        minutes = (minutes < 10 ? "0" : "") + minutes;
+        let date = dateObj.getDate();
+        let month = dateObj.getMonth() + 1;
+        let year = dateObj.getFullYear();
+
+        let formattedDate = hours + ":" + minutes + " - ";
+        formattedDate += date + "." + month + "." + year;
+
+        return formattedDate;
+    }
+
+    /**
+     * Builds new template of HTML element of news feed 
+     * according to given data and returns it.
+     * @param {string} title 
+     * @param {string} date 
+     * @param {string} content 
+     */
+    buildNews(title, date, content) {
+        let html = `
+            <div class="news">
+                <div class="newsHeader">
+                    <div class="newsTitle">
+                        ${title}
+                    </div>
+                    <div class="newsDate">
+                        ${date}
+                    </div>
                 </div>
-                <div class="newsDate">
-                    ${date}
+
+                <div class="newsContent">
+                    ${content}
                 </div>
             </div>
+        `;
 
-            <div class="newsContent">
-                ${content}
-            </div>
-        </div>
-    `;
+        let template = document.createElement("template");
+        html = html.trim();
+        template.innerHTML = html;
+        return template.content.firstChild;
+    }
 
-    let template = document.createElement("template");
-    html = html.trim();
-    template.innerHTML = html;
-    return template.content.firstChild;
-}
-
-/**
- * Appends given template element to 'rightPanel'.
- * @param {string} template
- */
-function appendNews(template) {
-    let rightPanel = document.getElementById("rightPanel");
-    rightPanel.appendChild(template);
+    /**
+     * Appends given template element to 'newsFeed'.
+     * @param template
+     */
+    appendNews(template) {
+        this.newsFeed.appendChild(template);
+    }
 }
