@@ -16,8 +16,8 @@ firebase.auth().onAuthStateChanged(function(user) {
  * Event listener for header left button.
  */
 document.getElementById("headerLeftBtn").addEventListener("click", function() {
-    let rightPanel = document.getElementById("rightPanel");
-    rightPanel.classList.add("hidden");
+    let rightPanelElem = document.getElementById("rightPanel");
+    rightPanelElem.classList.add("hidden");
     setTimeout(function() {
         window.location.assign("index.html");
     }, btnDelayMs);
@@ -59,43 +59,49 @@ function initBtns() {
             
             event.target.classList.add("active");
             
-            let rightPanel = document.getElementById("rightPanel");
-            rightPanel.classList.add("hidden");
+            let rightPanelElem = document.getElementById("rightPanel");
+            rightPanelElem.classList.add("hidden");
             setTimeout(function() {
-                rightPanel.removeChild(rightPanel.firstElementChild);
-                rightPanel.classList.remove("hidden");
+                rightPanelElem.removeChild(rightPanelElem.firstElementChild);
+                rightPanelElem.classList.remove("hidden");
                 let newElem = document.createElement("div");
 
                 switch (event.target.id) {
                     case "newsFeedBtn":
                         newElem.className = "newsFeed";
-                        rightPanel.appendChild(newElem);
+                        rightPanelElem.appendChild(newElem);
 
-                        new newsFeed(newElem);
+                        let newsFeedObj = new newsFeed(newElem);
+                        newsFeedObj.getNews();
                         break;
                     case "clinicsBtn":
                         newElem.className = "clinics";
-                        rightPanel.appendChild(newElem);
+                        rightPanelElem.appendChild(newElem);
 
+                        let clinicsObj = new clinics(newElem);
+                        clinicsObj.drawHeader();
+                        clinicsObj.drawContent();
+                        clinicsObj.drawFooter();
+                        clinicsObj.getLocation();
                         break;
                     case "supportedTestsBtn":
                         newElem.className = "supportedTests";
-                        rightPanel.appendChild(newElem);
+                        rightPanelElem.appendChild(newElem);
 
                         break;
                     case "testingResultsBtn":
                         newElem.className = "testingResults";
-                        rightPanel.appendChild(newElem);
+                        rightPanelElem.appendChild(newElem);
 
                         break;
                     case "contactUsBtn":
                         newElem.className = "contactUs";
-                        rightPanel.appendChild(newElem);
+                        rightPanelElem.appendChild(newElem);
 
                         break;
                     case "aboutUsBtn":
                         newElem.className = "aboutUs";
-                        rightPanel.appendChild(newElem);
+                        rightPanelElem.appendChild(newElem);
 
                         break;
                 }
