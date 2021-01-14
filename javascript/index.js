@@ -62,7 +62,6 @@ function initBtns() {
             let rightPanel = document.getElementById("rightPanel");
             rightPanel.classList.add("hidden");
             setTimeout(function() {
-                let rightPanel = document.getElementById("rightPanel");
                 rightPanel.removeChild(rightPanel.firstElementChild);
                 rightPanel.classList.remove("hidden");
                 let newElem = document.createElement("div");
