@@ -1,0 +1,83 @@
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+}
+
+div.clinics {
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-width: 760px;
+    animation: fade .2s ease-in-out;
+}
+
+div.clinicsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 7%;
+    background: rgb(190, 190, 190);
+    background: linear-gradient(90deg, rgb(190, 190, 190) 0%, rgb(220, 220, 220) 100%);
+}
+
+div.clinicsContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 86%;
+    padding: 20px;
+    border: black;
+    border-width: 2px;
+    border-style: solid;
+    cursor: default;
+    overflow: hidden;
+}
+
+div.zoomableContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: fit-content;
+    height: 100%;
+    user-select: none;
+}
+
+img.mapImg {
+    height: 100%;
+    object-fit: cover;
+}
+
+img.pinImg {
+    position: absolute;
+    width: 20px;
+    object-fit: contain;
+    animation: fade .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+img.pinImg:hover {
+    cursor: pointer;
+}
+
+img.pinImg.hidden {
+    opacity: 0;
+    transition: all .2s ease-in-out;
+}
+
+div.clinicsFooter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 7%;
+    background: rgb(240, 240, 240);
+    background: linear-gradient(135deg, rgb(240, 240, 240) 0%, rgb(245, 245, 245) 100%);
+}
