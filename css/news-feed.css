@@ -4,70 +4,71 @@
     }
 }
 
-div.rightPanel.newsFeed {
+div.newsFeed {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 20px 0 0 0;
-    min-width: 760px;
-    overflow-y: auto;
+    padding: 20px 20px 0 20px;
+    width: 100%;
+    height: 100%;
+    overflow-y: overlay;
+    animation: fade .2s ease-in-out;
 }
 
-div.news {
+.newsFeed div.news {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     width: 700px;
-    height: fit-content;
+    height: max-content;
     margin-bottom: 20px;
     padding: 10px;
     border-radius: 2.5px;
-    background: rgb(230, 230, 230);
-    background: linear-gradient(135deg, rgb(230, 230, 230) 0%, rgb(240, 240, 240) 100%);
-    animation: fade 1s ease-in-out;
+    background: rgb(235, 235, 235);
+    background: linear-gradient(135deg, rgb(235, 235, 235) 0%, rgb(245, 245, 245) 100%);
+    animation: fade .2s ease-in-out;
 }
 
-div.newsHeader {
+.news div.newsHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: fit-content;
+    height: max-content;
     margin-bottom: 10px;
+    padding: 10px 20px;
     border-radius: 2.5px;
-    background: rgb(210, 210, 210);
-    background: linear-gradient(135deg, rgb(210, 210, 210) 0%, rgb(220, 220, 220) 100%);
+    background: rgb(220, 220, 220);
+    background: linear-gradient(135deg, rgb(220, 220, 220) 0%, rgb(230, 230, 230) 100%);
 }
 
-div.newsTitle {
+.newsHeader div.newsTitle {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    width: 70%;
-    height: fit-content;
-    padding: 10px 0 10px 20px;
+    width: 80%;
+    height: max-content;
     font-size: 1.75rem;
 }
 
-div.newsDate {
+.newsHeader div.newsDate {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 30%;
-    height: 100%;
-    padding-right: 20px;
+    width: 20%;
+    height: max-content;
 }
 
-div.newsContent {
+.news div.newsContent {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    height: 100%;
-    padding: 10px 20px 10px 20px;
+    height: max-content;
+    padding: 10px 20px;
     border-radius: 2.5px;
-    background: rgb(210, 210, 210);
-    background: linear-gradient(135deg, rgb(210, 210, 210) 0%, rgb(220, 220, 220) 100%);
+    background: rgb(220, 220, 220);
+    background: linear-gradient(135deg, rgb(220, 220, 220) 0%, rgb(230, 230, 230) 100%);
 }

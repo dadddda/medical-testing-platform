@@ -1,141 +1,176 @@
-// variables and constants
-const newsRef = firebase.firestore().collection("news");
-let latestInit = false;
-let latestDoc = null;
+// constants
+const triggerThreshold = 0.8;
 
-/**
- * getNext() is called after pageload.
- */
-window.addEventListener("DOMContentLoaded", getNext);
+class newsFeed {
 
-/**
- * handleScroll() is called at each scroll event.
- */
-rightPanel.addEventListener("scroll", handleScroll);
+    /**
+     * Constructs new 'newsFeed' object with given 'newsFeedElem'
+     * element.
+     * @param newsFeedElem 
+     */
+    constructor(newsFeedElem) {
+        this.newsFeedElem = newsFeedElem;
+        this.newsRef = firebase.firestore().collection("news");
+        this.latestInit = false;
+        this.latestDoc = null;
 
-/**
- * Handles scroll events and if necessary calls getNext() function
- * to fetch additional data.
- */
-function handleScroll() {
-    let triggerHeight = rightPanel.scrollTop + rightPanel.offsetHeight;
-    if (triggerHeight >= rightPanel.scrollHeight) {
-        getNext();
+        this.scrollHandlerRef = this.scrollHandler.bind(this);
+        this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
     }
-}
 
-/**
- * Fetches data from Firestore database. Calls appropriate
- * functions to build and append HTML elements. Manages scroll
- * event listener and ensures that the whole page will be covered
- * with news articles at the initial startup and after scroll events.
- */
-async function getNext() {
-    let data = null;
-
-    if (!latestInit) {
-        data = await newsRef
-            .orderBy("date", "desc")
-            .get();
-
-        latestDoc = data.docs[0];
-        latestInit = true;
-
-        data = await newsRef
-            .orderBy("date", "desc")
-            .startAt(latestDoc)
-            .limit(2)
-            .get();
-    } else {
-        data = await newsRef
-            .orderBy("date", "desc")
-            .startAfter(latestDoc)
-            .limit(2)
-            .get();
+    /**
+     * Initializes event listeners.
+     */
+    initListeners() {
+        this.newsFeedElem.addEventListener("scroll", this.scrollHandlerRef);
+        window.addEventListener("resize", this.windowResizeHandlerRef);
     }
- 
-    data.docs.forEach(doc => {
-        let title = doc.data().title;
-        let timestamp = doc.data().date.toMillis();
-        let content = doc.data().content;
-        
-        content = content.replaceAll("\\n", "<br><br>");
-        
-        let formattedDate = createDate(timestamp);
-        let template = buildNews(title, formattedDate, content);
-        appendNews(template);
-        latestDoc = doc;
-    });
-        
-    latestDoc = data.docs[data.docs.length - 1];
 
-    if (data.empty) {
-        rightPanel.removeEventListener("scroll", handleScroll);
-    } else {
-        let triggerHeight = rightPanel.scrollTop + rightPanel.offsetHeight;
-        if (triggerHeight >= rightPanel.scrollHeight) {
-            getNext();
+    /**
+     * Deinitializes event listeners.
+     */
+    deinitListeners() {
+        this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
+        window.removeEventListener("resize", this.windowResizeHandlerRef);
+    }
+
+    /**
+     * Fetches data from Firestore database. Calls appropriate
+     * functions to build and append HTML elements. Manages scroll
+     * event listener and window resize event listener and ensures 
+     * that the whole page will be covered with news articles at the 
+     * initial startup and after scroll events.
+     */
+    async getNews() {
+        let data = null;
+        if (!this.latestInit) {
+            data = await this.newsRef
+                .orderBy("date", "desc")
+                .get();
+
+            this.latestDoc = data.docs[0];
+            this.latestInit = true;
+
+            data = await this.newsRef
+                .orderBy("date", "desc")
+                .startAt(this.latestDoc)
+                .limit(2)
+                .get();
+        } else {
+            data = await this.newsRef
+                .orderBy("date", "desc")
+                .startAfter(this.latestDoc)
+                .limit(2)
+                .get();
+        }
+    
+        data.docs.forEach(doc => {
+            let title = doc.data().title;
+            let timestamp = doc.data().date.toMillis();
+            let content = doc.data().content;
+            
+            content = content.replaceAll("\\n", "<br><br>");
+            
+            let formattedDate = this.createDate(timestamp);
+            this.buildAndAppendNews(title, formattedDate, content);
+        });
+            
+        this.latestDoc = data.docs[data.docs.length - 1];
+
+        if (data.empty) {
+            this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
+            window.removeEventListener("resize", this.windowResizeHandlerRef);
+        } else {
+            let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
+            if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+                this.getNews();
+            }
+            this.newsFeedElem.addEventListener("scroll", this.scrollHandlerRef);
         }
     }
-}
 
-/**
- * Formats input timestamp number into string and
- * returns it.
- * @param {number} timestamp 
- */
-function createDate(timestamp) {
-    let dateObj = new Date(timestamp);
+    /**
+     * Formats input timestamp number into string and
+     * returns it.
+     * @param {number} timestamp
+     */
+    createDate(timestamp) {
+        let dateObj = new Date(timestamp);
 
-    let hours = dateObj.getHours();
-    let minutes = dateObj.getMinutes();
-    minutes = (minutes < 10 ? "0" : "") + minutes;
-    let date = dateObj.getDate();
-    let month = dateObj.getMonth() + 1;
-    let year = dateObj.getFullYear();
+        let hours = dateObj.getHours();
+        let minutes = dateObj.getMinutes();
+        minutes = (minutes < 10 ? "0" : "") + minutes;
+        let date = dateObj.getDate();
+        let month = dateObj.getMonth() + 1;
+        let year = dateObj.getFullYear();
 
-    let formattedDate = hours + ":" + minutes + " - ";
-    formattedDate += date + "." + month + "." + year;
+        let formattedDate = hours + ":" + minutes + " - ";
+        formattedDate += date + "." + month + "." + year;
 
-    return formattedDate;
-}
+        return formattedDate;
+    }
 
-/**
- * Builds new template of HTML element of news feed 
- * according to given data and returns it.
- * @param {string} title 
- * @param {string} date 
- * @param {string} content 
- */
-function buildNews(title, date, content) {
-    let html = `
-        <div class="news">
-            <div class="newsHeader">
-                <div class="newsTitle">
-                    ${title}
+    /**
+     * Builds new template of HTML element of news feed 
+     * according to given data and calls this.appendNews()
+     * function.
+     * @param {string} title 
+     * @param {string} date 
+     * @param {string} content 
+     */
+    buildAndAppendNews(title, date, content) {
+        let html = `
+            <div class="news">
+                <div class="newsHeader">
+                    <div class="newsTitle">
+                        ${title}
+                    </div>
+                    <div class="newsDate">
+                        ${date}
+                    </div>
                 </div>
-                <div class="newsDate">
-                    ${date}
+
+                <div class="newsContent">
+                    ${content}
                 </div>
             </div>
+        `;
 
-            <div class="newsContent">
-                ${content}
-            </div>
-        </div>
-    `;
+        let template = document.createElement("template");
+        html = html.trim();
+        template.innerHTML = html;
+        this.appendNews(template.content.firstChild);
+    }
 
-    let template = document.createElement("template");
-    html = html.trim();
-    template.innerHTML = html;
-    return template.content.firstChild;
-}
+    /**
+     * Appends given template element to 'newsFeedElem'.
+     * @param template
+     */
+    appendNews(template) {
+        this.newsFeedElem.appendChild(template);
+    }
 
-/**
- * Appends given template element to 'rightPanel'.
- * @param {string} template
- */
-function appendNews(template) {
-    let rightPanel = document.getElementById("rightPanel");
-    rightPanel.appendChild(template);
+    /**
+     * Handles scroll events and if necessary calls getNews() function
+     * to fetch additional data.
+     */
+    scrollHandler() {
+        let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
+        if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+            this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
+            this.getNews();
+        }
+    }
+
+    /**
+     * Handles window resize events and if necessary calls getNews() function
+     * to fetch additional data.
+     */
+    windowResizeHandler() {
+        let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
+        if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+            window.removeEventListener("resize", this.windowResizeHandlerRef);
+            this.getNews();
+        }
+    }
 }

@@ -1,0 +1,192 @@
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+}
+
+div.clinics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    animation: fade .2s ease-in-out;
+}
+
+.clinics div.clinicsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: max-content;
+    padding: 10px;
+    background: rgb(190, 190, 190);
+    background: linear-gradient(90deg, rgb(190, 190, 190) 0%, rgb(220, 220, 220) 100%);
+}
+
+.clinics div.clinicsContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.clinicsContent div.infoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: max-content;
+    height: 100%;
+    padding: 20px;
+    background-color: greenyellow;
+}
+
+.infoContainer div.clinicTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: max-content;
+    padding: 10px;
+    background-color: lightblue;
+}
+
+.infoContainer div.clinicDescription {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 50%;
+    padding: 10px;
+    background-color: lightcoral;
+}
+
+.infoContainer div.clinicDashboard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 50%;
+    padding: 10px;
+    background-color: lightgreen;
+}
+
+.clinicsContent div.mapContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+.mapContainer div.mapHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: max-content;
+    padding: 5px;
+    background-color: indigo;
+}
+
+.mapContainer div.mapContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.mapContent div.zoomContainer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: overlay;
+}
+
+.zoomContainer div.zoomableContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transform-origin: top left;
+}
+
+.zoomableContent img.mapImg {
+    width: unset;
+    height: 95%;
+    position: absolute;
+    object-fit: contain;
+}
+
+.zoomableContent img.pinImg {
+    width: 25px;
+    position: absolute;
+    object-fit: contain;
+    animation: fade .2s ease-in-out;
+    transition: opacity .2s ease-in-out;
+}
+
+.zoomableContent img.pinImg:hover {
+    cursor: pointer;
+}
+
+.zoomableContent img.pinImg.hidden {
+    opacity: 0;
+    transition: all .2s ease-in-out;
+}
+
+.mapContent div.mapFooterBtns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    height: max-content;
+    position: absolute;
+    bottom: 20px;
+}
+
+.mapFooterBtns img.actionBtn {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(200, 200, 200);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: all .2s ease-in-out;
+}
+
+.mapFooterBtns img.actionBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+.mapContainer div.mapFooter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: max-content;
+    padding: 5px;
+    background-color: indianred;
+}
+
+.clinics div.clinicsFooter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: max-content;
+    padding: 10px;
+    background: rgb(240, 240, 240);
+    background: linear-gradient(135deg, rgb(240, 240, 240) 0%, rgb(245, 245, 245) 100%);
+}
