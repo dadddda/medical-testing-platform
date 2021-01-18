@@ -42,7 +42,7 @@ div.mainContent {
     align-items: center;
     justify-content: space-between;
     width: max-content;
-    height: 500px;
+    height: 475px;
 }
 
 .contentWindow div.titleWindow {
@@ -77,7 +77,7 @@ div.mainContent {
     border-radius: 2.5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     background: rgb(175, 0, 0);
-    background: linear-gradient(135deg, rgb(175, 0, 0) 0%, rgb(245, 35, 35) 100%);
+    background: linear-gradient(135deg, rgb(175, 0, 0) 0%, rgb(245, 35, 35) 80%);
 }
 
 .formWindow div.formHeader {

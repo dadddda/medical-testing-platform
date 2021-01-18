@@ -21,8 +21,9 @@ div.clinics {
     width: 100%;
     height: max-content;
     padding: 10px;
-    background: rgb(190, 190, 190);
-    background: linear-gradient(90deg, rgb(190, 190, 190) 0%, rgb(220, 220, 220) 100%);
+    background: rgb(215, 215, 215);
+    background-image: linear-gradient(135deg, rgb(215, 215, 215) 0%, rgb(245, 245, 245) 100%);
+    background-attachment: fixed;
 }
 
 .clinics div.clinicsContent {
@@ -41,7 +42,9 @@ div.clinics {
     width: max-content;
     height: 100%;
     padding: 20px;
-    background-color: greenyellow;
+    background: rgb(215, 215, 215);
+    background-image: linear-gradient(135deg, rgb(215, 215, 215) 0%, rgb(245, 245, 245) 100%);
+    background-attachment: fixed;
 }
 
 .infoContainer div.clinicTitle {
@@ -83,16 +86,6 @@ div.clinics {
     height: 100%;
 }
 
-.mapContainer div.mapHeader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: max-content;
-    padding: 5px;
-    background-color: indigo;
-}
-
 .mapContainer div.mapContent {
     display: flex;
     align-items: center;
@@ -107,6 +100,7 @@ div.clinics {
     width: 100%;
     height: 100%;
     overflow: overlay;
+    box-shadow: inset 0 0 16px 0 rgba(0, 0, 0, 0.15);
 }
 
 .zoomContainer div.zoomableContent {
@@ -126,7 +120,7 @@ div.clinics {
 }
 
 .zoomableContent img.pinImg {
-    width: 25px;
+    width: 20px;
     position: absolute;
     object-fit: contain;
     animation: fade .2s ease-in-out;
@@ -170,16 +164,6 @@ div.clinics {
     cursor: pointer;
 }
 
-.mapContainer div.mapFooter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: max-content;
-    padding: 5px;
-    background-color: indianred;
-}
-
 .clinics div.clinicsFooter {
     display: flex;
     align-items: center;
@@ -187,6 +171,7 @@ div.clinics {
     width: 100%;
     height: max-content;
     padding: 10px;
-    background: rgb(240, 240, 240);
-    background: linear-gradient(135deg, rgb(240, 240, 240) 0%, rgb(245, 245, 245) 100%);
+    background: rgb(215, 215, 215);
+    background-image: linear-gradient(135deg, rgb(215, 215, 215) 0%, rgb(245, 245, 245) 100%);
+    background-attachment: fixed;
 }

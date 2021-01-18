@@ -1,6 +1,6 @@
 // constants
 const mapScaleFactor = 1.2;
-const mapScaleThreshold = 2;
+const mapScaleThreshold = 4;
 const mapSizePct = 95;
 
 class clinics {
@@ -57,9 +57,6 @@ class clinics {
                     </div>
                 </div>
                 <div class="mapContainer">
-                    <div class="mapHeader">
-                        <text>Map Header</text>
-                    </div>
                     <div class="mapContent">
                         <div class="zoomContainer" id="zoomContainer">
                             <div class="zoomableContent" id="zoomableContent">
@@ -72,9 +69,6 @@ class clinics {
                             <img class="actionBtn" id="zoomOutBtn" src="../svgs/minus.svg">
                             <img class="actionBtn" id="centerBtn" src="../svgs/center.svg">
                         </div>
-                    </div>
-                    <div class="mapFooter">
-                        <text>Map Footer</text>
                     </div>
                 </div>
             </div>
