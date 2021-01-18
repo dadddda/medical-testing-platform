@@ -1,6 +1,6 @@
 // variables and constants
-const leftPanel = document.getElementById("leftPanel");
-const btns = leftPanel.getElementsByClassName("leftPanelBtn");
+const leftPanelBtns = document.getElementById("leftPanelBtns");
+const btns = leftPanelBtns.getElementsByClassName("leftPanelBtn");
 const btnDelayMs = 200;
 
 /**
@@ -40,10 +40,11 @@ document.getElementById("logoutBtn").addEventListener("click", function() {
     });
 });
 
-/**
- * initBtns() is called after pageload.
- */
+// initBtns() is called after pageload.
 window.addEventListener("DOMContentLoaded", initBtns);
+
+// Used to store a class reference.
+let tempClass = null;
 
 /**
  * Left navigation panel button listeners.
@@ -51,13 +52,17 @@ window.addEventListener("DOMContentLoaded", initBtns);
 function initBtns() {
     for (let i = 0; i < btns.length; i++) {
         btns[i].addEventListener("click", function(event) {
-            let curr = leftPanel.getElementsByClassName("active");
+            let curr = leftPanelBtns.getElementsByClassName("active");
             if (curr.length != 0) {
                 if (curr[0].id == event.target.id) return;
                 curr[0].classList.remove("active");
             }
-            
             event.target.classList.add("active");
+
+            if (tempClass != null) {
+                tempClass.deinitListeners();
+                tempClass = null;
+            }
             
             let rightPanelElem = document.getElementById("rightPanel");
             rightPanelElem.classList.add("hidden");
@@ -73,6 +78,9 @@ function initBtns() {
 
                         let newsFeedObj = new newsFeed(newElem);
                         newsFeedObj.getNews();
+                        newsFeedObj.initListeners();
+                        
+                        tempClass = newsFeedObj;
                         break;
                     case "clinicsBtn":
                         newElem.className = "clinics";
@@ -82,7 +90,10 @@ function initBtns() {
                         clinicsObj.drawHeader();
                         clinicsObj.drawContent();
                         clinicsObj.drawFooter();
+                        clinicsObj.initListeners();
                         clinicsObj.getLocation();
+                        
+                        tempClass = clinicsObj;
                         break;
                     case "supportedTestsBtn":
                         newElem.className = "supportedTests";
