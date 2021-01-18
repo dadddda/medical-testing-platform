@@ -43,9 +43,9 @@ function validateEmail(email) {
  * @param {string} password 
  */
 function validatePassword(password) {
-    return /[A-Z]/       .test(password) &&
-           /[a-z]/       .test(password) &&
-           /[0-9]/       .test(password) &&
+    return /[A-Z]/.test(password) &&
+           /[a-z]/.test(password) &&
+           /[0-9]/.test(password) &&
            password.length >= 8;
 }
 
