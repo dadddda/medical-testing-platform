@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Quicksand', sans-serif;
+    user-select: none;
 }
 
 html, body {
@@ -13,6 +14,17 @@ html, body {
     width: 100%;
     height: 100%;
     background-color: rgb(250, 250, 250);
+    overflow: overlay;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(245, 50, 50);
+    border-radius: 5px;
 }
 
 div.mainContent {
@@ -21,79 +33,92 @@ div.mainContent {
     justify-content: center;
     width: 100%;
     height: 100%;
-    min-height: 716px;
+    min-width: min-content;
+    min-height: min-content;
 }
 
-div.contentWindow {
+.mainContent div.contentWindow {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 900px;
+    width: max-content;
     height: 500px;
 }
 
-div.titleWindow {
+.contentWindow div.titleWindow {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
     width: 400px;
-    height: 500px;
+    height: max-content;
+    margin-right: 100px;
 }
 
-text.titleText {
+.titleWindow text.titleText {
     font-size: 3rem;
     color: rgb(10, 10, 10);
 }
 
-text.infoText {
+.titleWindow text.infoText {
     margin-top: 20px;
     font-size: 1.5rem;
     color: rgb(120, 120, 120);
 }
 
-div.formWindow {
+.contentWindow div.formWindow {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    width: 400px;
-    height: 500px;
+    justify-content: space-between;
+    width: max-content;
+    height: 100%;
+    padding: 0 40px;
     border-radius: 2.5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     background: rgb(175, 0, 0);
     background: linear-gradient(135deg, rgb(175, 0, 0) 0%, rgb(245, 35, 35) 100%);
 }
 
-div.formHeader {
+.formWindow div.formHeader {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 20%;
+    height: max-content;
+    padding: 20px 0;
 }
 
-text.headerText {
+.formHeader text.headerText {
     font-size: 2.5rem;
     color: rgb(235, 235, 235);
 }
 
-div.formContent {
+.formWindow div.formContent {
     display: flex;
     align-items: flex-start;
     justify-content: center;
     width: 100%;
-    height: 70%;
+    height: 100%;
 }
 
-form.form {
+.formContent form.form {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+    width: max-content;
 }
 
-label.inputLabel {
+.form .normal {
+    color: rgb(235, 235, 235);
+}
+
+.form .error {
+    color: rgb(255, 140, 140);
+}
+
+.form label.inputLabel {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -101,7 +126,7 @@ label.inputLabel {
     height: 30px;
 }
 
-input.inputField {
+.form input.inputField {
     width: 300px;
     height: 35px;
     padding: 0 5px 0 5px;
@@ -112,7 +137,7 @@ input.inputField {
     transition: all .2s ease-in-out;
 }
 
-div.checkboxField {
+.form div.checkboxField {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -121,19 +146,11 @@ div.checkboxField {
     color: rgb(235, 235, 235);
 }
 
-label.checkboxLabel {
+.checkboxField label.checkboxLabel {
     margin-left: 10px;
 }
 
-label.normal {
-    color: rgb(235, 235, 235);
-}
-
-label.error {
-    color: red;
-}
-
-div.btnGroup {
+.form div.btnGroup {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -141,7 +158,7 @@ div.btnGroup {
     margin-top: 40px;
 }
 
-button.formBtn {
+.btnGroup button.formBtn {
     width: 125px;
     height: 40px;
     outline: none;
@@ -152,34 +169,37 @@ button.formBtn {
     transition: all .2s ease-in-out;
 }
 
-button.formBtn.transparent {
+.btnGroup button.formBtn.transparent {
     background-color: transparent;
 }
 
-button.formBtn.focused {
+.btnGroup button.formBtn.focused {
     background-color: rgb(245, 50, 50);
 }
 
-button.formBtn:hover {
+.btnGroup button.formBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: all .2s ease-in-out;
 }
 
-text.errorText {
+.form text.errorText {
+    width: 300px;
+    height: max-content;
     visibility: hidden;
+    text-align: center;
     margin-top: 20px;
-    color: red;
 }
 
-div.formFooter {
+.formWindow div.formFooter {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 10%;
+    height: max-content;
+    padding: 15px 0;
 }
 
-text.footerText {
+.formFooter text.footerText {
     font-size: 0.75rem;
     color: rgb(235, 235, 235);
 }
