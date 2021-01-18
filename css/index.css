@@ -9,6 +9,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Quicksand', sans-serif;
+    user-select: none;
 }
 
 html, body {
@@ -19,6 +20,7 @@ html, body {
     width: 100%;
     height: 100%;
     background-color: rgb(250, 250, 250);
+    overflow: overlay;
 }
 
 ::-webkit-scrollbar {
@@ -32,56 +34,56 @@ html, body {
 }
 
 div.header {
-    z-index: 2;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 10%;
-    min-width: 976px;
-    min-height: 75px;
+    height: max-content;
+    min-width: min-content;
+    min-height: min-content;
+    padding: 10px 20px 10px 40px;
     background: rgb(175, 0, 0);
     background: linear-gradient(135deg, rgb(175, 0, 0) 0%, rgb(245, 35, 35) 100%);
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
 }
 
-button.headerLeft {
+.header button.headerLeft {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-left: 40px;
-    width: fit-content;
-    height: fit-content;
+    width: max-content;
+    height: max-content;
     background-color: transparent;
     outline: none;
     border: none;
 }
 
-button.headerLeft:hover {
+.header button.headerLeft:hover {
     cursor: pointer;
 }
 
-img.headerImg {
+.headerLeft img.headerImg {
     width: 25px;
     height: 25px;
     margin-right: 10px;
 }
 
-text.headerText {
+.headerLeft text.headerText {
+    width: max-content;
     font-size: 2rem;
     color: rgb(235, 235, 235);
 }
 
-div.headerRight {
+.header div.headerRight {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding-right: 20px;
-    width: 50%;
-    height: 100%;
+    width: max-content;
+    height: max-content;
 }
 
-button.redirectBtn {
+.headerRight button.redirectBtn {
     width: 110px;
     height: 35px;
     outline: none;
@@ -93,12 +95,13 @@ button.redirectBtn {
     transition: all .2s ease-in-out;
 }
 
-button.redirectBtn:hover {
+.headerRight button.redirectBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
     transition: all .2s ease-in-out;
+    cursor: pointer;
 }
 
-button.redirectBtn:focus {
+.headerRight button.redirectBtn:focus {
     background-color: rgb(245, 50, 50);
     transition: all .2s ease-in-out;
 }
@@ -108,26 +111,35 @@ div.mainContent {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 85%;
-    min-height: 640px;
+    height: 100%;
+    overflow: hidden;
 }
 
-div.leftPanel {
-    z-index: 1;
+.mainContent div.leftPanel {
+    z-index: 90;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 20px 0 0 0;
-    width: 15%;
+    align-items: flex-start;
+    justify-content: center;
+    width: max-content;
     height: 100%;
-    min-width: 216px;
+    min-width: min-content;
+    min-height: min-content;
+    padding: 20px;
     background: rgb(200, 200, 200);
     background: linear-gradient(135deg, rgb(200, 200, 200) 0%, rgb(230, 230, 230) 100%);
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
 }
 
-button.leftPanelBtn {
+.leftPanel div.leftPanelBtns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: max-content;
+    height: max-content;
+}
+
+.leftPanelBtns button.leftPanelBtn {
     width: 170px;
     height: 35px;
     margin: 5px 0 5px 0;
@@ -140,18 +152,19 @@ button.leftPanelBtn {
     transition: all .2s ease-in-out;
 }
 
-button.leftPanelBtn:hover {
+.leftPanelBtns button.leftPanelBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
     transition: all .2s ease-in-out;
+    cursor: pointer;
 }
 
-button.leftPanelBtn.active {
+.leftPanelBtns button.leftPanelBtn.active {
     color: rgb(235, 235, 235);
     background-color: rgb(245, 50, 50);
     transition: all .2s ease-in-out;
 }
 
-hr.solid {
+.leftPanelBtns hr.solid {
     display: block;
     width: 85%;
     margin: 5px 0 5px 0;
@@ -159,65 +172,73 @@ hr.solid {
     border-top: 2px solid rgb(180, 180, 180);
 }
 
-div.rightPanel {
+.mainContent div.rightPanel {
+    z-index: 80;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 85%;
-    height: 100%;
-    transition: all .2s ease-in-out;
-}
-
-div.rightPanel.hidden {
-    opacity: 0;
-    transition: all .2s ease-in-out;
-}
-
-div.welcomeScreen {
-    display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
+    transition: all .2s ease-in-out;
+}
+
+.mainContent div.rightPanel.hidden {
+    opacity: 0;
+    transition: all .2s ease-in-out;
+}
+
+.rightPanel div.welcomeScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    height: max-content;
     animation: fade .2s ease-in-out;
 }
 
-div.rightPanelTextBox {
+.welcomeScreen div.rightPanelTextBox {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70%;
-    height: fit-content;
+    width: max-content;
+    height: max-content;
     margin: 5px;
 }
 
-text.greetings {
+.rightPanelTextBox text.greetings {
     font-size: 3rem;
     color: rgb(10, 10, 10);
     text-align: center;
 }
 
-text.info {
+.rightPanelTextBox text.info {
     font-size: 1.5rem;
     color: rgb(120, 120, 120);
     text-align: center;
 }
 
 div.footer {
-    z-index: 2;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 5%;
-    min-width: 976px;
-    min-height: 37px;
+    height: max-content;
+    min-width: min-content;
+    min-height: min-content;
+    padding: 10px 0;
     background: linear-gradient(135deg, rgb(170, 170, 170) 0%, rgb(200, 200, 200) 100%);
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
 }
 
-text.footerText {
+.footer text.footerText {
+    width: max-content;
     font-size: 0.75rem;
     color: rgb(10, 10, 10);
+    text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    /* ... */
 }
