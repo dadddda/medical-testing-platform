@@ -1,3 +1,6 @@
+// constants
+const triggerThreshold = 0.8;
+
 class newsFeed {
 
     /**
@@ -12,14 +15,31 @@ class newsFeed {
         this.latestDoc = null;
 
         this.scrollHandlerRef = this.scrollHandler.bind(this);
+        this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
+    }
+
+    /**
+     * Initializes event listeners.
+     */
+    initListeners() {
         this.newsFeedElem.addEventListener("scroll", this.scrollHandlerRef);
+        window.addEventListener("resize", this.windowResizeHandlerRef);
+    }
+
+    /**
+     * Deinitializes event listeners.
+     */
+    deinitListeners() {
+        this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
+        window.removeEventListener("resize", this.windowResizeHandlerRef);
     }
 
     /**
      * Fetches data from Firestore database. Calls appropriate
      * functions to build and append HTML elements. Manages scroll
-     * event listener and ensures that the whole page will be covered
-     * with news articles at the initial startup and after scroll events.
+     * event listener and window resize event listener and ensures 
+     * that the whole page will be covered with news articles at the 
+     * initial startup and after scroll events.
      */
     async getNews() {
         let data = null;
@@ -59,18 +79,20 @@ class newsFeed {
 
         if (data.empty) {
             this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
+            window.removeEventListener("resize", this.windowResizeHandlerRef);
         } else {
             let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
-            if (triggerHeight >= this.newsFeedElem.scrollHeight) {
+            if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
                 this.getNews();
             }
+            this.newsFeedElem.addEventListener("scroll", this.scrollHandlerRef);
         }
     }
 
     /**
      * Formats input timestamp number into string and
      * returns it.
-     * @param {number} timestamp 
+     * @param {number} timestamp
      */
     createDate(timestamp) {
         let dateObj = new Date(timestamp);
@@ -134,7 +156,20 @@ class newsFeed {
      */
     scrollHandler() {
         let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
-        if (triggerHeight >= this.newsFeedElem.scrollHeight) {
+        if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+            this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
+            this.getNews();
+        }
+    }
+
+    /**
+     * Handles window resize events and if necessary calls getNews() function
+     * to fetch additional data.
+     */
+    windowResizeHandler() {
+        let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
+        if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+            window.removeEventListener("resize", this.windowResizeHandlerRef);
             this.getNews();
         }
     }
