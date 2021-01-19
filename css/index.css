@@ -33,6 +33,14 @@ html, body {
     border-radius: 5px;
 }
 
+hr.solid {
+    display: block;
+    width: 85%;
+    margin: 5px 0 5px 0;
+    border: 0;
+    border-top: 2px solid rgb(180, 180, 180);
+}
+
 div.header {
     z-index: 100;
     display: flex;
@@ -162,14 +170,6 @@ div.mainContent {
     color: rgb(235, 235, 235);
     background-color: rgb(245, 50, 50);
     transition: all .2s ease-in-out;
-}
-
-.leftPanelBtns hr.solid {
-    display: block;
-    width: 85%;
-    margin: 5px 0 5px 0;
-    border: 0;
-    border-top: 2px solid rgb(180, 180, 180);
 }
 
 .mainContent div.rightPanel {

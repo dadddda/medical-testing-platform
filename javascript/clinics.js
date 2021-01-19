@@ -14,6 +14,7 @@ class clinics {
         this.clinicsElem = clinicsElem;
         this.pos = {top: 0, left: 0, x: 0, y: 0};
         this.scale = 1;
+        this.centered = true;
 
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
 
@@ -49,9 +50,11 @@ class clinics {
                     <div class="clinicTitle">
                         <text>Clinic Title</text>
                     </div>
+                    <hr class="solid">
                     <div class="clinicDescription">
                         <text>Clinic Description</text>
                     </div>
+                    <hr class="solid">
                     <div class="clinicDashboard">
                         <text>Clinic Dashboard</text>
                     </div>
@@ -140,7 +143,9 @@ class clinics {
         if (navigator.geolocation) {
             let showPositionRef = this.showPosition.bind(this);
             let showErrorRef = this.showError.bind(this);
-            navigator.geolocation.getCurrentPosition(showPositionRef, showErrorRef);
+            navigator.geolocation.getCurrentPosition(showPositionRef, showErrorRef, {
+                enableHighAccuracy: true
+            });
         } else {
             console.log("Geolocation is not supported by this browser.");
         }
@@ -153,8 +158,8 @@ class clinics {
      * @param position 
      */
     showPosition(position) {
-        this.latitude = 41.816448 - position.coords.latitude;
-        this.longitude = position.coords.longitude - 44.682537;
+        this.latitude = position.coords.latitude;
+        this.longitude = position.coords.longitude;
 
         let pinImgElem = document.getElementById("pinImg");
         let pinImgElemOrigin = this.calcPinImgElemOrigin();
@@ -209,6 +214,8 @@ class clinics {
                     block: "center",
                     inline: "center"
                 });
+
+                this.centered = false;
                 break;
         }
     }
@@ -250,6 +257,8 @@ class clinics {
         
         zoomContainerElem.scrollLeft = this.pos.left - dx;
         zoomContainerElem.scrollTop = this.pos.top - dy;
+
+        this.centered = false;
     }
 
     /**
@@ -312,7 +321,9 @@ class clinics {
      * @param {Boolean} zoomIn 
      */
     zoomMap(zoomIn) {
+        let zoomContainerElem = document.getElementById("zoomContainer");
         let zoomableContentElem = document.getElementById("zoomableContent");
+        let pinImgElem = document.getElementById("pinImg");
 
         if (!zoomIn && this.scale > 1) {
             this.scale /= mapScaleFactor;
@@ -321,6 +332,14 @@ class clinics {
         }
 
         zoomableContentElem.style.transform = `scale(${this.scale})`;
+        pinImgElem.style.transform = `scale(${1 / this.scale})`;
+
+        if (this.centered) {
+            zoomContainerElem.scrollLeft = (zoomContainerElem.scrollWidth - zoomContainerElem.clientWidth) / 2;
+            zoomContainerElem.scrollTop = (zoomContainerElem.scrollHeight - zoomContainerElem.clientHeight) / 2;
+        }
+
+        if (this.scale == 1) this.centered = true;
     }
 
     /**
@@ -345,20 +364,41 @@ class clinics {
     }
     
     /**
-     * Mercator projection. Calculates the coordinates of the point according
-     * to given latitude and longitude on the map according to it's dimensions.
-     * 
-     * TODO! Needs revision as this isn't valid calculation for segments of the map.
+     * Calculates 'pinImg' relative coordinates to 'mapImg' and returns it.
      */
     calcPinImgElemRelative() {
         let mapImgElem = document.getElementById("mapImg");
         let mapW = mapImgElem.getBoundingClientRect().width;
-        let mapH = mapImgElem.getBoundingClientRect().height;
 
-        let x = (this.longitude + 180) * (mapW / 360);
-        let latRad = this.latitude * Math.PI / 180;
+        const topmostLat = 41.816398;
+        const leftmostLong = 44.682701;
+        const rightmostLong = 45.012187;
+
+        let wholeMapW = 360 / (rightmostLong - leftmostLong) * mapW;
+        let wholeMapH = wholeMapW;
+
+        let anchorCoordinates = this.calcMercator(topmostLat, leftmostLong, wholeMapW, wholeMapH);
+        let currCoordinates = this.calcMercator(this.latitude, this.longitude, wholeMapW, wholeMapH);
+
+        let x = currCoordinates.x - anchorCoordinates.x;
+        let y = currCoordinates.y - anchorCoordinates.y;
+
+        return {x: x, y: y};
+    }
+
+    /**
+     * Mercator projection. Calculates the (x, y) coordinates from given 
+     * (lat, long) on the map according to map's dimensions.
+     * @param lat 
+     * @param long 
+     * @param w 
+     * @param h 
+     */
+    calcMercator(lat, long, w, h) {
+        let x = (long + 180) * (w / 360);
+        let latRad = lat * Math.PI / 180;
         let mercator = Math.log(Math.tan((Math.PI / 4) + (latRad / 2)));
-        let y = (mapH / 2) - (mapW * mercator / (2 * Math.PI));
+        let y = (h / 2) - (w * mercator / (2 * Math.PI));
 
         return {x: x, y: y};
     }
