@@ -91,7 +91,6 @@ function initBtns() {
                         clinicsObj.drawContent();
                         clinicsObj.drawFooter();
                         clinicsObj.initListeners();
-                        clinicsObj.getLocation();
                         
                         tempClass = clinicsObj;
                         break;

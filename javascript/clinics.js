@@ -12,6 +12,7 @@ class clinics {
      */
     constructor(clinicsElem) {
         this.clinicsElem = clinicsElem;
+        this.clinicsRef = firebase.firestore().collection("clinics");
         this.pos = {top: 0, left: 0, x: 0, y: 0};
         this.scale = 1;
 
@@ -76,7 +77,7 @@ class clinics {
                         <div class="zoomContainer" id="zoomContainer">
                             <div class="zoomableContent" id="zoomableContent">
                                 <img class="mapImg" id="mapImg" src="../svgs/map.svg">
-                                <img class="pinImg hidden" id="pinImg" src="../svgs/pin.svg">
+                                <img class="userPin hidden" id="userPin" src="../svgs/pin.svg">
                             </div>
                         </div>
                         <div class="mapFooterBtns" id="mapFooterBtns">
@@ -174,17 +175,12 @@ class clinics {
     showPosition(position) {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
+        
+        let userPinElem = document.getElementById("userPin");
+        this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
+        userPinElem.classList.remove("hidden");
 
-        let pinImgElem = document.getElementById("pinImg");
-        let pinImgElemOrigin = this.calcPinImgElemOrigin();
-        let relativeCoordinates = this.calcPinImgElemRelative();
-
-        relativeCoordinates.x += pinImgElemOrigin.x;
-        relativeCoordinates.y += pinImgElemOrigin.y;
-
-        pinImgElem.classList.remove("hidden");
-        pinImgElem.style.left = `${relativeCoordinates.x}px`;
-        pinImgElem.style.top = `${relativeCoordinates.y}px`;
+        this.getClinics();
     }
 
     /**
@@ -208,6 +204,39 @@ class clinics {
         }
     }
 
+    // -------------------------------------------------------------------- Firestore Start
+
+    /**
+     * 
+     */
+    async getClinics() {
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        let data = await this.clinicsRef.get();
+
+        this.clinicPins = new Map();
+
+        data.docs.forEach((doc) => {
+            let id = doc.data().id;
+            let location = doc.data().location;
+
+            let html = `
+                <img class="clinicPin" id="${id}" src="../svgs/clinic.svg">
+            `;
+            
+            this.appendHtml(html, zoomableContentElem);
+            
+            let clinicPinElem = document.getElementById(id);
+            let clinicPinLoadHandler = () => {
+                this.positionPinOnMap(clinicPinElem, location.latitude, location.longitude);
+                this.clinicPins.set(id, {lat: location.latitude, long: location.longitude});
+                clinicPinElem.removeEventListener("load", clinicPinLoadHandler);
+            };
+            clinicPinElem.addEventListener("load", clinicPinLoadHandler);
+        });
+    }
+
+    // -------------------------------------------------------------------- Firestore End
+
     /**
      * Mouse click handler.
      * @param {Event} event 
@@ -221,8 +250,8 @@ class clinics {
                 this.zoomMap(false);
                 break;
             case "centerBtn":
-                let pinImgElem = document.getElementById("pinImg");
-                pinImgElem.scrollIntoView({
+                let userPinElem = document.getElementById("userPin");
+                userPinElem.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "center"
@@ -311,25 +340,24 @@ class clinics {
      */
     mapLoadHandler() {
         this.adjustMapImgElemSize();
+        this.getLocation();
     }
 
     /**
      * On each window resize adjusts 'mapImg' size, calcualtes
-     * new 'pinImg' origin and relative coordinates and updates
-     * them.
+     * new 'userPin' and 'clinicPin' elements origins and relative
+     * coordinates and updates them.
      */
     windowResizeHandler() {
         this.adjustMapImgElemSize();
+        
+        let userPinElem = document.getElementById("userPin");
 
-        let pinImgElem = document.getElementById("pinImg");
-        let pinImgElemOrigin = this.calcPinImgElemOrigin();
-        let relativeCoordinates = this.calcPinImgElemRelative();
-
-        relativeCoordinates.x += pinImgElemOrigin.x;
-        relativeCoordinates.y += pinImgElemOrigin.y;
-
-        pinImgElem.style.left = `${relativeCoordinates.x}px`;
-        pinImgElem.style.top = `${relativeCoordinates.y}px`;
+        this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
+        this.clinicPins.forEach((value, key) => {
+            let currClinicPinElem = document.getElementById(key);
+            this.positionPinOnMap(currClinicPinElem, value.lat, value.long);
+        });
     }
 
     /**
@@ -339,7 +367,7 @@ class clinics {
     zoomMap(zoomIn) {
         let zoomContainerElem = document.getElementById("zoomContainer");
         let zoomableContentElem = document.getElementById("zoomableContent");
-        let pinImgElem = document.getElementById("pinImg");
+        let userPinElem = document.getElementById("userPin");
 
         if (!zoomIn && this.scale > 1) {
             this.scale /= mapScaleFactor;
@@ -355,7 +383,11 @@ class clinics {
         let lastScrollHeight = zoomContainerElem.scrollHeight;
 
         zoomableContentElem.style.transform = `scale(${this.scale})`;
-        pinImgElem.style.transform = `scale(${1 / this.scale})`;
+        userPinElem.style.transform = `scale(${1 / this.scale})`;
+        this.clinicPins.forEach((value, key) => {
+            let currClinicPinElem = document.getElementById(key);
+            currClinicPinElem.style.transform = `scale(${1 / this.scale})`;
+        });
         
         if (!zoomIn) {
             let pctW = 1 - zoomContainerElem.scrollWidth / lastScrollWidth;
@@ -369,12 +401,28 @@ class clinics {
     }
 
     /**
-     * Calculates 'pinImg' origin coordinates relative to 'mapImg' using
-     * parent element's and 'mapImg's' dimensions. Also accounts for the
-     * dimensions of the 'pinImg' to make it's anchor at pin's point.
+     * Positions given pin element on the map according to given
+     * latitude and longitude.
+     * @param {HTMLElement} pin 
      */
-    calcPinImgElemOrigin() {
-        let pinImgElem = document.getElementById("pinImg");
+    positionPinOnMap(pin, lat, long) {
+        let pinElemOrigin = this.calcElemOrigin(pin);
+        let relativeCoordinates = this.calcElemRelative(lat, long);
+
+        relativeCoordinates.x += pinElemOrigin.x;
+        relativeCoordinates.y += pinElemOrigin.y;
+
+        pin.style.left = `${relativeCoordinates.x}px`;
+        pin.style.top = `${relativeCoordinates.y}px`;
+    }
+
+    /**
+     * Calculates 'elem' origin coordinates relative to 'mapImg' using
+     * parent element's and 'mapImg's' dimensions. Also accounts for the
+     * dimensions of the 'elem' to make it's anchor at pin's point.
+     * @param {HTMLElement} elem
+     */
+    calcElemOrigin(elem) {
         let zoomableContentElem = document.getElementById("zoomableContent");
         let mapImgElem = document.getElementById("mapImg");
         let zoomableContentElemBR = zoomableContentElem.getBoundingClientRect();
@@ -383,16 +431,17 @@ class clinics {
         let x = mapImgElemBR.x - zoomableContentElemBR.x;
         let y = mapImgElemBR.y - zoomableContentElemBR.y;
 
-        x -= pinImgElem.offsetWidth / 2;
-        y -= pinImgElem.offsetHeight;
+        x -= elem.offsetWidth / 2;
+        y -= elem.offsetHeight;
 
         return {x: x, y: y};
     }
     
     /**
-     * Calculates 'pinImg' relative coordinates to 'mapImg' and returns it.
+     * Calculates relative coordinates to 'mapImg' according to given
+     * latitude and longitude values and returns it.
      */
-    calcPinImgElemRelative() {
+    calcElemRelative(lat, long) {
         let mapImgElem = document.getElementById("mapImg");
         let mapW = mapImgElem.getBoundingClientRect().width;
 
@@ -404,7 +453,7 @@ class clinics {
         let wholeMapH = wholeMapW;
 
         let anchorCoordinates = this.calcMercator(topmostLat, leftmostLong, wholeMapW, wholeMapH);
-        let currCoordinates = this.calcMercator(this.latitude, this.longitude, wholeMapW, wholeMapH);
+        let currCoordinates = this.calcMercator(lat, long, wholeMapW, wholeMapH);
 
         let x = currCoordinates.x - anchorCoordinates.x;
         let y = currCoordinates.y - anchorCoordinates.y;
@@ -439,7 +488,11 @@ class clinics {
 
         if (this.scale > 1) {
             zoomableContentElem.style.transform = "scale(1)";
-            document.getElementById("pinImg").style.transform = "scale(1)";
+            document.getElementById("userPin").style.transform = "scale(1)";
+            this.clinicPins.forEach((value, key) => {
+                let currClinicPinElem = document.getElementById(key);
+                currClinicPinElem.style.transform = "scale(1)";
+            });
             this.scale = 1;
         }
 

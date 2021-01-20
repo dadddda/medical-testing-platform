@@ -135,22 +135,35 @@ div.clinics {
     height: 95%;
     position: absolute;
     object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
 }
 
-.zoomableContent img.pinImg {
-    width: 20px;
+.zoomableContent img.userPin {
+    z-index: 1;
+    height: 36px;
     position: absolute;
     object-fit: contain;
     transform-origin: bottom center;
     animation: fade .2s ease-in-out;
     transition: opacity .2s ease-in-out;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-.zoomableContent img.pinImg:hover {
+.zoomableContent img.clinicPin {
+    height: 36px;
+    position: absolute;
+    object-fit: contain;
+    transform-origin: bottom center;
+    animation: fade .2s ease-in-out;
+    transition: opacity .2s ease-in-out;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.zoomableContent img.userPin:hover {
     cursor: pointer;
 }
 
-.zoomableContent img.pinImg.hidden {
+.zoomableContent img.userPin.hidden {
     opacity: 0;
     transition: all .2s ease-in-out;
 }
