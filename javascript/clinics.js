@@ -14,7 +14,6 @@ class clinics {
         this.clinicsElem = clinicsElem;
         this.pos = {top: 0, left: 0, x: 0, y: 0};
         this.scale = 1;
-        this.centered = true;
 
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
 
@@ -208,14 +207,11 @@ class clinics {
                 break;
             case "centerBtn":
                 let pinImgElem = document.getElementById("pinImg");
-
                 pinImgElem.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "center"
                 });
-
-                this.centered = false;
                 break;
         }
     }
@@ -257,8 +253,6 @@ class clinics {
         
         zoomContainerElem.scrollLeft = this.pos.left - dx;
         zoomContainerElem.scrollTop = this.pos.top - dy;
-
-        this.centered = false;
     }
 
     /**
@@ -329,17 +323,27 @@ class clinics {
             this.scale /= mapScaleFactor;
         } else if (zoomIn && this.scale < mapScaleThreshold) {
             this.scale *= mapScaleFactor;
+        } else {
+            return;
         }
+
+        let elemWidth = zoomContainerElem.clientWidth;
+        let elemHeight = zoomContainerElem.clientHeight;
+        let lastScrollWidth = zoomContainerElem.scrollWidth;
+        let lastScrollHeight = zoomContainerElem.scrollHeight;
 
         zoomableContentElem.style.transform = `scale(${this.scale})`;
         pinImgElem.style.transform = `scale(${1 / this.scale})`;
-
-        if (this.centered) {
-            zoomContainerElem.scrollLeft = (zoomContainerElem.scrollWidth - zoomContainerElem.clientWidth) / 2;
-            zoomContainerElem.scrollTop = (zoomContainerElem.scrollHeight - zoomContainerElem.clientHeight) / 2;
+        
+        if (!zoomIn) {
+            let pctW = 1 - zoomContainerElem.scrollWidth / lastScrollWidth;
+            let pctH = 1 - zoomContainerElem.scrollHeight / lastScrollHeight;
+            zoomContainerElem.scrollLeft -= (zoomContainerElem.scrollLeft + elemWidth / 2) * pctW;
+            zoomContainerElem.scrollTop -= (zoomContainerElem.scrollTop + elemHeight / 2) * pctH;
+        } else if (zoomIn) {
+            zoomContainerElem.scrollLeft += (zoomContainerElem.scrollLeft + elemWidth / 2) * 0.2;
+            zoomContainerElem.scrollTop += (zoomContainerElem.scrollTop + elemHeight / 2) * 0.2;
         }
-
-        if (this.scale == 1) this.centered = true;
     }
 
     /**
