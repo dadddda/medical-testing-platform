@@ -17,12 +17,12 @@ div.clinics {
 .clinics div.clinicsHeader {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
     height: max-content;
     padding: 10px;
-    background: rgb(215, 215, 215);
-    background-image: linear-gradient(135deg, rgb(215, 215, 215) 0%, rgb(245, 245, 245) 100%);
+    background: rgb(225, 225, 225);
+    background-image: linear-gradient(315deg, rgb(225, 225, 225) 0%, rgb(255, 255, 255) 100%);
     background-attachment: fixed;
 }
 
@@ -42,39 +42,57 @@ div.clinics {
     width: max-content;
     height: 100%;
     padding: 0 20px;
-    background: rgb(215, 215, 215);
-    background-image: linear-gradient(135deg, rgb(215, 215, 215) 0%, rgb(245, 245, 245) 100%);
+    background: rgb(225, 225, 225);
+    background-image: linear-gradient(315deg, rgb(225, 225, 225) 0%, rgb(255, 255, 255) 100%);
     background-attachment: fixed;
 }
 
 .infoContainer div.clinicTitle {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 200px;
+    justify-content: flex-start;
+    width: 300px;
     height: max-content;
-    padding: 10px;
-    background-color: lightblue;
+    margin-bottom: 10px;
 }
 
-.infoContainer div.clinicDescription {
+.clinicTitle text.titleText {
+    font-size: 1.7rem;
+    color: rgb(10, 10, 10);
+}
+
+.infoContainer dl.clinicDescription {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 50%;
-    padding: 10px;
-    background-color: lightcoral;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: max-content;
+}
+
+.clinicDescription dt.categoryName {
+    margin-top: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: rgb(10, 10, 10);
+}
+
+.clinicDescription dd.categoryDesc {
+    margin-bottom: 5px;
+    font-size: 1rem;
+    color: rgb(10, 10, 10);
+}
+
+.categoryDesc ul.categoryDescList {
+    margin-left: 20px;
 }
 
 .infoContainer div.clinicDashboard {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 200px;
-    height: 50%;
-    padding: 10px;
-    background-color: lightgreen;
+    width: 100%;
+    height: 100%;
 }
 
 .clinicsContent div.mapContainer {
@@ -154,7 +172,7 @@ div.clinics {
     outline: none;
     border: none;
     border-radius: 5px;
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(245, 50, 50);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
     transition: all .2s ease-in-out;
 }
@@ -172,7 +190,7 @@ div.clinics {
     width: 100%;
     height: max-content;
     padding: 10px;
-    background: rgb(215, 215, 215);
-    background-image: linear-gradient(135deg, rgb(215, 215, 215) 0%, rgb(245, 245, 245) 100%);
+    background: rgb(225, 225, 225);
+    background-image: linear-gradient(315deg, rgb(225, 225, 225) 0%, rgb(255, 255, 255) 100%);
     background-attachment: fixed;
 }

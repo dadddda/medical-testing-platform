@@ -35,7 +35,7 @@ html, body {
 
 hr.solid {
     display: block;
-    width: 85%;
+    width: calc(100% - 10px);
     margin: 5px 0 5px 0;
     border: 0;
     border-top: 2px solid rgb(180, 180, 180);
@@ -227,7 +227,7 @@ div.footer {
     height: max-content;
     min-width: min-content;
     min-height: min-content;
-    padding: 10px 0;
+    padding: 7px 0;
     background: linear-gradient(135deg, rgb(170, 170, 170) 0%, rgb(200, 200, 200) 100%);
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
 }

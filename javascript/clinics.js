@@ -16,12 +16,14 @@ class clinics {
         this.scale = 1;
 
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
-
+        
         this.mouseDownHandlerRef = this.mouseDownHandler.bind(this);
         this.mouseMoveHandlerRef = this.mouseMoveHandler.bind(this);
         this.mouseUpHandlerRef = this.mouseUpHandler.bind(this);
         this.mouseWheelHandlerRef = this.mouseWheelHandler.bind(this);
-        this.windowResizeHndlerRef = this.windowResizeHndler.bind(this);
+
+        this.mapLoadHandlerRef = this.mapLoadHandler.bind(this);
+        this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
     }
 
     /**
@@ -30,9 +32,7 @@ class clinics {
      */
     drawHeader() {
         let html = `
-            <div class="clinicsHeader">
-                <text>Header</text>
-            </div>
+            <div class="clinicsHeader"></div>
         `;
 
         this.appendHtml(html, this.clinicsElem);
@@ -47,12 +47,25 @@ class clinics {
             <div class="clinicsContent">
                 <div class="infoContainer">
                     <div class="clinicTitle">
-                        <text>Clinic Title</text>
+                        <text class="titleText">Sports Medicine Clinic</text>
                     </div>
-                    <hr class="solid">
-                    <div class="clinicDescription">
-                        <text>Clinic Description</text>
-                    </div>
+                    <dl class="clinicDescription">
+                        <dt class="categoryName">Address:</dt>
+                        <dd class="categoryDesc">40 Bogdan Khmelnitski St</dd>
+                        <dt class="categoryName">Phone: </dt>
+                        <dd class="categoryDesc">593 33 73 30</dd>
+                        <dt class="categoryName">Working Hours:</dt>
+                        <dd class="categoryDesc">10:00 - 18:00</dd>
+                        <dt class="categoryName">Supported Tests:</dt>
+                        <dd class="categoryDesc">
+                            <ul class="categoryDescList">
+                                <li>Blood Glucose</li>
+                                <li>Calcium</li>
+                                <li>Cardiac Enzymes</li>
+                                <li>Cholesterol and Lipid</li>
+                            </ul>
+                        </dd>
+                    </dl>
                     <hr class="solid">
                     <div class="clinicDashboard">
                         <text>Clinic Dashboard</text>
@@ -85,9 +98,7 @@ class clinics {
      */
     drawFooter() {
         let html = `
-            <div class="clinicsFooter">
-                <text>Footer</text>
-            </div>
+            <div class="clinicsFooter"></div>
         `;
 
         this.appendHtml(html, this.clinicsElem);
@@ -111,12 +122,14 @@ class clinics {
     initListeners() {
         let zoomContainerElem = document.getElementById("zoomContainer");
         let mapFooterBtnsElem = document.getElementById("mapFooterBtns");
+        let mapImgElem = document.getElementById("mapImg");
 
         zoomContainerElem.addEventListener("mousedown", this.mouseDownHandlerRef);
         zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
         mapFooterBtnsElem.addEventListener("click", this.mouseClickHandlerRef);
 
-        window.addEventListener("resize", this.windowResizeHndlerRef);
+        mapImgElem.addEventListener("load", this.mapLoadHandlerRef);
+        window.addEventListener("resize", this.windowResizeHandlerRef);
     }
 
     /**
@@ -125,12 +138,14 @@ class clinics {
     deinitListeners() {
         let zoomContainerElem = document.getElementById("zoomContainer");
         let mapFooterBtnsElem = document.getElementById("mapFooterBtns");
+        let mapImgElem = document.getElementById("mapImg");
         
         zoomContainerElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
         zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
         mapFooterBtnsElem.removeEventListener("click", this.mouseClickHandlerRef);
 
-        window.removeEventListener("resize", this.windowResizeHndlerRef);
+        mapImgElem.removeEventListener("load", this.mapLoadHandlerRef);
+        window.removeEventListener("resize", this.windowResizeHandlerRef);
     }
 
     /**
@@ -292,11 +307,18 @@ class clinics {
     }
 
     /**
+     * Executes script when 'mapImg' is fully loaded.
+     */
+    mapLoadHandler() {
+        this.adjustMapImgElemSize();
+    }
+
+    /**
      * On each window resize adjusts 'mapImg' size, calcualtes
      * new 'pinImg' origin and relative coordinates and updates
      * them.
      */
-    windowResizeHndler() {
+    windowResizeHandler() {
         this.adjustMapImgElemSize();
 
         let pinImgElem = document.getElementById("pinImg");
@@ -417,6 +439,7 @@ class clinics {
 
         if (this.scale > 1) {
             zoomableContentElem.style.transform = "scale(1)";
+            document.getElementById("pinImg").style.transform = "scale(1)";
             this.scale = 1;
         }
 
