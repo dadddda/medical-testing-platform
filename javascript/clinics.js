@@ -17,10 +17,10 @@ class clinics {
         this.scale = 1;
 
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
-        
         this.mouseDownHandlerRef = this.mouseDownHandler.bind(this);
         this.mouseMoveHandlerRef = this.mouseMoveHandler.bind(this);
         this.mouseUpHandlerRef = this.mouseUpHandler.bind(this);
+
         this.mouseWheelHandlerRef = this.mouseWheelHandler.bind(this);
 
         this.mapLoadHandlerRef = this.mapLoadHandler.bind(this);
@@ -28,56 +28,18 @@ class clinics {
     }
 
     /**
-     * Builds new template of HTML element of clinics header and
-     * calls appendHtml().
-     */
-    drawHeader() {
-        let html = `
-            <div class="clinicsHeader"></div>
-        `;
-
-        this.appendHtml(html, this.clinicsElem);
-    }
-
-    /**
      * Builds new template of HTML element of clinics content and
-     * calls appendHtml().
+     * renders created element.
      */
     drawContent() {
         let html = `
             <div class="clinicsContent">
-                <div class="infoContainer">
-                    <div class="clinicTitle">
-                        <text class="titleText">Sports Medicine Clinic</text>
-                    </div>
-                    <dl class="clinicDescription">
-                        <dt class="categoryName">Address:</dt>
-                        <dd class="categoryDesc">40 Bogdan Khmelnitski St</dd>
-                        <dt class="categoryName">Phone: </dt>
-                        <dd class="categoryDesc">593 33 73 30</dd>
-                        <dt class="categoryName">Working Hours:</dt>
-                        <dd class="categoryDesc">10:00 - 18:00</dd>
-                        <dt class="categoryName">Supported Tests:</dt>
-                        <dd class="categoryDesc">
-                            <ul class="categoryDescList">
-                                <li>Blood Glucose</li>
-                                <li>Calcium</li>
-                                <li>Cardiac Enzymes</li>
-                                <li>Cholesterol and Lipid</li>
-                            </ul>
-                        </dd>
-                    </dl>
-                    <hr class="solid">
-                    <div class="clinicDashboard">
-                        <text>Clinic Dashboard</text>
-                    </div>
-                </div>
+                <div class="infoContainer" id="infoContainer"></div>
                 <div class="mapContainer">
                     <div class="mapContent">
                         <div class="zoomContainer" id="zoomContainer">
                             <div class="zoomableContent" id="zoomableContent">
                                 <img class="mapImg" id="mapImg" src="../svgs/map.svg">
-                                <img class="userPin hidden" id="userPin" src="../svgs/pin.svg">
                             </div>
                         </div>
                         <div class="mapFooterBtns" id="mapFooterBtns">
@@ -94,15 +56,47 @@ class clinics {
     }
 
     /**
-     * Builds new template of HTML element of clinics footer and
-     * calls appendHtml().
+     * Builds new template of HTML element of clinic info container
+     * according to given 'clinicInfo' object and renders created
+     * element.
+     * @param clinicInfo
      */
-    drawFooter() {
+    drawInfoContainer(clinicInfo) {
         let html = `
-            <div class="clinicsFooter"></div>
+            <div class="clinicName" id="clinicName">
+                <text class="nameText">${clinicInfo.name}</text>
+            </div>
+            <dl class="clinicDescription">
+                <dt class="categoryName">Address:</dt>
+                <dd class="categoryDesc">${clinicInfo.address}</dd>
+                <dt class="categoryName">Phone: </dt>
+                <dd class="categoryDesc">${clinicInfo.phone}</dd>
+                <dt class="categoryName">Working Hours:</dt>
+                <dd class="categoryDesc">${clinicInfo.hours}</dd>
+                <dt class="categoryName">Supported Tests:</dt>
+                <dd class="categoryDesc">
+                    <ul class="categoryDescList" id="categoryDescList"></ul>
+                </dd>
+            </dl>
+            <hr class="solid">
+            <div class="clinicDashboard">
+                <text>Clinic Dashboard</text>
+            </div>
         `;
+        let infoContainerElem = document.getElementById("infoContainer");
+        infoContainerElem.innerHTML = "";
+        this.appendHtml(html, infoContainerElem);
 
-        this.appendHtml(html, this.clinicsElem);
+        setTimeout(() => {
+            let categoryDescListElem = document.getElementById("categoryDescList");
+            clinicInfo.tests.forEach((testName) => {
+                let currListItem = document.createElement("li");
+                currListItem.innerHTML = testName;
+                categoryDescListElem.appendChild(currListItem);
+            });
+        }, 10);
+        
+        infoContainerElem.style.display = "flex";
     }
 
     /**
@@ -114,21 +108,24 @@ class clinics {
         let template = document.createElement("template");
         html = html.trim();
         template.innerHTML = html;
-        element.appendChild(template.content.firstChild);
+
+        let templateChildren = template.content.childNodes;
+        for (let i = 0; i < templateChildren.length; i++) {
+            element.appendChild(templateChildren[i]);
+        }
     }
 
     /**
      * Initializes event listeners.
      */
     initListeners() {
+        this.clinicsElem.addEventListener("click", this.mouseClickHandlerRef);
+        this.clinicsElem.addEventListener("mousedown", this.mouseDownHandlerRef);
+        
         let zoomContainerElem = document.getElementById("zoomContainer");
-        let mapFooterBtnsElem = document.getElementById("mapFooterBtns");
-        let mapImgElem = document.getElementById("mapImg");
-
-        zoomContainerElem.addEventListener("mousedown", this.mouseDownHandlerRef);
         zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
-        mapFooterBtnsElem.addEventListener("click", this.mouseClickHandlerRef);
-
+        
+        let mapImgElem = document.getElementById("mapImg");
         mapImgElem.addEventListener("load", this.mapLoadHandlerRef);
         window.addEventListener("resize", this.windowResizeHandlerRef);
     }
@@ -137,16 +134,20 @@ class clinics {
      * Deinitializes event listeners.
      */
     deinitListeners() {
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        let mapFooterBtnsElem = document.getElementById("mapFooterBtns");
-        let mapImgElem = document.getElementById("mapImg");
-        
-        zoomContainerElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
-        zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
-        mapFooterBtnsElem.removeEventListener("click", this.mouseClickHandlerRef);
+        this.clinicsElem.removeEventListener("click", this.mouseClickHandlerRef);
+        this.clinicsElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
 
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
+
+        let mapImgElem = document.getElementById("mapImg");
         mapImgElem.removeEventListener("load", this.mapLoadHandlerRef);
         window.removeEventListener("resize", this.windowResizeHandlerRef);
+
+        this.clinicPins.forEach((value, key) => {
+            let currClinicPinElem = document.getElementById(key);
+            currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
+        });
     }
 
     /**
@@ -169,16 +170,21 @@ class clinics {
     /**
      * Extracts latitude and longitude from user's location and calls
      * certain functions to calculate estimate coordinates on x, y plane of the
-     * 'mapImg' and drops pin at that exact location.
+     * 'mapImg' and drops pin at that exact location. Then calls 'getClinics()'.
      * @param position 
      */
     showPosition(position) {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
+
+        let html = `<img class="userPin" id="userPin" src="../svgs/pin.svg">`;
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        this.appendHtml(html, zoomableContentElem);
         
-        let userPinElem = document.getElementById("userPin");
-        this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
-        userPinElem.classList.remove("hidden");
+        setTimeout(() => {
+            let userPinElem = document.getElementById("userPin");
+            this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
+        }, 10);
 
         this.getClinics();
     }
@@ -204,38 +210,67 @@ class clinics {
         }
     }
 
-    // -------------------------------------------------------------------- Firestore Start
-
     /**
-     * 
+     * Fetches clinics data from database and places each clinic pin on the map.
+     * Creates instance variable of a 'Map' object to store longitude and latitude
+     * values for each clinic pin. Also adds event listeners to each.
      */
     async getClinics() {
         let zoomableContentElem = document.getElementById("zoomableContent");
         let data = await this.clinicsRef.get();
 
         this.clinicPins = new Map();
+        this.clinicPinClickHandlerRef = this.clinicPinClickHandler.bind(this);
 
         data.docs.forEach((doc) => {
             let id = doc.data().id;
             let location = doc.data().location;
 
-            let html = `
-                <img class="clinicPin" id="${id}" src="../svgs/clinic.svg">
-            `;
-            
+            let html = `<img class="clinicPin" id="${id}" src="../svgs/clinic.svg">`;
             this.appendHtml(html, zoomableContentElem);
-            
-            let clinicPinElem = document.getElementById(id);
-            let clinicPinLoadHandler = () => {
+
+            setTimeout(() => {
+                let clinicPinElem = document.getElementById(id);
                 this.positionPinOnMap(clinicPinElem, location.latitude, location.longitude);
                 this.clinicPins.set(id, {lat: location.latitude, long: location.longitude});
-                clinicPinElem.removeEventListener("load", clinicPinLoadHandler);
-            };
-            clinicPinElem.addEventListener("load", clinicPinLoadHandler);
+                clinicPinElem.addEventListener("click", this.clinicPinClickHandlerRef);
+            }, 10);
         });
     }
 
-    // -------------------------------------------------------------------- Firestore End
+    /**
+     * Called when certain clinic pin is clicked on the map.
+     * @param {Event} event 
+     */
+    async clinicPinClickHandler(event) {
+        let currClinicPinElem = event.target;
+
+        currClinicPinElem.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "center"
+        });
+
+        let data = await this.clinicsRef.where("id", "==", currClinicPinElem.id).get();
+
+        data.docs.forEach((doc) => {
+            let name = doc.data().name;
+            let address = doc.data().address;
+            let phone = doc.data().phone;
+            let hours = doc.data().hours;
+            let tests = doc.data().tests;
+
+            let clinicInfo = {
+                name: name,
+                address: address,
+                phone: phone,
+                hours: hours,
+                tests: tests
+            };
+
+            this.drawInfoContainer(clinicInfo);
+        });
+    }
 
     /**
      * Mouse click handler.
@@ -261,11 +296,58 @@ class clinics {
     }
 
     /**
-     * Mouse down handler when 'zoomContainer' is zoomed.
+     * Mouse down handler.
      * @param {Event} event
      */
     mouseDownHandler(event) {
         event.preventDefault();
+        switch (event.target.id) {
+            case "mapImg":
+                this.mapMouseDown(event);
+                break;
+            case "clinicName":
+                console.log("drag");
+                break;
+        }
+    }
+
+    /**
+     * Mouse move handler.
+     * @param {Event} event
+     */
+    mouseMoveHandler(event) {
+        event.preventDefault();
+        switch (event.target.id) {
+            case "mapImg":
+                this.mapMouseMove(event);
+                break;
+            case "clinicName":
+                console.log("drag");
+                break;
+        }
+    }
+
+    /**
+     * Mouse up handler.
+     * @param {Event} event
+     */
+    mouseUpHandler(event) {
+        event.preventDefault();
+        switch (event.target.id) {
+            case "mapImg":
+                this.mapMouseUp(event);
+                break;
+            case "clinicName":
+                console.log("drag");
+                break;
+        }
+    }
+
+    /**
+     * Map mouse down handler.
+     * @param {Event} event
+     */
+    mapMouseDown(event) {
         let zoomContainerElem = document.getElementById("zoomContainer");
         let zoomableContentElem = document.getElementById("zoomableContent");
         if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
@@ -283,11 +365,10 @@ class clinics {
     }
 
     /**
-     * Mouse move handler when 'zoomContainer' is zoomed.
+     * Map mouse move handler.
      * @param {Event} event
      */
-    mouseMoveHandler(event) {
-        event.preventDefault();
+    mapMouseMove(event) {
         let zoomContainerElem = document.getElementById("zoomContainer");
         let zoomableContentElem = document.getElementById("zoomableContent");
         if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
@@ -300,11 +381,9 @@ class clinics {
     }
 
     /**
-     * Mouse up handler when 'zoomContainer' is zoomed.
-     * @param {Event} event
+     * Map mouse up handler.
      */
-    mouseUpHandler(event) {
-        event.preventDefault();
+    mapMouseUp() {
         let zoomContainerElem = document.getElementById("zoomContainer");
         let zoomableContentElem = document.getElementById("zoomableContent");
         if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
@@ -501,7 +580,11 @@ class clinics {
         let zoomableContentW = zoomableContentElem.getBoundingClientRect().width;
         let zoomableContentH = zoomableContentElem.getBoundingClientRect().height;
 
+        console.log(zoomableContentW, zoomableContentH);
+        console.log(mapW, mapH);
+
         if (mapW > zoomableContentW * mapSizePct / 100) {
+            console.log("dasdasd");
             mapImgElem.style.width = `${mapSizePct}%`;
             mapImgElem.style.height = "unset";
         }

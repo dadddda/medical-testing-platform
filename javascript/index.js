@@ -87,9 +87,7 @@ function initBtns() {
                         rightPanelElem.appendChild(newElem);
 
                         let clinicsObj = new clinics(newElem);
-                        clinicsObj.drawHeader();
                         clinicsObj.drawContent();
-                        clinicsObj.drawFooter();
                         clinicsObj.initListeners();
                         
                         tempClass = clinicsObj;
