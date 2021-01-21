@@ -14,51 +14,52 @@ div.clinics {
     animation: fade .2s ease-in-out;
 }
 
-.clinics div.clinicsHeader {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    height: max-content;
-    padding: 10px;
-    background: rgb(225, 225, 225);
-    background-image: linear-gradient(315deg, rgb(225, 225, 225) 0%, rgb(255, 255, 255) 100%);
-    background-attachment: fixed;
-}
-
 .clinics div.clinicsContent {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
+    position: relative;
 }
 
 .clinicsContent div.infoContainer {
-    display: flex;
+    z-index: 2;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     width: max-content;
-    height: 100%;
-    padding: 0 20px;
-    background: rgb(225, 225, 225);
-    background-image: linear-gradient(315deg, rgb(225, 225, 225) 0%, rgb(255, 255, 255) 100%);
-    background-attachment: fixed;
+    height: max-content;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    background: rgb(220, 220, 220);
+    background-image: linear-gradient(135deg, rgb(220, 220, 220) 0%, rgb(240, 240, 240) 100%);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    overflow: hidden;
+    animation: fade .2s ease-in-out;
 }
 
-.infoContainer div.clinicTitle {
+.infoContainer div.clinicName {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     width: 300px;
     height: max-content;
-    margin-bottom: 10px;
+    padding: 5px 10px;
+    background: rgb(175, 0, 0);
+    background: linear-gradient(135deg, rgb(175, 0, 0) -100%, rgb(245, 35, 35) 100%);
 }
 
-.clinicTitle text.titleText {
-    font-size: 1.7rem;
-    color: rgb(10, 10, 10);
+.infoContainer div.clinicName:hover {
+    cursor: grab;
+}
+
+.clinicName text.nameText {
+    font-size: 1.5rem;
+    color: rgb(235, 235, 235);
 }
 
 .infoContainer dl.clinicDescription {
@@ -68,17 +69,18 @@ div.clinics {
     justify-content: flex-start;
     width: 100%;
     height: max-content;
+    padding: 5px 10px;
 }
 
 .clinicDescription dt.categoryName {
-    margin-top: 5px;
+    margin-top: 10px;
     font-size: 1rem;
     font-weight: bold;
     color: rgb(10, 10, 10);
 }
 
 .clinicDescription dd.categoryDesc {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-size: 1rem;
     color: rgb(10, 10, 10);
 }
@@ -91,8 +93,9 @@ div.clinics {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
+    width: max-content;
+    height: max-content;
+    padding: 5px 10px;
 }
 
 .clinicsContent div.mapContainer {
@@ -118,7 +121,6 @@ div.clinics {
     width: 100%;
     height: 100%;
     overflow: overlay;
-    box-shadow: inset 0 0 12px 0 rgba(0, 0, 0, 0.25);
 }
 
 .zoomContainer div.zoomableContent {
@@ -149,6 +151,10 @@ div.clinics {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
+.zoomableContent img.userPin:hover {
+    cursor: pointer;
+}
+
 .zoomableContent img.clinicPin {
     height: 36px;
     position: absolute;
@@ -159,13 +165,8 @@ div.clinics {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-.zoomableContent img.userPin:hover {
+.zoomableContent img.clinicPin:hover {
     cursor: pointer;
-}
-
-.zoomableContent img.userPin.hidden {
-    opacity: 0;
-    transition: all .2s ease-in-out;
 }
 
 .mapContent div.mapFooterBtns {
@@ -194,16 +195,4 @@ div.clinics {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: all .2s ease-in-out;
     cursor: pointer;
-}
-
-.clinics div.clinicsFooter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: max-content;
-    padding: 10px;
-    background: rgb(225, 225, 225);
-    background-image: linear-gradient(315deg, rgb(225, 225, 225) 0%, rgb(255, 255, 255) 100%);
-    background-attachment: fixed;
 }
