@@ -2,6 +2,8 @@
 const mapScaleFactor = 1.2;
 const mapScaleThreshold = 4;
 const mapSizePct = 95;
+const animationDelay = 200;
+const timeoutDelay = 10;
 
 class clinics {
 
@@ -13,7 +15,6 @@ class clinics {
     constructor(clinicsElem) {
         this.clinicsElem = clinicsElem;
         this.clinicsRef = firebase.firestore().collection("clinics");
-        this.pos = {top: 0, left: 0, x: 0, y: 0};
         this.scale = 1;
 
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
@@ -34,7 +35,7 @@ class clinics {
     drawContent() {
         let html = `
             <div class="clinicsContent">
-                <div class="infoContainer" id="infoContainer"></div>
+                <div class="infoCard" id="infoCard"></div>
                 <div class="mapContainer">
                     <div class="mapContent">
                         <div class="zoomContainer" id="zoomContainer">
@@ -61,10 +62,11 @@ class clinics {
      * element.
      * @param clinicInfo
      */
-    drawInfoContainer(clinicInfo) {
+    drawInfoCard(clinicInfo) {
         let html = `
             <div class="clinicName" id="clinicName">
-                <text class="nameText">${clinicInfo.name}</text>
+                <text class="nameText" id="nameText">${clinicInfo.name}</text>
+                <img class="actionBtn" id="closeBtn" src="../svgs/close.svg">
             </div>
             <dl class="clinicDescription">
                 <dt class="categoryName">Address:</dt>
@@ -83,20 +85,47 @@ class clinics {
                 <text>Clinic Dashboard</text>
             </div>
         `;
-        let infoContainerElem = document.getElementById("infoContainer");
-        infoContainerElem.innerHTML = "";
-        this.appendHtml(html, infoContainerElem);
+        let infoCardElem = document.getElementById("infoCard");
+        let currAnimationDelay = animationDelay;
+        if (infoCardElem.innerHTML.length == 0) {
+            currAnimationDelay = 0;
+            infoCardElem.style.display = "flex";
+        }
 
+        infoCardElem.style.opacity = 0;
         setTimeout(() => {
-            let categoryDescListElem = document.getElementById("categoryDescList");
-            clinicInfo.tests.forEach((testName) => {
-                let currListItem = document.createElement("li");
-                currListItem.innerHTML = testName;
-                categoryDescListElem.appendChild(currListItem);
-            });
-        }, 10);
-        
-        infoContainerElem.style.display = "flex";
+            infoCardElem.innerHTML = "";
+            this.appendHtml(html, infoCardElem);
+
+            setTimeout(() => {
+                let categoryDescListElem = document.getElementById("categoryDescList");
+                clinicInfo.tests.forEach((testName) => {
+                    let currListItem = document.createElement("li");
+                    currListItem.innerHTML = testName;
+                    categoryDescListElem.appendChild(currListItem);
+                });
+
+                setTimeout(() => {
+                    this.adjustCardElemPos();
+                }, timeoutDelay);
+            }, timeoutDelay);
+
+            infoCardElem.style.opacity = `${100}%`;
+        }, currAnimationDelay);
+    }
+
+    /**
+     * Clears info card HTML content and removes from the page.
+     */
+    closeInfoCard() {
+        this.storeActiveClinicPin = null;
+        let infoCardElem = document.getElementById("infoCard");
+
+        infoCardElem.style.opacity = 0;
+        setTimeout(() => {
+            infoCardElem.innerHTML = "";
+            infoCardElem.style.display = "none";
+        }, animationDelay);
     }
 
     /**
@@ -184,9 +213,8 @@ class clinics {
         setTimeout(() => {
             let userPinElem = document.getElementById("userPin");
             this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
-        }, 10);
-
-        this.getClinics();
+            this.getClinics();
+        }, timeoutDelay);
     }
 
     /**
@@ -234,7 +262,7 @@ class clinics {
                 this.positionPinOnMap(clinicPinElem, location.latitude, location.longitude);
                 this.clinicPins.set(id, {lat: location.latitude, long: location.longitude});
                 clinicPinElem.addEventListener("click", this.clinicPinClickHandlerRef);
-            }, 10);
+            }, timeoutDelay);
         });
     }
 
@@ -244,6 +272,8 @@ class clinics {
      */
     async clinicPinClickHandler(event) {
         let currClinicPinElem = event.target;
+        if (currClinicPinElem === this.storeActiveClinicPin) return;
+        this.storeActiveClinicPin = currClinicPinElem;
 
         currClinicPinElem.scrollIntoView({
             behavior: "smooth",
@@ -267,9 +297,39 @@ class clinics {
                 hours: hours,
                 tests: tests
             };
-
-            this.drawInfoContainer(clinicInfo);
+            
+            this.drawInfoCard(clinicInfo);
         });
+    }
+
+    /**
+     * 
+     */
+    adjustCardElemPos() {
+        let infoCardElem = document.getElementById("infoCard");
+        if (infoCardElem.innerHTML.length == 0) return;
+
+        let clinicsContentElem = this.clinicsElem.firstElementChild;
+        let clinicsContentElemBr = clinicsContentElem.getBoundingClientRect();
+        let infoCardElemBr = infoCardElem.getBoundingClientRect();
+
+        let left = infoCardElemBr.left - clinicsContentElemBr.left;
+        let top = infoCardElemBr.top - clinicsContentElemBr.top;
+
+        let overflowX = clinicsContentElemBr.width - (left + infoCardElemBr.width);
+        let overflowY = clinicsContentElemBr.height - (top + infoCardElemBr.height);
+
+        if (left <= 0) {
+            infoCardElem.style.left = 0;
+        } else {
+            if (overflowX < 0) infoCardElem.style.left = `${left + overflowX}px`;
+        }
+
+        if (top <= 0) {
+            infoCardElem.style.top = 0;
+        } else {
+            if (overflowY < 0) infoCardElem.style.top = `${top + overflowY}px`;
+        }
     }
 
     /**
@@ -292,6 +352,9 @@ class clinics {
                     inline: "center"
                 });
                 break;
+            case "closeBtn":
+                this.closeInfoCard();
+                break;
         }
     }
 
@@ -301,12 +364,14 @@ class clinics {
      */
     mouseDownHandler(event) {
         event.preventDefault();
+        this.activeElem = event.target.id;
         switch (event.target.id) {
             case "mapImg":
                 this.mapMouseDown(event);
                 break;
             case "clinicName":
-                console.log("drag");
+            case "nameText":
+                this.cardMouseDown(event);
                 break;
         }
     }
@@ -317,12 +382,13 @@ class clinics {
      */
     mouseMoveHandler(event) {
         event.preventDefault();
-        switch (event.target.id) {
+        switch (this.activeElem) {
             case "mapImg":
                 this.mapMouseMove(event);
                 break;
             case "clinicName":
-                console.log("drag");
+            case "nameText":
+                this.cardMouseMove(event);
                 break;
         }
     }
@@ -333,14 +399,16 @@ class clinics {
      */
     mouseUpHandler(event) {
         event.preventDefault();
-        switch (event.target.id) {
+        switch (this.activeElem) {
             case "mapImg":
-                this.mapMouseUp(event);
+                this.mapMouseUp();
                 break;
             case "clinicName":
-                console.log("drag");
+            case "nameText":
+                this.cardMouseUp();
                 break;
         }
+        this.activeElem = null;
     }
 
     /**
@@ -353,7 +421,7 @@ class clinics {
         if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
         zoomContainerElem.style.cursor = "grabbing";
 
-        this.pos = {
+        this.mapPos = {
             left: zoomContainerElem.scrollLeft,
             top: zoomContainerElem.scrollTop,
             x: event.clientX,
@@ -373,11 +441,11 @@ class clinics {
         let zoomableContentElem = document.getElementById("zoomableContent");
         if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
 
-        const dx = event.clientX - this.pos.x;
-        const dy = event.clientY - this.pos.y;
+        const dx = event.clientX - this.mapPos.x;
+        const dy = event.clientY - this.mapPos.y;
         
-        zoomContainerElem.scrollLeft = this.pos.left - dx;
-        zoomContainerElem.scrollTop = this.pos.top - dy;
+        zoomContainerElem.scrollLeft = this.mapPos.left - dx;
+        zoomContainerElem.scrollTop = this.mapPos.top - dy;
     }
 
     /**
@@ -388,6 +456,59 @@ class clinics {
         let zoomableContentElem = document.getElementById("zoomableContent");
         if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
         zoomContainerElem.style.cursor = "grab";
+
+        document.removeEventListener("mousemove", this.mouseMoveHandlerRef);
+        document.removeEventListener("mouseup", this.mouseUpHandlerRef);
+    }
+
+    /**
+     * 
+     * @param {Event} event 
+     */
+    cardMouseDown(event) {
+        let clinicNameElem = document.getElementById("clinicName");
+        clinicNameElem.style.cursor = "grabbing";
+
+        this.cardPos = {
+            x: event.clientX,
+            y: event.clientY
+        };
+        
+        document.addEventListener("mousemove", this.mouseMoveHandlerRef);
+        document.addEventListener("mouseup", this.mouseUpHandlerRef);
+    }
+
+    cardMouseMove(event) {
+        let clinicsContentElem = this.clinicsElem.firstElementChild;
+        let clinicsContentElemBr = clinicsContentElem.getBoundingClientRect();
+        let infoCardElem = document.getElementById("infoCard");
+        let infoCardElemBr = infoCardElem.getBoundingClientRect();
+
+        const dx = event.clientX - this.cardPos.x;
+        const dy = event.clientY - this.cardPos.y;
+
+        this.cardPos = {
+            x: event.clientX,
+            y: event.clientY
+        };
+
+        let left = infoCardElemBr.left - clinicsContentElemBr.left;
+        let top = infoCardElemBr.top - clinicsContentElemBr.top;
+
+        left += dx;
+        top += dy;
+
+        if (left >= 0 && left <= clinicsContentElemBr.width - infoCardElemBr.width) {
+            infoCardElem.style.left = `${left}px`;
+        }
+        if (top >= 0 && top <= clinicsContentElemBr.height - infoCardElemBr.height) {
+            infoCardElem.style.top = `${top}px`;
+        }
+    }
+
+    cardMouseUp() {
+        let clinicNameElem = document.getElementById("clinicName");
+        clinicNameElem.style.cursor = "grab";
 
         document.removeEventListener("mousemove", this.mouseMoveHandlerRef);
         document.removeEventListener("mouseup", this.mouseUpHandlerRef);
@@ -429,6 +550,7 @@ class clinics {
      */
     windowResizeHandler() {
         this.adjustMapImgElemSize();
+        this.adjustCardElemPos();
         
         let userPinElem = document.getElementById("userPin");
 
@@ -504,11 +626,11 @@ class clinics {
     calcElemOrigin(elem) {
         let zoomableContentElem = document.getElementById("zoomableContent");
         let mapImgElem = document.getElementById("mapImg");
-        let zoomableContentElemBR = zoomableContentElem.getBoundingClientRect();
-        let mapImgElemBR = mapImgElem.getBoundingClientRect();
+        let zoomableContentElemBr = zoomableContentElem.getBoundingClientRect();
+        let mapImgElemBr = mapImgElem.getBoundingClientRect();
 
-        let x = mapImgElemBR.x - zoomableContentElemBR.x;
-        let y = mapImgElemBR.y - zoomableContentElemBR.y;
+        let x = mapImgElemBr.x - zoomableContentElemBr.x;
+        let y = mapImgElemBr.y - zoomableContentElemBr.y;
 
         x -= elem.offsetWidth / 2;
         y -= elem.offsetHeight;
@@ -580,11 +702,7 @@ class clinics {
         let zoomableContentW = zoomableContentElem.getBoundingClientRect().width;
         let zoomableContentH = zoomableContentElem.getBoundingClientRect().height;
 
-        console.log(zoomableContentW, zoomableContentH);
-        console.log(mapW, mapH);
-
         if (mapW > zoomableContentW * mapSizePct / 100) {
-            console.log("dasdasd");
             mapImgElem.style.width = `${mapSizePct}%`;
             mapImgElem.style.height = "unset";
         }

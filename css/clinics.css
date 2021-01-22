@@ -23,7 +23,7 @@ div.clinics {
     position: relative;
 }
 
-.clinicsContent div.infoContainer {
+.clinicsContent div.infoCard {
     z-index: 2;
     display: none;
     flex-direction: column;
@@ -39,21 +39,22 @@ div.clinics {
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     overflow: hidden;
+    transition: opacity .2s ease-in-out;
     animation: fade .2s ease-in-out;
 }
 
-.infoContainer div.clinicName {
+.infoCard div.clinicName {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: space-between;
     width: 300px;
     height: max-content;
-    padding: 5px 10px;
+    padding: 5px 5px 5px 10px;
     background: rgb(175, 0, 0);
     background: linear-gradient(135deg, rgb(175, 0, 0) -100%, rgb(245, 35, 35) 100%);
 }
 
-.infoContainer div.clinicName:hover {
+.infoCard div.clinicName:hover {
     cursor: grab;
 }
 
@@ -62,7 +63,25 @@ div.clinics {
     color: rgb(235, 235, 235);
 }
 
-.infoContainer dl.clinicDescription {
+.clinicName img.actionBtn {
+    width: 30px;
+    height: 30px;
+    margin: 0 0 0 5px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04); */
+    transition: all .2s ease-in-out;
+}
+
+.clinicName img.actionBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+.infoCard dl.clinicDescription {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -89,7 +108,7 @@ div.clinics {
     margin-left: 20px;
 }
 
-.infoContainer div.clinicDashboard {
+.infoCard div.clinicDashboard {
     display: flex;
     align-items: center;
     justify-content: center;
