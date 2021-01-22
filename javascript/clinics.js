@@ -3,12 +3,12 @@ const mapScaleFactor = 1.2;
 const mapScaleThreshold = 4;
 const mapSizePct = 95;
 const animationDelay = 200;
-const timeoutDelay = 10;
+const timeoutDelay = 20;
 
-class clinics {
+class Clinics {
 
     /**
-     * Constructs new 'clinics' object with given 'clinicsElem'
+     * Constructs new 'Clinics' object with given 'clinicsElem'
      * element.
      * @param {HTMLElement} clinicsElem 
      */
@@ -21,7 +21,6 @@ class clinics {
         this.mouseDownHandlerRef = this.mouseDownHandler.bind(this);
         this.mouseMoveHandlerRef = this.mouseMoveHandler.bind(this);
         this.mouseUpHandlerRef = this.mouseUpHandler.bind(this);
-
         this.mouseWheelHandlerRef = this.mouseWheelHandler.bind(this);
 
         this.mapLoadHandlerRef = this.mapLoadHandler.bind(this);
@@ -54,129 +53,6 @@ class clinics {
         `;
 
         this.appendHtml(html, this.clinicsElem);
-    }
-
-    /**
-     * Builds new template of HTML element of clinic info container
-     * according to given 'clinicInfo' object and renders created
-     * element.
-     * @param clinicInfo
-     */
-    drawInfoCard(clinicInfo) {
-        let html = `
-            <div class="clinicName" id="clinicName">
-                <text class="nameText" id="nameText">${clinicInfo.name}</text>
-                <img class="actionBtn" id="closeBtn" src="../svgs/close.svg">
-            </div>
-            <dl class="clinicDescription">
-                <dt class="categoryName">Address:</dt>
-                <dd class="categoryDesc">${clinicInfo.address}</dd>
-                <dt class="categoryName">Phone: </dt>
-                <dd class="categoryDesc">${clinicInfo.phone}</dd>
-                <dt class="categoryName">Working Hours:</dt>
-                <dd class="categoryDesc">${clinicInfo.hours}</dd>
-                <dt class="categoryName">Supported Tests:</dt>
-                <dd class="categoryDesc">
-                    <ul class="categoryDescList" id="categoryDescList"></ul>
-                </dd>
-            </dl>
-            <hr class="solid">
-            <div class="clinicDashboard">
-                <text>Clinic Dashboard</text>
-            </div>
-        `;
-        let infoCardElem = document.getElementById("infoCard");
-        let currAnimationDelay = animationDelay;
-        if (infoCardElem.innerHTML.length == 0) {
-            currAnimationDelay = 0;
-            infoCardElem.style.display = "flex";
-        }
-
-        infoCardElem.style.opacity = 0;
-        setTimeout(() => {
-            infoCardElem.innerHTML = "";
-            this.appendHtml(html, infoCardElem);
-
-            setTimeout(() => {
-                let categoryDescListElem = document.getElementById("categoryDescList");
-                clinicInfo.tests.forEach((testName) => {
-                    let currListItem = document.createElement("li");
-                    currListItem.innerHTML = testName;
-                    categoryDescListElem.appendChild(currListItem);
-                });
-
-                setTimeout(() => {
-                    this.adjustCardElemPos();
-                }, timeoutDelay);
-            }, timeoutDelay);
-
-            infoCardElem.style.opacity = `${100}%`;
-        }, currAnimationDelay);
-    }
-
-    /**
-     * Clears info card HTML content and removes from the page.
-     */
-    closeInfoCard() {
-        this.storeActiveClinicPin = null;
-        let infoCardElem = document.getElementById("infoCard");
-
-        infoCardElem.style.opacity = 0;
-        setTimeout(() => {
-            infoCardElem.innerHTML = "";
-            infoCardElem.style.display = "none";
-        }, animationDelay);
-    }
-
-    /**
-     * Appends given html to given element.
-     * @param {string} html 
-     * @param {HTMLElement} element
-     */
-    appendHtml(html, element) {
-        let template = document.createElement("template");
-        html = html.trim();
-        template.innerHTML = html;
-
-        let templateChildren = template.content.childNodes;
-        for (let i = 0; i < templateChildren.length; i++) {
-            element.appendChild(templateChildren[i]);
-        }
-    }
-
-    /**
-     * Initializes event listeners.
-     */
-    initListeners() {
-        this.clinicsElem.addEventListener("click", this.mouseClickHandlerRef);
-        this.clinicsElem.addEventListener("mousedown", this.mouseDownHandlerRef);
-        
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
-        
-        let mapImgElem = document.getElementById("mapImg");
-        mapImgElem.addEventListener("load", this.mapLoadHandlerRef);
-        window.addEventListener("resize", this.windowResizeHandlerRef);
-    }
-
-    /**
-     * Deinitializes event listeners.
-     */
-    deinitListeners() {
-        this.clinicsElem.removeEventListener("click", this.mouseClickHandlerRef);
-        this.clinicsElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
-
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
-
-        let mapImgElem = document.getElementById("mapImg");
-        mapImgElem.removeEventListener("load", this.mapLoadHandlerRef);
-        window.removeEventListener("resize", this.windowResizeHandlerRef);
-
-        this.clinicPins.forEach((value, key) => {
-            let currClinicPinElem = document.getElementById(key);
-            currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
-        });
     }
 
     /**
@@ -272,8 +148,6 @@ class clinics {
      */
     async clinicPinClickHandler(event) {
         let currClinicPinElem = event.target;
-        if (currClinicPinElem === this.storeActiveClinicPin) return;
-        this.storeActiveClinicPin = currClinicPinElem;
 
         currClinicPinElem.scrollIntoView({
             behavior: "smooth",
@@ -284,6 +158,7 @@ class clinics {
         let data = await this.clinicsRef.where("id", "==", currClinicPinElem.id).get();
 
         data.docs.forEach((doc) => {
+            let id = doc.data().id;
             let name = doc.data().name;
             let address = doc.data().address;
             let phone = doc.data().phone;
@@ -291,273 +166,23 @@ class clinics {
             let tests = doc.data().tests;
 
             let clinicInfo = {
+                id: id,
                 name: name,
                 address: address,
                 phone: phone,
                 hours: hours,
                 tests: tests
             };
-            
-            this.drawInfoCard(clinicInfo);
-        });
-    }
 
-    /**
-     * 
-     */
-    adjustCardElemPos() {
-        let infoCardElem = document.getElementById("infoCard");
-        if (infoCardElem.innerHTML.length == 0) return;
-
-        let clinicsContentElem = this.clinicsElem.firstElementChild;
-        let clinicsContentElemBr = clinicsContentElem.getBoundingClientRect();
-        let infoCardElemBr = infoCardElem.getBoundingClientRect();
-
-        let left = infoCardElemBr.left - clinicsContentElemBr.left;
-        let top = infoCardElemBr.top - clinicsContentElemBr.top;
-
-        let overflowX = clinicsContentElemBr.width - (left + infoCardElemBr.width);
-        let overflowY = clinicsContentElemBr.height - (top + infoCardElemBr.height);
-
-        if (left <= 0) {
-            infoCardElem.style.left = 0;
-        } else {
-            if (overflowX < 0) infoCardElem.style.left = `${left + overflowX}px`;
-        }
-
-        if (top <= 0) {
-            infoCardElem.style.top = 0;
-        } else {
-            if (overflowY < 0) infoCardElem.style.top = `${top + overflowY}px`;
-        }
-    }
-
-    /**
-     * Mouse click handler.
-     * @param {Event} event 
-     */
-    mouseClickHandler(event) {
-        switch (event.target.id) {
-            case "zoomInBtn":
-                this.zoomMap(true);
-                break;
-            case "zoomOutBtn":
-                this.zoomMap(false);
-                break;
-            case "centerBtn":
-                let userPinElem = document.getElementById("userPin");
-                userPinElem.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                    inline: "center"
-                });
-                break;
-            case "closeBtn":
-                this.closeInfoCard();
-                break;
-        }
-    }
-
-    /**
-     * Mouse down handler.
-     * @param {Event} event
-     */
-    mouseDownHandler(event) {
-        event.preventDefault();
-        this.activeElem = event.target.id;
-        switch (event.target.id) {
-            case "mapImg":
-                this.mapMouseDown(event);
-                break;
-            case "clinicName":
-            case "nameText":
-                this.cardMouseDown(event);
-                break;
-        }
-    }
-
-    /**
-     * Mouse move handler.
-     * @param {Event} event
-     */
-    mouseMoveHandler(event) {
-        event.preventDefault();
-        switch (this.activeElem) {
-            case "mapImg":
-                this.mapMouseMove(event);
-                break;
-            case "clinicName":
-            case "nameText":
-                this.cardMouseMove(event);
-                break;
-        }
-    }
-
-    /**
-     * Mouse up handler.
-     * @param {Event} event
-     */
-    mouseUpHandler(event) {
-        event.preventDefault();
-        switch (this.activeElem) {
-            case "mapImg":
-                this.mapMouseUp();
-                break;
-            case "clinicName":
-            case "nameText":
-                this.cardMouseUp();
-                break;
-        }
-        this.activeElem = null;
-    }
-
-    /**
-     * Map mouse down handler.
-     * @param {Event} event
-     */
-    mapMouseDown(event) {
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
-        zoomContainerElem.style.cursor = "grabbing";
-
-        this.mapPos = {
-            left: zoomContainerElem.scrollLeft,
-            top: zoomContainerElem.scrollTop,
-            x: event.clientX,
-            y: event.clientY
-        };
-        
-        document.addEventListener("mousemove", this.mouseMoveHandlerRef);
-        document.addEventListener("mouseup", this.mouseUpHandlerRef);
-    }
-
-    /**
-     * Map mouse move handler.
-     * @param {Event} event
-     */
-    mapMouseMove(event) {
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
-
-        const dx = event.clientX - this.mapPos.x;
-        const dy = event.clientY - this.mapPos.y;
-        
-        zoomContainerElem.scrollLeft = this.mapPos.left - dx;
-        zoomContainerElem.scrollTop = this.mapPos.top - dy;
-    }
-
-    /**
-     * Map mouse up handler.
-     */
-    mapMouseUp() {
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
-        zoomContainerElem.style.cursor = "grab";
-
-        document.removeEventListener("mousemove", this.mouseMoveHandlerRef);
-        document.removeEventListener("mouseup", this.mouseUpHandlerRef);
-    }
-
-    /**
-     * 
-     * @param {Event} event 
-     */
-    cardMouseDown(event) {
-        let clinicNameElem = document.getElementById("clinicName");
-        clinicNameElem.style.cursor = "grabbing";
-
-        this.cardPos = {
-            x: event.clientX,
-            y: event.clientY
-        };
-        
-        document.addEventListener("mousemove", this.mouseMoveHandlerRef);
-        document.addEventListener("mouseup", this.mouseUpHandlerRef);
-    }
-
-    cardMouseMove(event) {
-        let clinicsContentElem = this.clinicsElem.firstElementChild;
-        let clinicsContentElemBr = clinicsContentElem.getBoundingClientRect();
-        let infoCardElem = document.getElementById("infoCard");
-        let infoCardElemBr = infoCardElem.getBoundingClientRect();
-
-        const dx = event.clientX - this.cardPos.x;
-        const dy = event.clientY - this.cardPos.y;
-
-        this.cardPos = {
-            x: event.clientX,
-            y: event.clientY
-        };
-
-        let left = infoCardElemBr.left - clinicsContentElemBr.left;
-        let top = infoCardElemBr.top - clinicsContentElemBr.top;
-
-        left += dx;
-        top += dy;
-
-        if (left >= 0 && left <= clinicsContentElemBr.width - infoCardElemBr.width) {
-            infoCardElem.style.left = `${left}px`;
-        }
-        if (top >= 0 && top <= clinicsContentElemBr.height - infoCardElemBr.height) {
-            infoCardElem.style.top = `${top}px`;
-        }
-    }
-
-    cardMouseUp() {
-        let clinicNameElem = document.getElementById("clinicName");
-        clinicNameElem.style.cursor = "grab";
-
-        document.removeEventListener("mousemove", this.mouseMoveHandlerRef);
-        document.removeEventListener("mouseup", this.mouseUpHandlerRef);
-    }
-
-    /**
-     * Mouse wheel handler for zooming 'zoomContainer'.
-     * @param {Event} event
-     */
-    mouseWheelHandler(event) {
-        event.preventDefault();
-
-        let zoomMode = true;
-        if (event.deltaY > 0) zoomMode = false;
-        this.zoomMap(zoomMode);
-        
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        let zoomableContentElem = document.getElementById("zoomableContent");
-
-        if (!this.overflows(zoomableContentElem, zoomContainerElem)) {
-            zoomContainerElem.style.cursor = "default";
-        } else {
-            zoomContainerElem.style.cursor = "grab";
-        }
-    }
-
-    /**
-     * Executes script when 'mapImg' is fully loaded.
-     */
-    mapLoadHandler() {
-        this.adjustMapImgElemSize();
-        this.getLocation();
-    }
-
-    /**
-     * On each window resize adjusts 'mapImg' size, calcualtes
-     * new 'userPin' and 'clinicPin' elements origins and relative
-     * coordinates and updates them.
-     */
-    windowResizeHandler() {
-        this.adjustMapImgElemSize();
-        this.adjustCardElemPos();
-        
-        let userPinElem = document.getElementById("userPin");
-
-        this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
-        this.clinicPins.forEach((value, key) => {
-            let currClinicPinElem = document.getElementById(key);
-            this.positionPinOnMap(currClinicPinElem, value.lat, value.long);
+            if (this.infoCardObj) {
+                this.infoCardObj.drawInfoCard(clinicInfo);
+            } else {
+                let infoCardElem = document.getElementById("infoCard");
+                let clinicsContentElem = this.clinicsElem.firstElementChild;
+                this.infoCardObj = new InfoCard(infoCardElem, clinicsContentElem);
+                this.infoCardObj.drawInfoCard(clinicInfo);
+                this.infoCardObj.initListeners();
+            }
         });
     }
 
@@ -727,5 +352,185 @@ class clinics {
         if (elem1W > elem2W) return true;
         if (elem1H > elem2H) return true;
         return false;
+    }
+
+    /**
+     * Appends given html to given element.
+     * @param {string} html 
+     * @param {HTMLElement} element
+     */
+    appendHtml(html, element) {
+        let template = document.createElement("template");
+        html = html.trim();
+        template.innerHTML = html;
+
+        let templateChildren = template.content.childNodes;
+        for (let i = 0; i < templateChildren.length; i++) {
+            element.appendChild(templateChildren[i]);
+        }
+    }
+
+    /**
+     * Initializes event listeners.
+     */
+    initListeners() {
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        zoomableContentElem.addEventListener("click", this.mouseClickHandlerRef);
+        zoomableContentElem.addEventListener("mousedown", this.mouseDownHandlerRef);
+        
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
+        
+        let mapImgElem = document.getElementById("mapImg");
+        mapImgElem.addEventListener("load", this.mapLoadHandlerRef);
+
+        window.addEventListener("resize", this.windowResizeHandlerRef);
+    }
+
+    /**
+     * Deinitializes event listeners.
+     */
+    deinitListeners() {
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        zoomableContentElem.removeEventListener("click", this.mouseClickHandlerRef);
+        zoomableContentElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
+
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
+
+        let mapImgElem = document.getElementById("mapImg");
+        mapImgElem.removeEventListener("load", this.mapLoadHandlerRef);
+
+        window.removeEventListener("resize", this.windowResizeHandlerRef);
+
+        this.clinicPins.forEach((value, key) => {
+            let currClinicPinElem = document.getElementById(key);
+            currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
+        });
+
+        if (this.infoCardObj) this.infoCardObj.deinitListeners();
+    }
+
+    /**
+     * Mouse click handler.
+     * @param {Event} event 
+     */
+    mouseClickHandler(event) {
+        switch (event.target.id) {
+            case "zoomInBtn":
+                this.zoomMap(true);
+                break;
+            case "zoomOutBtn":
+                this.zoomMap(false);
+                break;
+            case "centerBtn":
+                let userPinElem = document.getElementById("userPin");
+                userPinElem.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "center"
+                });
+                break;
+        }
+    }
+
+    /**
+     * Mouse down handler.
+     * @param {Event} event
+     */
+    mouseDownHandler(event) {
+        event.preventDefault();
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
+        zoomContainerElem.style.cursor = "grabbing";
+
+        this.mapPos = {
+            left: zoomContainerElem.scrollLeft,
+            top: zoomContainerElem.scrollTop,
+            x: event.clientX,
+            y: event.clientY
+        };
+        
+        document.addEventListener("mousemove", this.mouseMoveHandlerRef);
+        document.addEventListener("mouseup", this.mouseUpHandlerRef);
+    }
+
+    /**
+     * Mouse move handler.
+     * @param {Event} event
+     */
+    mouseMoveHandler(event) {
+        event.preventDefault();
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
+
+        const dx = event.clientX - this.mapPos.x;
+        const dy = event.clientY - this.mapPos.y;
+        
+        zoomContainerElem.scrollLeft = this.mapPos.left - dx;
+        zoomContainerElem.scrollTop = this.mapPos.top - dy;
+    }
+
+    /**
+     * Mouse up handler.
+     * @param {Event} event
+     */
+    mouseUpHandler(event) {
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
+        zoomContainerElem.style.cursor = "grab";
+
+        document.removeEventListener("mousemove", this.mouseMoveHandlerRef);
+        document.removeEventListener("mouseup", this.mouseUpHandlerRef);
+    }
+
+    /**
+     * Mouse wheel handler for zooming 'zoomContainer'.
+     * @param {Event} event
+     */
+    mouseWheelHandler(event) {
+        event.preventDefault();
+
+        let zoomMode = true;
+        if (event.deltaY > 0) zoomMode = false;
+        this.zoomMap(zoomMode);
+        
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        let zoomableContentElem = document.getElementById("zoomableContent");
+
+        if (!this.overflows(zoomableContentElem, zoomContainerElem)) {
+            zoomContainerElem.style.cursor = "default";
+        } else {
+            zoomContainerElem.style.cursor = "grab";
+        }
+    }
+
+    /**
+     * Executes script when 'mapImg' is fully loaded.
+     */
+    mapLoadHandler() {
+        this.adjustMapImgElemSize();
+        this.getLocation();
+    }
+
+    /**
+     * On each window resize adjusts 'mapImg' size, calcualtes
+     * new 'userPin' and 'clinicPin' elements origins and relative
+     * coordinates and updates them.
+     */
+    windowResizeHandler() {
+        this.adjustMapImgElemSize();
+        if (this.infoCardObj) this.infoCardObj.adjustCardElemPos();
+        
+        let userPinElem = document.getElementById("userPin");
+
+        this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
+        this.clinicPins.forEach((value, key) => {
+            let currClinicPinElem = document.getElementById(key);
+            this.positionPinOnMap(currClinicPinElem, value.lat, value.long);
+        });
     }
 }

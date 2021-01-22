@@ -76,7 +76,7 @@ function initBtns() {
                         newElem.className = "newsFeed";
                         rightPanelElem.appendChild(newElem);
 
-                        let newsFeedObj = new newsFeed(newElem);
+                        let newsFeedObj = new NewsFeed(newElem);
                         newsFeedObj.getNews();
                         newsFeedObj.initListeners();
                         
@@ -86,7 +86,7 @@ function initBtns() {
                         newElem.className = "clinics";
                         rightPanelElem.appendChild(newElem);
 
-                        let clinicsObj = new clinics(newElem);
+                        let clinicsObj = new Clinics(newElem);
                         clinicsObj.drawContent();
                         clinicsObj.initListeners();
                         

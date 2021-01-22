@@ -1,10 +1,10 @@
 // constants
 const triggerThreshold = 0.8;
 
-class newsFeed {
+class NewsFeed {
 
     /**
-     * Constructs new 'newsFeed' object with given 'newsFeedElem'
+     * Constructs new 'NewsFeed' object with given 'newsFeedElem'
      * element.
      * @param newsFeedElem 
      */
