@@ -43,12 +43,14 @@ class Clinics {
                             </div>
                         </div>
                         <div class="mapFooterBtns" id="mapFooterBtns">
-                            <img class="actionBtn" id="zoomInBtn" src="../svgs/plus.svg">
-                            <img class="actionBtn" id="zoomOutBtn" src="../svgs/minus.svg">
-                            <img class="actionBtn" id="centerBtn" src="../svgs/center.svg">
+                            <button class="actionBtnLng" id="filterBtn">Filter</button>
+                            <img class="actionBtnSqr" id="zoomInBtn" src="../svgs/plus.svg">
+                            <img class="actionBtnSqr" id="zoomOutBtn" src="../svgs/minus.svg">
+                            <img class="actionBtnSqr" id="centerBtn" src="../svgs/center.svg">
                         </div>
                     </div>
                 </div>
+                <div class="filterContainer" id="filterContainer"></div>
             </div>
         `;
 
@@ -414,6 +416,63 @@ class Clinics {
 
         if (this.infoCardObj) this.infoCardObj.deinitListeners();
     }
+    
+    /**
+     * Fetches every test that is currently available from "clinics" database
+     * and creates appropriate popup window. Calls 'toggleFilterPopup()' to make
+     * this window visible.
+     */
+    async createFilterPopup() {
+        let filterContainerElem = document.getElementById("filterContainer");
+        let data = await this.clinicsRef.get();
+
+        this.allTests = new Array();
+
+        data.docs.forEach((doc) => {
+            let tests = doc.data().tests;
+
+            tests.forEach((testName) => {
+                this.allTests.push(testName);
+            });
+        });
+
+        let i = 1;
+        this.allTests.forEach((testName) => {
+            let html = `
+                <div class="checkboxField">
+                    <input id="ck${i}" type="checkbox">
+                    <label class="checkboxLabel" for="ck${i}">
+                        ${testName}
+                    </label>
+                </div>
+            `;
+            this.appendHtml(html, filterContainerElem);
+            i++;
+        });
+
+        this.toggleFilterPopup();
+    }
+
+    /**
+     * Toggles the visibility of 'filterContainer'.
+     */
+    toggleFilterPopup() {
+        if (this.opened) {
+            this.opened = false;
+
+            let filterContainerElem = document.getElementById("filterContainer");
+            filterContainerElem.style.opacity = 0;
+            setTimeout(() => {
+                filterContainerElem.style.display = "none";
+            }, animationDelay);
+        } else {
+            this.opened = true;
+
+            let filterContainerElem = document.getElementById("filterContainer");
+            filterContainerElem.style.display = "flex";
+            filterContainerElem.style.opacity = "100%";
+        }
+    }
 
     /**
      * Mouse click handler.
@@ -421,6 +480,13 @@ class Clinics {
      */
     mouseClickHandler(event) {
         switch (event.target.id) {
+            case "filterBtn":
+                if (this.opened == undefined) {
+                    this.createFilterPopup();
+                } else {
+                    this.toggleFilterPopup();
+                }
+                break;
             case "zoomInBtn":
                 this.zoomMap(true);
                 break;
