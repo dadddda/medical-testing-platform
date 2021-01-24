@@ -145,32 +145,30 @@ div.clinics {
 .clinicsContent div.filterContainer {
     z-index: 2;
     display: none;
-    flex-direction: column;
-    width: 60%;
+    column-count: 3;
+    width: max-content;
     height: max-content;
-    min-width: max-content;
     position: absolute;
     bottom: 70px;
-    padding: 5px 10px;
+    padding: 7.5px;
     border-radius: 2.5px;
-    background: rgb(240, 240, 240);
-    background: linear-gradient(135deg, rgb(240, 240, 240) 0%, rgb(250, 250, 250) 100%);
+    background: rgb(200, 200, 200);
+    background: linear-gradient(135deg, rgb(200, 200, 200) -100%, rgb(230, 230, 230) 100%);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: opacity .2s ease-in-out;
     animation: fade .2s ease-in-out;
 }
 
 .filterContainer div.checkboxField {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: max-content;
-    height: max-content;
-    margin: 5px 0;
+    display: block;
+    width: 100%;
+    padding: 2.5px;
     color: rgb(10, 10, 10);
 }
 
 .checkboxField label.checkboxLabel {
-    margin-left: 10px;
+    display: inline-block;
+    width: max-content;
+    margin-left: 5px;
     font-size: 0.9rem;
 }

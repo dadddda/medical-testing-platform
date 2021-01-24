@@ -189,6 +189,63 @@ class Clinics {
     }
 
     /**
+     * Fetches every test that is currently available from "clinics" database
+     * and creates appropriate popup window. Calls 'toggleFilterPopup()' to make
+     * this window visible.
+     */
+    async createFilterPopup() {
+        let filterContainerElem = document.getElementById("filterContainer");
+        let data = await this.clinicsRef.get();
+
+        this.allTests = new Set();
+
+        data.docs.forEach((doc) => {
+            let tests = doc.data().tests;
+
+            tests.forEach((testName) => {
+                this.allTests.add(testName);
+            });
+        });
+
+        let i = 1;
+        this.allTests.forEach((testName) => {
+            let html = `
+                <div class="checkboxField">
+                    <input id="ck${i}" type="checkbox">
+                    <label class="checkboxLabel" for="ck${i}">
+                        ${testName}
+                    </label>
+                </div>
+            `;
+            this.appendHtml(html, filterContainerElem);
+            i++;
+        });
+
+        this.toggleFilterPopup();
+    }
+
+    /**
+     * Toggles the visibility of 'filterContainer'.
+     */
+    toggleFilterPopup() {
+        if (this.opened) {
+            this.opened = false;
+
+            let filterContainerElem = document.getElementById("filterContainer");
+            filterContainerElem.style.opacity = 0;
+            setTimeout(() => {
+                filterContainerElem.style.display = "none";
+            }, animationDelay);
+        } else {
+            this.opened = true;
+
+            let filterContainerElem = document.getElementById("filterContainer");
+            filterContainerElem.style.display = "block";
+            filterContainerElem.style.opacity = "100%";
+        }
+    }
+
+    /**
      * Zooms in/out map according to given parameter and constants.
      * @param {Boolean} zoomIn 
      */
@@ -415,63 +472,6 @@ class Clinics {
         });
 
         if (this.infoCardObj) this.infoCardObj.deinitListeners();
-    }
-    
-    /**
-     * Fetches every test that is currently available from "clinics" database
-     * and creates appropriate popup window. Calls 'toggleFilterPopup()' to make
-     * this window visible.
-     */
-    async createFilterPopup() {
-        let filterContainerElem = document.getElementById("filterContainer");
-        let data = await this.clinicsRef.get();
-
-        this.allTests = new Array();
-
-        data.docs.forEach((doc) => {
-            let tests = doc.data().tests;
-
-            tests.forEach((testName) => {
-                this.allTests.push(testName);
-            });
-        });
-
-        let i = 1;
-        this.allTests.forEach((testName) => {
-            let html = `
-                <div class="checkboxField">
-                    <input id="ck${i}" type="checkbox">
-                    <label class="checkboxLabel" for="ck${i}">
-                        ${testName}
-                    </label>
-                </div>
-            `;
-            this.appendHtml(html, filterContainerElem);
-            i++;
-        });
-
-        this.toggleFilterPopup();
-    }
-
-    /**
-     * Toggles the visibility of 'filterContainer'.
-     */
-    toggleFilterPopup() {
-        if (this.opened) {
-            this.opened = false;
-
-            let filterContainerElem = document.getElementById("filterContainer");
-            filterContainerElem.style.opacity = 0;
-            setTimeout(() => {
-                filterContainerElem.style.display = "none";
-            }, animationDelay);
-        } else {
-            this.opened = true;
-
-            let filterContainerElem = document.getElementById("filterContainer");
-            filterContainerElem.style.display = "flex";
-            filterContainerElem.style.opacity = "100%";
-        }
     }
 
     /**
