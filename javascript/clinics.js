@@ -374,12 +374,14 @@ class Clinics {
      * Initializes event listeners.
      */
     initListeners() {
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        zoomableContentElem.addEventListener("click", this.mouseClickHandlerRef);
-        zoomableContentElem.addEventListener("mousedown", this.mouseDownHandlerRef);
-        
         let zoomContainerElem = document.getElementById("zoomContainer");
         zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
+        
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        zoomableContentElem.addEventListener("mousedown", this.mouseDownHandlerRef);
+
+        let mapFooterBtnsElem = document.getElementById("mapFooterBtns");
+        mapFooterBtnsElem.addEventListener("click", this.mouseClickHandlerRef);
         
         let mapImgElem = document.getElementById("mapImg");
         mapImgElem.addEventListener("load", this.mapLoadHandlerRef);
@@ -391,12 +393,14 @@ class Clinics {
      * Deinitializes event listeners.
      */
     deinitListeners() {
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        zoomableContentElem.removeEventListener("click", this.mouseClickHandlerRef);
-        zoomableContentElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
-
         let zoomContainerElem = document.getElementById("zoomContainer");
         zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
+        
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        zoomableContentElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
+
+        let mapFooterBtnsElem = document.getElementById("mapFooterBtns");
+        mapFooterBtnsElem.removeEventListener("click", this.mouseClickHandlerRef);
 
         let mapImgElem = document.getElementById("mapImg");
         mapImgElem.removeEventListener("load", this.mapLoadHandlerRef);
