@@ -35,7 +35,7 @@ html, body {
 
 hr.solid {
     display: block;
-    width: calc(100% - 10px);
+    width: 100%;
     margin: 5px 0 5px 0;
     border: 0;
     border-top: 2px solid rgb(180, 180, 180);
@@ -133,8 +133,8 @@ div.mainContent {
     min-width: min-content;
     min-height: min-content;
     padding: 20px;
-    background: rgb(200, 200, 200);
-    background: linear-gradient(135deg, rgb(200, 200, 200) 0%, rgb(230, 230, 230) 100%);
+    background: rgb(210, 210, 210);
+    background: linear-gradient(135deg, rgb(210, 210, 210) 0%, rgb(240, 240, 240) 100%);
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
 }
 

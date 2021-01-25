@@ -129,7 +129,7 @@ class NewsFeed {
                         ${date}
                     </div>
                 </div>
-
+                <hr class="solid">
                 <div class="newsContent">
                     ${content}
                 </div>
