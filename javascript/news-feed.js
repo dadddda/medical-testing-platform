@@ -135,19 +135,8 @@ class NewsFeed {
                 </div>
             </div>
         `;
-
-        let template = document.createElement("template");
-        html = html.trim();
-        template.innerHTML = html;
-        this.appendNews(template.content.firstChild);
-    }
-
-    /**
-     * Appends given template element to 'newsFeedElem'.
-     * @param template
-     */
-    appendNews(template) {
-        this.newsFeedElem.appendChild(template);
+        
+        appendHtml(html, this.newsFeedElem);
     }
 
     /**

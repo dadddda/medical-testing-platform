@@ -54,7 +54,7 @@ class Clinics {
             </div>
         `;
 
-        this.appendHtml(html, this.clinicsElem);
+        appendHtml(html, this.clinicsElem);
     }
 
     /**
@@ -86,7 +86,7 @@ class Clinics {
 
         let html = `<img class="userPin" id="userPin" src="../svgs/pin.svg">`;
         let zoomableContentElem = document.getElementById("zoomableContent");
-        this.appendHtml(html, zoomableContentElem);
+        appendHtml(html, zoomableContentElem);
         
         setTimeout(() => {
             let userPinElem = document.getElementById("userPin");
@@ -133,7 +133,7 @@ class Clinics {
             let location = doc.data().location;
 
             let html = `<img class="clinicPin" id="${id}" src="../svgs/clinic.svg">`;
-            this.appendHtml(html, zoomableContentElem);
+            appendHtml(html, zoomableContentElem);
 
             setTimeout(() => {
                 let clinicPinElem = document.getElementById(id);
@@ -176,7 +176,7 @@ class Clinics {
                 tests: tests
             };
 
-            if (this.infoCardObj == undefined) {
+            if (this.infoCardObj != undefined) {
                 this.infoCardObj.drawInfoCard(clinicInfo);
             } else {
                 let infoCardElem = document.getElementById("infoCard");
@@ -217,7 +217,7 @@ class Clinics {
                     </label>
                 </div>
             `;
-            this.appendHtml(html, filterContainerElem);
+            appendHtml(html, filterContainerElem);
             i++;
         });
 
@@ -414,22 +414,6 @@ class Clinics {
     }
 
     /**
-     * Appends given html to given element.
-     * @param {string} html 
-     * @param {HTMLElement} element
-     */
-    appendHtml(html, element) {
-        let template = document.createElement("template");
-        html = html.trim();
-        template.innerHTML = html;
-
-        let templateChildren = template.content.childNodes;
-        for (let i = 0; i < templateChildren.length; i++) {
-            element.appendChild(templateChildren[i]);
-        }
-    }
-
-    /**
      * Initializes event listeners.
      */
     initListeners() {
@@ -467,7 +451,6 @@ class Clinics {
         window.removeEventListener("resize", this.windowResizeHandlerRef);
 
         if (this.clinicPins != undefined) {
-            console.log("got here");
             this.clinicPins.forEach((value, key) => {
                 let currClinicPinElem = document.getElementById(key);
                 currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
@@ -596,7 +579,7 @@ class Clinics {
      */
     windowResizeHandler() {
         this.adjustMapImgElemSize();
-        if (this.infoCardObj) this.infoCardObj.adjustCardElemPos();
+        if (this.infoCardObj != undefined) this.infoCardObj.adjustCardElemPos();
         
         let userPinElem = document.getElementById("userPin");
 

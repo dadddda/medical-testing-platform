@@ -57,7 +57,7 @@ class InfoCard {
         this.infoCardElem.style.opacity = 0;
         setTimeout(() => {
             this.infoCardElem.innerHTML = "";
-            this.appendHtml(html, this.infoCardElem);
+            appendHtml(html, this.infoCardElem);
 
             setTimeout(() => {
                 let categoryDescListElem = document.getElementById("categoryDescList");
@@ -119,22 +119,6 @@ class InfoCard {
             this.infoCardElem.style.top = 0;
         } else {
             if (overflowY < 0) this.infoCardElem.style.top = `${top + overflowY}px`;
-        }
-    }
-
-    /**
-     * Appends given html to given element.
-     * @param {string} html 
-     * @param {HTMLElement} element
-     */
-    appendHtml(html, element) {
-        let template = document.createElement("template");
-        html = html.trim();
-        template.innerHTML = html;
-
-        let templateChildren = template.content.childNodes;
-        for (let i = 0; i < templateChildren.length; i++) {
-            element.appendChild(templateChildren[i]);
         }
     }
 
