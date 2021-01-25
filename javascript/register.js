@@ -1,4 +1,13 @@
 /**
+ * Redirects page to index.html if the user is already logged in.
+ */
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        window.location.replace("index.html");
+    }
+});
+
+/**
  * Event listener for registration form.
  */
 document.getElementById("registerForm").addEventListener("submit", registerUser);
