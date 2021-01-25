@@ -176,7 +176,7 @@ class Clinics {
                 tests: tests
             };
 
-            if (this.infoCardObj) {
+            if (this.infoCardObj == undefined) {
                 this.infoCardObj.drawInfoCard(clinicInfo);
             } else {
                 let infoCardElem = document.getElementById("infoCard");
@@ -466,12 +466,15 @@ class Clinics {
 
         window.removeEventListener("resize", this.windowResizeHandlerRef);
 
-        this.clinicPins.forEach((value, key) => {
-            let currClinicPinElem = document.getElementById(key);
-            currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
-        });
+        if (this.clinicPins != undefined) {
+            console.log("got here");
+            this.clinicPins.forEach((value, key) => {
+                let currClinicPinElem = document.getElementById(key);
+                currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
+            });
+        }
 
-        if (this.infoCardObj) this.infoCardObj.deinitListeners();
+        if (this.infoCardObj != undefined) this.infoCardObj.deinitListeners();
     }
 
     /**
