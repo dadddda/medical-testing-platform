@@ -11,6 +11,7 @@ class NewsFeed {
     constructor(newsFeedElem) {
         this.newsFeedElem = newsFeedElem;
         this.newsRef = firebase.firestore().collection("news");
+        this.storageRef = firebase.storage();
         this.latestInit = false;
         this.latestDoc = null;
         this.moreBtnClicked = false;
@@ -50,18 +51,14 @@ class NewsFeed {
                 .get();
         }
     
-        data.docs.forEach(doc => {
-            let id = doc.id;
-            let title = doc.data().title;
-            let timestamp = doc.data().date.toMillis();
-            let content = doc.data().content;
+        data.docs.forEach(async doc => {
+            let newsData = await this.fetchNewsData(doc);
             
-            content = content.replaceAll("\\n", "<br><br>");
-            
-            let formattedDate = this.createDate(timestamp);
-            this.buildAndAppendNews(id, title, formattedDate, content);
+            newsData.content = newsData.content.replace(/(?:\r\n|\r|\n)/g, "<br>");
+            let formattedDate = this.createDate(newsData.timestamp);
+            this.buildAndAppendNews(newsData.id, newsData.title, formattedDate, newsData.content);
         });
-            
+
         this.latestDoc = data.docs[data.docs.length - 1];
 
         if (data.empty) {
@@ -77,29 +74,8 @@ class NewsFeed {
     }
 
     /**
-     * Formats input timestamp number into string and
-     * returns it.
-     * @param {number} timestamp
-     */
-    createDate(timestamp) {
-        let dateObj = new Date(timestamp);
-
-        let hours = dateObj.getHours();
-        let minutes = dateObj.getMinutes();
-        minutes = (minutes < 10 ? "0" : "") + minutes;
-        let date = dateObj.getDate();
-        let month = dateObj.getMonth() + 1;
-        let year = dateObj.getFullYear();
-
-        let formattedDate = hours + ":" + minutes + " - ";
-        formattedDate += date + "." + month + "." + year;
-
-        return formattedDate;
-    }
-
-    /**
      * Builds new template of HTML element of news feed 
-     * according to given data and calls 'this.appendNews()'
+     * according to given data and calls 'appendHtml'
      * function.
      * @param {String} id 
      * @param {String} title 
@@ -142,27 +118,28 @@ class NewsFeed {
     }
 
     /**
-     * 
+     * According to given 'id' builds new template of HTML element of expanded
+     * type of news and renders it by calling 'appendHtml()'.
      * @param {String} id
      */
     async drawOpenedNews(id) {
-        var docRef = this.newsRef.doc(id);
+        let docRef = this.newsRef.doc(id);
 
-        await docRef.get().then(doc => {
+        await docRef.get().then(async doc => {
             if (doc.exists) {
-                let title = doc.data().title;
-                let content = doc.data().content;
-                content = content.replaceAll("\\n", "<br><br>");
+                let newsData = await this.fetchNewsData(doc);
+
+                newsData.content = newsData.content.replace(/(?:\r\n|\r|\n)/g, "<br>");
                 let html = `
                     <div class="openedNewsBackground" style="top: ${this.newsFeedElem.scrollTop}px;"></div>
                     <div class="openedNews" style="top: ${this.newsFeedElem.scrollTop + 50}px;">
                         <div class="openedNewsTitle">
-                            <text class="titleText">${title}</text>
+                            <text class="titleText">${newsData.title}</text>
                             <img class="actionBtn" id="closeBtn" src="../svgs/close-black.svg">
                         </div>
                         <hr class="solid">
                         <div class="openedNewsContent">
-                            ${content}
+                            ${newsData.content}
                         </div>
                     </div>
                 `;
@@ -174,6 +151,60 @@ class NewsFeed {
         }).catch(error => {
             console.log("Error: ", error);
         });
+    }
+
+    /**
+     * Extracts necessary information from given document object
+     * and returns an object containing those data.
+     * @param doc 
+     */
+    async fetchNewsData(doc) {
+        let id = doc.id;
+        let title = doc.data().title;
+        let timestamp = doc.data().date.toMillis();
+        let content = "";
+
+        let contentRef = this.storageRef.ref(`news/${id}/content.txt`);
+        await contentRef.getDownloadURL()
+        .then(async url => {
+            await fetch(url)
+            .then(async data => {
+                await data.text()
+                .then(text => {
+                    content = text;
+                });
+            });
+        }).catch((error) => {
+            console.log("Error: ", error);
+        });
+
+        return {
+            id: id,
+            title: title,
+            timestamp: timestamp,
+            content: content
+        };
+    }
+
+    /**
+     * Formats input timestamp number into string and
+     * returns it.
+     * @param {number} timestamp
+     */
+    createDate(timestamp) {
+        let dateObj = new Date(timestamp);
+
+        let hours = dateObj.getHours();
+        let minutes = dateObj.getMinutes();
+        minutes = (minutes < 10 ? "0" : "") + minutes;
+        let date = dateObj.getDate();
+        let month = dateObj.getMonth() + 1;
+        let year = dateObj.getFullYear();
+
+        let formattedDate = hours + ":" + minutes + " - ";
+        formattedDate += date + "." + month + "." + year;
+
+        return formattedDate;
     }
 
     /**
