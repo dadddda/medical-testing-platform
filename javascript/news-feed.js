@@ -13,6 +13,7 @@ class NewsFeed {
         this.newsRef = firebase.firestore().collection("news");
         this.latestInit = false;
         this.latestDoc = null;
+        this.moreBtnClicked = false;
     
         this.clickHandlerRef = this.clickHandler.bind(this);
         this.scrollHandlerRef = this.scrollHandler.bind(this);
@@ -157,8 +158,9 @@ class NewsFeed {
                     <div class="openedNews" style="top: ${this.newsFeedElem.scrollTop + 50}px;">
                         <div class="openedNewsTitle">
                             <text class="titleText">${title}</text>
-                            <img class="actionBtn" id="closeBtn" src="../svgs/close.svg">
+                            <img class="actionBtn" id="closeBtn" src="../svgs/close-black.svg">
                         </div>
+                        <hr class="solid">
                         <div class="openedNewsContent">
                             ${content}
                         </div>
@@ -235,11 +237,13 @@ class NewsFeed {
      * @param {Event} event 
      */
     clickHandler(event) {
-        if (event.target.id == "moreBtn") {
+        if (event.target.id == "moreBtn" && this.moreBtnClicked == false) {
+            this.moreBtnClicked = true;
             this.newsFeedElem.style.overflow = "hidden";
             let parentElem = event.target.parentElement.parentElement;
             this.drawOpenedNews(parentElem.id);
         } else if (event.target.id == "closeBtn") {
+            this.moreBtnClicked = false;
             this.newsFeedElem.style.overflow = "overlay";
 
             let openedNewsBackgroundElem = document.getElementsByClassName("openedNewsBackground")[0];
