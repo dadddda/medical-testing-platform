@@ -24,9 +24,10 @@
     flex-direction: column;
     width: calc(100% - 100px);
     height: calc(100% - 100px);
+    max-width: 900px;
     position: absolute;
     top: 50px;
-    left: 50px;
+    margin: auto;
     padding: 15px;
     border-radius: 2.5px;
     background: rgb(220, 220, 220);

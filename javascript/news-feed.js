@@ -50,14 +50,14 @@ class NewsFeed {
                 .limit(2)
                 .get();
         }
-    
-        data.docs.forEach(async doc => {
+
+        for (let i = 0; i < data.docs.length; i++) {
+            let doc = data.docs[i];
             let newsData = await this.fetchNewsData(doc);
             
             newsData.content = newsData.content.replace(/(?:\r\n|\r|\n)/g, "<br>");
-            let formattedDate = this.createDate(newsData.timestamp);
-            this.buildAndAppendNews(newsData.id, newsData.title, formattedDate, newsData.content);
-        });
+            this.buildAndAppendNews(newsData);
+        }
 
         this.latestDoc = data.docs[data.docs.length - 1];
 
@@ -75,20 +75,18 @@ class NewsFeed {
 
     /**
      * Builds new template of HTML element of news feed 
-     * according to given data and calls 'appendHtml'
+     * according to given data and calls 'appendHtml()'
      * function.
-     * @param {String} id 
-     * @param {String} title 
-     * @param {String} date 
-     * @param {String} content 
+     * @param newsData
      */
-    buildAndAppendNews(id, title, date, content) {
-        let wordCount = this.countWords(content);
+    buildAndAppendNews(newsData) {
+        let formattedDate = this.createDate(newsData.timestamp);
+        let wordCount = this.countWords(newsData.content);
 
         let moreBtn = "";
         if (wordCount > 128) {
-            content = this.substrWords(content, 32);
-            content += "...";
+            newsData.content = this.substrWords(newsData.content, 64);
+            newsData.content += "...";
             moreBtn = `
                 <div class="moreBtnContainer">
                     <button class="moreBtn" id="moreBtn">More</button>
@@ -97,18 +95,20 @@ class NewsFeed {
         }
 
         let html = `
-            <div class="news" id="${id}">
+            <div class="news" id="${newsData.id}">
                 <div class="newsHeader">
                     <div class="newsTitle">
-                        ${title}
+                        ${newsData.title}
                     </div>
                     <div class="newsDate">
-                        ${date}
+                        ${formattedDate}
                     </div>
                 </div>
                 <hr class="solid">
+                <img class="newsHeaderImg" src="${newsData.headerUrl}">
+                <hr class="solid">
                 <div class="newsContent">
-                    ${content}
+                    ${newsData.content}
                 </div>
                 ${moreBtn}
             </div>
@@ -125,7 +125,8 @@ class NewsFeed {
     async drawOpenedNews(id) {
         let docRef = this.newsRef.doc(id);
 
-        await docRef.get().then(async doc => {
+        await docRef.get()
+        .then(async doc => {
             if (doc.exists) {
                 let newsData = await this.fetchNewsData(doc);
 
@@ -163,6 +164,7 @@ class NewsFeed {
         let title = doc.data().title;
         let timestamp = doc.data().date.toMillis();
         let content = "";
+        let headerUrl = "";
 
         let contentRef = this.storageRef.ref(`news/${id}/content.txt`);
         await contentRef.getDownloadURL()
@@ -178,11 +180,20 @@ class NewsFeed {
             console.log("Error: ", error);
         });
 
+        let headerRef = this.storageRef.ref(`news/${id}/header.jpg`);
+        await headerRef.getDownloadURL()
+        .then(url => {
+            headerUrl = url;
+        }).catch((error) => {
+            console.log("Error: ", error);
+        });
+
         return {
             id: id,
             title: title,
             timestamp: timestamp,
-            content: content
+            content: content,
+            headerUrl: headerUrl
         };
     }
 

@@ -59,6 +59,12 @@ div.newsFeed {
     height: max-content;
 }
 
+.news img.newsHeaderImg {
+    width: 100%;
+    object-fit: contain;
+    border-radius: 2.5px;
+}
+
 .news div.newsContent {
     display: flex;
     align-items: center;
