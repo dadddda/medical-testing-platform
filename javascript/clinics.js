@@ -15,6 +15,7 @@ class Clinics {
     constructor(clinicsElem) {
         this.clinicsElem = clinicsElem;
         this.clinicsRef = firebase.firestore().collection("clinics");
+        this.clinicsData = new Map();
         this.scale = 1;
 
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
@@ -85,7 +86,7 @@ class Clinics {
     /**
      * Extracts latitude and longitude from user's location and calls
      * certain functions to calculate estimate coordinates on x, y plane of the
-     * 'mapImg' and drops pin at that exact location. Then calls 'getClinics()'.
+     * 'mapImg' and drops pin at that exact location.
      * @param position 
      */
     showPosition(position) {
@@ -99,7 +100,6 @@ class Clinics {
         setTimeout(() => {
             let userPinElem = document.getElementById("userPin");
             this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
-            this.getClinics();
         }, timeoutDelay);
     }
 
@@ -126,27 +126,41 @@ class Clinics {
 
     /**
      * Fetches clinics data from database and places each clinic pin on the map.
-     * Creates instance variable of a 'Map' object to store longitude and latitude
-     * values for each clinic pin. Also adds event listeners to each.
+     * Creates instance variable of a 'Map' object to store data of each fetched clinic.
+     * Also adds event listeners to each.
      */
     async getClinics() {
         let zoomableContentElem = document.getElementById("zoomableContent");
         let data = await this.clinicsRef.get();
 
-        this.clinicPins = new Map();
         this.clinicPinClickHandlerRef = this.clinicPinClickHandler.bind(this);
 
         data.docs.forEach((doc) => {
             let id = doc.data().id;
+            let name = doc.data().name;
+            let address = doc.data().address;
+            let phone = doc.data().phone;
+            let hours = doc.data().hours;
+            let tests = doc.data().tests;
             let location = doc.data().location;
-
+            
+            let currClinicInfo = {
+                id: id,
+                name: name,
+                address: address,
+                phone: phone,
+                hours: hours,
+                tests: tests,
+                location: location
+            };
+            
             let html = `<img class="clinicPin" id="${id}" src="../svgs/clinic.svg">`;
             appendHtml(html, zoomableContentElem);
 
             setTimeout(() => {
                 let clinicPinElem = document.getElementById(id);
                 this.positionPinOnMap(clinicPinElem, location.latitude, location.longitude);
-                this.clinicPins.set(id, {lat: location.latitude, long: location.longitude});
+                this.clinicsData.set(id, currClinicInfo);
                 clinicPinElem.addEventListener("click", this.clinicPinClickHandlerRef);
             }, timeoutDelay);
         });
@@ -156,67 +170,46 @@ class Clinics {
      * Called when certain clinic pin is clicked on the map.
      * @param {Event} event 
      */
-    async clinicPinClickHandler(event) {
-        let currClinicPinElem = event.target;
+    clinicPinClickHandler(event) {
+        let clinicPinElem = event.target;
 
-        currClinicPinElem.scrollIntoView({
+        clinicPinElem.scrollIntoView({
             behavior: "smooth",
             block: "center",
             inline: "center"
         });
 
-        let data = await this.clinicsRef.where("id", "==", currClinicPinElem.id).get();
+        let clinicInfo = this.clinicsData.get(clinicPinElem.id);
 
-        data.docs.forEach((doc) => {
-            let id = doc.data().id;
-            let name = doc.data().name;
-            let address = doc.data().address;
-            let phone = doc.data().phone;
-            let hours = doc.data().hours;
-            let tests = doc.data().tests;
-
-            let clinicInfo = {
-                id: id,
-                name: name,
-                address: address,
-                phone: phone,
-                hours: hours,
-                tests: tests
-            };
-
-            if (this.infoCardObj != undefined) {
-                this.infoCardObj.drawInfoCard(clinicInfo);
-            } else {
-                let infoCardElem = document.getElementById("infoCard");
-                let clinicsContentElem = this.clinicsElem.firstElementChild;
-                this.infoCardObj = new InfoCard(infoCardElem, clinicsContentElem);
-                this.infoCardObj.drawInfoCard(clinicInfo);
-                this.infoCardObj.initListeners();
-            }
-        });
+        if (this.infoCardObj != undefined) {
+            this.infoCardObj.drawInfoCard(clinicInfo);
+        } else {
+            let infoCardElem = document.getElementById("infoCard");
+            let clinicsContentElem = this.clinicsElem.firstElementChild;
+            this.infoCardObj = new InfoCard(infoCardElem, clinicsContentElem);
+            this.infoCardObj.drawInfoCard(clinicInfo);
+            this.infoCardObj.initListeners();
+        }
     }
 
     /**
-     * Fetches every test that is currently available from "clinics" database
+     * Takes every test name that is currently available from 'this.clinicsData' map
      * and creates appropriate popup window. Calls 'toggleFilterPopup()' to make
      * this window visible.
      */
-    async createFilterPopup() {
+    createFilterPopup() {
         let filterContainerElem = document.getElementById("filterContainer");
-        let data = await this.clinicsRef.get();
 
-        this.allTests = new Set();
-
-        data.docs.forEach((doc) => {
-            let tests = doc.data().tests;
-
+        let allTests = new Set();
+        this.clinicsData.forEach((value, key) => {
+            let tests = value.tests;
             tests.forEach((testName) => {
-                this.allTests.add(testName);
+                allTests.add(testName);
             });
         });
 
         let i = 1;
-        this.allTests.forEach((testName) => {
+        allTests.forEach((testName) => {
             let html = `
                 <div class="checkboxField">
                     <input id="ck${i}" type="checkbox">
@@ -276,8 +269,10 @@ class Clinics {
         let lastScrollHeight = zoomContainerElem.scrollHeight;
 
         zoomableContentElem.style.transform = `scale(${this.scale})`;
-        userPinElem.style.transform = `scale(${1 / this.scale})`;
-        this.clinicPins.forEach((value, key) => {
+        if (userPinElem != undefined) {
+            userPinElem.style.transform = `scale(${1 / this.scale})`;
+        }
+        this.clinicsData.forEach((value, key) => {
             let currClinicPinElem = document.getElementById(key);
             currClinicPinElem.style.transform = `scale(${1 / this.scale})`;
         });
@@ -382,7 +377,7 @@ class Clinics {
         if (this.scale > 1) {
             zoomableContentElem.style.transform = "scale(1)";
             document.getElementById("userPin").style.transform = "scale(1)";
-            this.clinicPins.forEach((value, key) => {
+            this.clinicsData.forEach((value, key) => {
                 let currClinicPinElem = document.getElementById(key);
                 currClinicPinElem.style.transform = "scale(1)";
             });
@@ -425,12 +420,6 @@ class Clinics {
      * Initializes event listeners.
      */
     initListeners() {
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
-        
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        zoomableContentElem.addEventListener("mousedown", this.mouseDownHandlerRef);
-
         let mapFooterDashboardElem = document.getElementById("mapFooterDashboard");
         mapFooterDashboardElem.addEventListener("click", this.mouseClickHandlerRef);
         
@@ -438,6 +427,17 @@ class Clinics {
         mapImgElem.addEventListener("load", this.mapLoadHandlerRef);
 
         window.addEventListener("resize", this.windowResizeHandlerRef);
+    }
+
+    /**
+     * Initializes secondary event listeners.
+     */
+    initSecondaryListeners() {
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
+        
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        zoomableContentElem.addEventListener("mousedown", this.mouseDownHandlerRef);
     }
 
     /**
@@ -458,12 +458,10 @@ class Clinics {
 
         window.removeEventListener("resize", this.windowResizeHandlerRef);
 
-        if (this.clinicPins != undefined) {
-            this.clinicPins.forEach((value, key) => {
-                let currClinicPinElem = document.getElementById(key);
-                currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
-            });
-        }
+        this.clinicsData.forEach((value, key) => {
+            let currClinicPinElem = document.getElementById(key);
+            currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
+        });
 
         if (this.infoCardObj != undefined) this.infoCardObj.deinitListeners();
     }
@@ -489,11 +487,13 @@ class Clinics {
                 break;
             case "centerBtn":
                 let userPinElem = document.getElementById("userPin");
-                userPinElem.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                    inline: "center"
-                });
+                if (userPinElem != undefined) {
+                    userPinElem.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                        inline: "center"
+                    });
+                }
                 break;
         }
     }
@@ -575,9 +575,11 @@ class Clinics {
     /**
      * Executes script when 'mapImg' is fully loaded.
      */
-    mapLoadHandler() {
+    async mapLoadHandler() {
         this.adjustMapImgElemSize();
+        await this.getClinics();
         this.getLocation();
+        this.initSecondaryListeners();
     }
 
     /**
@@ -590,11 +592,13 @@ class Clinics {
         if (this.infoCardObj != undefined) this.infoCardObj.adjustCardElemPos();
         
         let userPinElem = document.getElementById("userPin");
+        if (userPinElem != undefined) {
+            this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
+        }
 
-        this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
-        this.clinicPins.forEach((value, key) => {
+        this.clinicsData.forEach((value, key) => {
             let currClinicPinElem = document.getElementById(key);
-            this.positionPinOnMap(currClinicPinElem, value.lat, value.long);
+            this.positionPinOnMap(currClinicPinElem, value.location.latitude, value.location.longitude);
         });
     }
 }
