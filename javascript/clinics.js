@@ -42,11 +42,19 @@ class Clinics {
                                 <img class="mapImg" id="mapImg" src="../svgs/map.svg">
                             </div>
                         </div>
-                        <div class="mapFooterBtns" id="mapFooterBtns">
-                            <button class="actionBtnLng" id="filterBtn">Filter</button>
-                            <img class="actionBtnSqr" id="zoomInBtn" src="../svgs/plus.svg">
-                            <img class="actionBtnSqr" id="zoomOutBtn" src="../svgs/minus.svg">
-                            <img class="actionBtnSqr" id="centerBtn" src="../svgs/center.svg">
+                        <div class="mapFooterDashboard" id="mapFooterDashboard">
+                            <div class="footerDashboardLeft">
+                                <div class="searchFieldContainer">
+                                    <label class="searchFieldLabel" for="searchField">Search:</label>
+                                    <input class="searchField" type="text" id="searchField">
+                                </div>
+                                <button class="actionBtnLng" id="filterBtn">Filter</button>
+                            </div>
+                            <div class="footerDashboardRight">
+                                <img class="actionBtnSqr" id="zoomInBtn" src="../svgs/plus.svg">
+                                <img class="actionBtnSqr" id="zoomOutBtn" src="../svgs/minus.svg">
+                                <img class="actionBtnSqr" id="centerBtn" src="../svgs/center.svg">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -423,8 +431,8 @@ class Clinics {
         let zoomableContentElem = document.getElementById("zoomableContent");
         zoomableContentElem.addEventListener("mousedown", this.mouseDownHandlerRef);
 
-        let mapFooterBtnsElem = document.getElementById("mapFooterBtns");
-        mapFooterBtnsElem.addEventListener("click", this.mouseClickHandlerRef);
+        let mapFooterDashboardElem = document.getElementById("mapFooterDashboard");
+        mapFooterDashboardElem.addEventListener("click", this.mouseClickHandlerRef);
         
         let mapImgElem = document.getElementById("mapImg");
         mapImgElem.addEventListener("load", this.mapLoadHandlerRef);
@@ -442,8 +450,8 @@ class Clinics {
         let zoomableContentElem = document.getElementById("zoomableContent");
         zoomableContentElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
 
-        let mapFooterBtnsElem = document.getElementById("mapFooterBtns");
-        mapFooterBtnsElem.removeEventListener("click", this.mouseClickHandlerRef);
+        let mapFooterDashboardElem = document.getElementById("mapFooterDashboard");
+        mapFooterDashboardElem.removeEventListener("click", this.mouseClickHandlerRef);
 
         let mapImgElem = document.getElementById("mapImg");
         mapImgElem.removeEventListener("load", this.mapLoadHandlerRef);

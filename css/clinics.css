@@ -94,17 +94,83 @@ div.clinics {
     cursor: pointer;
 }
 
-.mapContent div.mapFooterBtns {
+.mapContent div.mapFooterDashboard {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: max-content;
+    justify-content: space-between;
+    width: 100%;
     height: max-content;
+    min-width: min-content;
+    padding: 0 65px;
     position: absolute;
     bottom: 20px;
 }
 
-.mapFooterBtns img.actionBtnSqr {
+.mapFooterDashboard div.footerDashboardLeft {
+    display: flex;
+}
+
+.footerDashboardLeft div.searchFieldContainer {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    height: 30px;
+    margin: 0 5px;
+    padding: 0 5px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: rgb(245, 50, 50);
+    border-width: 2px;
+    background-color: rgb(240, 240, 240);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: all .2s ease-in-out;
+}
+
+.footerDashboardLeft div.searchFieldContainer:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: all .2s ease-in-out;
+}
+
+.searchFieldContainer input.searchField {
+    width: 100%;
+    height: 100%;
+    padding-left: 5px;
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+.searchFieldContainer label.searchFieldLabel {
+    width: max-content;
+    height: max-content;
+}
+
+.footerDashboardLeft button.actionBtnLng {
+    width: 60px;
+    height: 30px;
+    margin: 0 5px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(245, 50, 50);
+    font-size: 1.05rem;
+    color: rgb(235, 235, 235);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: all .2s ease-in-out;
+}
+
+.footerDashboardLeft button.actionBtnLng:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+.mapFooterDashboard div.footerDashboardRight {
+    display: flex;
+}
+
+.footerDashboardRight img.actionBtnSqr {
     width: 30px;
     height: 30px;
     margin: 0 5px;
@@ -116,27 +182,7 @@ div.clinics {
     transition: all .2s ease-in-out;
 }
 
-.mapFooterBtns img.actionBtnSqr:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    transition: all .2s ease-in-out;
-    cursor: pointer;
-}
-
-.mapFooterBtns button.actionBtnLng {
-    width: 60px;
-    height: 30px;
-    margin: 0 20px 0 5px;
-    outline: none;
-    border: none;
-    border-radius: 5px;
-    background-color: rgb(245, 50, 50);
-    font-size: 1.05rem;
-    color: rgb(235, 235, 235);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
-    transition: all .2s ease-in-out;
-}
-
-.mapFooterBtns button.actionBtnLng:hover {
+.footerDashboardRight img.actionBtnSqr:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: all .2s ease-in-out;
     cursor: pointer;
@@ -145,18 +191,26 @@ div.clinics {
 .clinicsContent div.filterContainer {
     z-index: 2;
     display: none;
-    column-count: 3;
-    width: max-content;
+    column-count: 2;
+    width: 370px;
     height: max-content;
     position: absolute;
-    bottom: 70px;
+    bottom: 60px;
+    left: 70px;
     padding: 7.5px;
-    border-radius: 2.5px;
-    background: rgb(220, 220, 220);
-    background: linear-gradient(135deg, rgb(220, 220, 220) -100%, rgb(250, 250, 250) 100%);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    transition: opacity .2s ease-in-out;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: rgb(245, 50, 50);
+    border-width: 2px;
+    background-color: rgb(240, 240, 240);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: opacity .2s ease-in-out, box-shadow .2s ease-in-out;
     animation: fade .2s ease-in-out;
+}
+
+.clinicsContent div.filterContainer:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: box-shadow .2s ease-in-out;
 }
 
 .filterContainer div.checkboxField {
