@@ -319,8 +319,8 @@ class Clinics {
         let x = mapImgElemBr.x - zoomableContentElemBr.x;
         let y = mapImgElemBr.y - zoomableContentElemBr.y;
 
-        x -= elem.offsetWidth / 2;
-        y -= elem.offsetHeight;
+        x -= elem.clientWidth / 2;
+        y -= elem.clientHeight;
 
         return {x: x, y: y};
     }
