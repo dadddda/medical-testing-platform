@@ -204,12 +204,33 @@ class Clinics {
     }
 
     /**
+     * Makes given clinic pin user accessible.
+     * @param {HTMLElement} clinicPinElem 
+     */
+    enableClinicPin(clinicPinElem) {
+        clinicPinElem.style.opacity = "100%";
+        clinicPinElem.style.cursor = "pointer";
+        clinicPinElem.addEventListener("click", this.clinicPinClickHandlerRef);
+    }
+
+    /**
+     * Makes given clinic pin user inaccessible.
+     * @param {HTMLElement} clinicPinElem 
+     */
+    disableClinicPin(clinicPinElem) {
+        clinicPinElem.style.opacity = "25%";
+        clinicPinElem.style.cursor = "unset";
+        clinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
+    }
+
+    /**
      * Takes every test name that is currently available from 'this.clinicsData' map
      * and creates appropriate popup window. Calls 'toggleFilterPopup()' to make
      * this window visible.
      */
     createFilterPopup() {
         let filterContainerElem = document.getElementById("filterContainer");
+        this.filterTestsMap = new Map();
 
         let allTests = new Set();
         this.clinicsData.forEach((value, key) => {
@@ -230,6 +251,7 @@ class Clinics {
                 </div>
             `;
             appendHtml(html, filterContainerElem);
+            this.filterTestsMap.set(`ck${i}`, testName);
             i++;
         });
 
@@ -490,21 +512,34 @@ class Clinics {
             let searchFieldValue = event.target.value.toLowerCase();
 
             this.clinicsData.forEach((value, key) => {
-                let currPinName = value.name.toLowerCase();
-                let currPinElem = document.getElementById(key);
+                let currClinicPinElem = document.getElementById(key);
+                let currClinicName = value.name.toLowerCase();
 
-                if (currPinName.includes(searchFieldValue)) {
-                    currPinElem.style.opacity = "100%";
-                    currPinElem.style.cursor = "pointer";
-                    currPinElem.addEventListener("click", this.clinicPinClickHandlerRef);
-                } else {
-                    currPinElem.style.opacity = "25%";
-                    currPinElem.style.cursor = "unset";
-                    currPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
-                }
+                if (currClinicName.includes(searchFieldValue)) this.enableClinicPin(currClinicPinElem);
+                else this.disableClinicPin(currClinicPinElem);
             });
         } else {
-            console.log(event.target.id, event.target.checked);
+            let checkedTests = new Set();
+
+            this.filterTestsMap.forEach((value, key) => {
+                let currCheckboxElem = document.getElementById(key);
+
+                if (currCheckboxElem.checked) checkedTests.add(value);
+                else checkedTests.delete(value);
+            });
+            
+            this.clinicsData.forEach((value, key) => {
+                let currClinicPinElem = document.getElementById(key);
+                let currClinicTests = value.tests;
+
+                let containsSome = true;
+                checkedTests.forEach(testName => {
+                    if (currClinicTests.indexOf(testName) == -1) containsSome = false;
+                });
+
+                if (containsSome == true) this.enableClinicPin(currClinicPinElem);
+                else this.disableClinicPin(currClinicPinElem);
+            });
         }
     }
 
