@@ -1,7 +1,8 @@
 // variables and constants
 const leftPanelBtns = document.getElementById("leftPanelBtns");
 const btns = leftPanelBtns.getElementsByClassName("leftPanelBtn");
-const btnDelayMs = 200;
+const animationDelay = 200;
+const timeoutDelay = 20;
 
 /**
  * Redirects page to login.html if the user isn't logged in.
@@ -113,7 +114,7 @@ function initBtns() {
 
                         break;
                 }
-            }, btnDelayMs);
+            }, animationDelay);
         });
     }
 }

@@ -2,8 +2,6 @@
 const mapScaleFactor = 1.2;
 const mapScaleThreshold = 4;
 const mapSizePct = 95;
-const animationDelay = 200;
-const timeoutDelay = 20;
 
 class Clinics {
 
