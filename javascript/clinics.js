@@ -476,7 +476,22 @@ class Clinics {
      */
     inputUpdateHandler(event) {
         if (event.target.id == "searchField") {
-            console.log(event.target.value);
+            let searchFieldValue = event.target.value.toLowerCase();
+
+            this.clinicsData.forEach((value, key) => {
+                let currPinName = value.name.toLowerCase();
+                let currPinElem = document.getElementById(key);
+
+                if (currPinName.includes(searchFieldValue)) {
+                    currPinElem.style.opacity = "100%";
+                    currPinElem.style.cursor = "pointer";
+                    currPinElem.addEventListener("click", this.clinicPinClickHandlerRef);
+                } else {
+                    currPinElem.style.opacity = "25%";
+                    currPinElem.style.cursor = "unset";
+                    currPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
+                }
+            });
         } else {
             console.log(event.target.id, event.target.checked);
         }
