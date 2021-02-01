@@ -21,7 +21,7 @@ document.getElementById("headerLeftBtn").addEventListener("click", function() {
     rightPanelElem.classList.add("hidden");
     setTimeout(function() {
         window.location.assign("index.html");
-    }, btnDelayMs);
+    }, animationDelay);
 })
 
 /**
