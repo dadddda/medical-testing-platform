@@ -16,6 +16,8 @@ class Clinics {
         this.clinicsData = new Map();
         this.scale = 1;
 
+        this.inputUpdateHandlerRef = this.inputUpdateHandler.bind(this);
+
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
         this.mouseDownHandlerRef = this.mouseDownHandler.bind(this);
         this.mouseMoveHandlerRef = this.mouseMoveHandler.bind(this);
@@ -418,6 +420,8 @@ class Clinics {
      * Initializes event listeners.
      */
     initListeners() {
+        this.clinicsElem.addEventListener("input", this.inputUpdateHandlerRef);
+
         let mapFooterDashboardElem = document.getElementById("mapFooterDashboard");
         mapFooterDashboardElem.addEventListener("click", this.mouseClickHandlerRef);
         
@@ -442,6 +446,8 @@ class Clinics {
      * Deinitializes event listeners.
      */
     deinitListeners() {
+        this.clinicsElem.removeEventListener("input", this.inputUpdateHandlerRef);
+
         let zoomContainerElem = document.getElementById("zoomContainer");
         zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
         
@@ -462,6 +468,18 @@ class Clinics {
         });
 
         if (this.infoCardObj != undefined) this.infoCardObj.deinitListeners();
+    }
+
+    /**
+     * Handles input element update events.
+     * @param {Event} event 
+     */
+    inputUpdateHandler(event) {
+        if (event.target.id == "searchField") {
+            console.log(event.target.value);
+        } else {
+            console.log(event.target.id, event.target.checked);
+        }
     }
 
     /**
