@@ -68,19 +68,30 @@ class Clinics {
 
     /**
      * Prompts the user for location access and if browser supports
-     * geolocation then showPosition() or showError() function is called.
+     * geolocation then 'showPosition()' or 'showError()' function is called.
      * Logs "not supported" error message in console otherwise.
      */
-    getLocation() {
+    async getLocation() {
         if (navigator.geolocation) {
-            let showPositionRef = this.showPosition.bind(this);
-            let showErrorRef = this.showError.bind(this);
-            navigator.geolocation.getCurrentPosition(showPositionRef, showErrorRef, {
-                enableHighAccuracy: true
-            });
+            let position = await this.getCoordinates();
+            if (position != undefined) {
+                this.showPosition(position);
+            }
         } else {
             console.log("Geolocation is not supported by this browser.");
         }
+    }
+
+    /**
+     * Returns new promise after 'getCurrentPosition()' calls resolve.
+     * calls 'showError()' if some error is catched.
+     */
+    async getCoordinates() {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        }).catch(error => {
+            this.showError(error);
+        });
     }
 
     /**
@@ -609,7 +620,7 @@ class Clinics {
     async mapLoadHandler() {
         this.adjustMapImgElemSize();
         await this.getClinics();
-        this.getLocation();
+        await this.getLocation();
         this.initSecondaryListeners();
     }
 
