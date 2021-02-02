@@ -191,7 +191,7 @@ div.clinics {
 .clinicsContent div.filterContainer {
     z-index: 2;
     display: none;
-    column-count: 2;
+    flex-wrap: wrap;
     width: 370px;
     height: max-content;
     position: absolute;
@@ -214,15 +214,22 @@ div.clinics {
 }
 
 .filterContainer div.checkboxField {
-    display: block;
-    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex: 1 1 50%;
+    height: min-content;
     padding: 2.5px;
     color: rgb(10, 10, 10);
 }
 
+.checkboxField input.checkboxInput {
+    display: flex;
+    margin-top: 3px;
+}
+
 .checkboxField label.checkboxLabel {
-    display: inline-block;
-    width: max-content;
+    display: flex;
     margin-left: 5px;
     font-size: 0.9rem;
 }

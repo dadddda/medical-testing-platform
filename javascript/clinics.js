@@ -147,7 +147,7 @@ class Clinics {
         this.clinicPinClickHandlerRef = this.clinicPinClickHandler.bind(this);
 
         data.docs.forEach((doc) => {
-            let id = doc.data().id;
+            let id = doc.id;
             let name = doc.data().name;
             let address = doc.data().address;
             let phone = doc.data().phone;
@@ -244,7 +244,7 @@ class Clinics {
         allTests.forEach((testName) => {
             let html = `
                 <div class="checkboxField">
-                    <input id="ck${i}" type="checkbox">
+                    <input class="checkboxInput" id="ck${i}" type="checkbox">
                     <label class="checkboxLabel" for="ck${i}">
                         ${testName}
                     </label>
@@ -274,7 +274,7 @@ class Clinics {
             this.opened = true;
 
             let filterContainerElem = document.getElementById("filterContainer");
-            filterContainerElem.style.display = "block";
+            filterContainerElem.style.display = "flex";
             filterContainerElem.style.opacity = "100%";
         }
     }
