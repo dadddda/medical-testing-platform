@@ -3,7 +3,7 @@
  * @param {string} email 
  * @param {string} password 
  */
-function validateInput(email, password) {
+export function validateInput(email, password) {
     let emailLabelClasses = document.getElementById("emailLabel").classList;
     let passwordLabelClasses = document.getElementById("passwordLabel").classList;
 

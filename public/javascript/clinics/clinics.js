@@ -2,8 +2,15 @@
 const mapScaleFactor = 1.2;
 const mapScaleThreshold = 4;
 const mapSizePct = 95;
+import {animationDelay, timeoutDelay} from "../utils/utils.js";
 
-class Clinics {
+// classes
+import {InfoCard} from "./info-card.js";
+
+// functions
+import {appendHtml} from "../utils/utils.js";
+
+export class Clinics {
 
     /**
      * Constructs new 'Clinics' object with given 'clinicsElem'

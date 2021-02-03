@@ -1,3 +1,6 @@
+// functions
+import {validateInput} from "./authentication.js";
+
 /**
  * Redirects page to index.html if the user is already logged in.
  */

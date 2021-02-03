@@ -1,7 +1,11 @@
 // constants
 const triggerThreshold = 0.8;
+import {animationDelay} from "../utils/utils.js";
 
-class NewsFeed {
+// functions
+import {appendHtml} from "../utils/utils.js";
+
+export class NewsFeed {
 
     /**
      * Constructs new 'NewsFeed' object with given 'newsFeedElem'

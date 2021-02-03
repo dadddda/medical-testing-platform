@@ -1,8 +1,11 @@
-// variables and constants
+// constants
 const leftPanelBtns = document.getElementById("leftPanelBtns");
 const btns = leftPanelBtns.getElementsByClassName("leftPanelBtn");
-const animationDelay = 200;
-const timeoutDelay = 20;
+import {animationDelay} from "./utils/utils.js";
+
+// classes
+import {NewsFeed} from "./news-feed/news-feed.js";
+import {Clinics} from "./clinics/clinics.js";
 
 /**
  * Redirects page to login.html if the user isn't logged in.
@@ -116,21 +119,5 @@ function initBtns() {
                 }
             }, animationDelay);
         });
-    }
-}
-
-/**
- * Appends given html to given element.
- * @param {string} html 
- * @param {HTMLElement} element
- */
-function appendHtml(html, element) {
-    let template = document.createElement("template");
-    html = html.trim();
-    template.innerHTML = html;
-
-    let templateChildren = template.content.childNodes;
-    for (let i = 0; i < templateChildren.length; i++) {
-        element.appendChild(templateChildren[i]);
     }
 }

@@ -1,4 +1,10 @@
-class InfoCard {
+// constants
+import {animationDelay, timeoutDelay} from "../utils/utils.js";
+
+// functions
+import {appendHtml} from "../utils/utils.js";
+
+export class InfoCard {
 
     /**
      * Constructs new 'InfoCard' object with given 'infoCardElem'
