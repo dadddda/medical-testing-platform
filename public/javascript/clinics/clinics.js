@@ -37,9 +37,7 @@ export class Clinics {
         this.observer = new MutationObserver(this.observerHandlerRef);
         this.observer.observe(document.body, {
             childList: true,
-            subtree: true,
-            attributes: false,
-            characterData: false
+            subtree: true
         });
     }
 
