@@ -67,9 +67,9 @@ div.clinics {
 
 .zoomableContent img.userPin {
     z-index: 1;
-    width: 19.9px;
     height: 36px;
     position: absolute;
+    object-fit: contain;
     transform-origin: bottom center;
     animation: fade .2s ease-in-out;
     transition: opacity .2s ease-in-out;
@@ -81,9 +81,9 @@ div.clinics {
 }
 
 .zoomableContent img.clinicPin {
-    width: 25.5px;
     height: 36px;
     position: absolute;
+    object-fit: contain;
     transform-origin: bottom center;
     animation: fade .2s ease-in-out;
     transition: opacity .2s ease-in-out;
