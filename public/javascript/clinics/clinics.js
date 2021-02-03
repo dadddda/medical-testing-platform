@@ -460,11 +460,6 @@ export class Clinics {
      * Initializes event listeners.
      */
     initListeners() {
-        this.clinicsElem.addEventListener("input", this.inputUpdateHandlerRef);
-
-        let mapFooterDashboardElem = document.getElementById("mapFooterDashboard");
-        mapFooterDashboardElem.addEventListener("click", this.mouseClickHandlerRef);
-        
         let mapImgElem = document.getElementById("mapImg");
         mapImgElem.addEventListener("load", this.mapLoadHandlerRef);
 
@@ -475,11 +470,16 @@ export class Clinics {
      * Initializes secondary event listeners.
      */
     initSecondaryListeners() {
+        this.clinicsElem.addEventListener("input", this.inputUpdateHandlerRef);
+
         let zoomContainerElem = document.getElementById("zoomContainer");
         zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
         
         let zoomableContentElem = document.getElementById("zoomableContent");
         zoomableContentElem.addEventListener("mousedown", this.mouseDownHandlerRef);
+
+        let mapFooterDashboardElem = document.getElementById("mapFooterDashboard");
+        mapFooterDashboardElem.addEventListener("click", this.mouseClickHandlerRef);
     }
 
     /**
