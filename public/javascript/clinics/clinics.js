@@ -2,7 +2,7 @@
 const mapScaleFactor = 1.2;
 const mapScaleThreshold = 4;
 const mapSizePct = 95;
-import {animationDelay, timeoutDelay} from "../utils/utils.js";
+import {animationDelay} from "../utils/utils.js";
 
 // classes
 import {InfoCard} from "./info-card.js";
@@ -31,8 +31,16 @@ export class Clinics {
         this.mouseUpHandlerRef = this.mouseUpHandler.bind(this);
         this.mouseWheelHandlerRef = this.mouseWheelHandler.bind(this);
 
-        this.mapLoadHandlerRef = this.mapLoadHandler.bind(this);
         this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
+
+        this.observerHandlerRef = this.observerHandler.bind(this);
+        this.observer = new MutationObserver(this.observerHandlerRef);
+        this.observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: false,
+            characterData: false
+        });
     }
 
     /**
@@ -102,9 +110,9 @@ export class Clinics {
     }
 
     /**
-     * Extracts latitude and longitude from user's location and calls
-     * certain functions to calculate estimate coordinates on x, y plane of the
-     * 'mapImg' and drops pin at that exact location.
+     * Extracts and stores latitude and longitude from user's location and 
+     * adds 'userPin' HTML element to the map. The rest is handled in mutation
+     * observer.
      * @param position 
      */
     showPosition(position) {
@@ -114,11 +122,6 @@ export class Clinics {
         let html = `<img class="userPin" id="userPin" src="../svgs/pin.svg">`;
         let zoomableContentElem = document.getElementById("zoomableContent");
         appendHtml(html, zoomableContentElem);
-        
-        setTimeout(() => {
-            let userPinElem = document.getElementById("userPin");
-            this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
-        }, timeoutDelay);
     }
 
     /**
@@ -145,7 +148,7 @@ export class Clinics {
     /**
      * Fetches clinics data from database and places each clinic pin on the map.
      * Creates instance variable of a 'Map' object to store data of each fetched clinic.
-     * Also adds event listeners to each.
+     * Mutation observer does the rest.
      */
     async getClinics() {
         let zoomableContentElem = document.getElementById("zoomableContent");
@@ -175,12 +178,7 @@ export class Clinics {
             let html = `<img class="clinicPin" id="${id}" src="../svgs/clinic.svg">`;
             appendHtml(html, zoomableContentElem);
 
-            setTimeout(() => {
-                let clinicPinElem = document.getElementById(id);
-                this.positionPinOnMap(clinicPinElem, location.latitude, location.longitude);
-                this.clinicsData.set(id, currClinicInfo);
-                clinicPinElem.addEventListener("click", this.clinicPinClickHandlerRef);
-            }, timeoutDelay);
+            this.clinicsData.set(id, currClinicInfo);
         });
     }
 
@@ -460,9 +458,6 @@ export class Clinics {
      * Initializes event listeners.
      */
     initListeners() {
-        let mapImgElem = document.getElementById("mapImg");
-        mapImgElem.addEventListener("load", this.mapLoadHandlerRef);
-
         window.addEventListener("resize", this.windowResizeHandlerRef);
     }
 
@@ -497,9 +492,6 @@ export class Clinics {
         let mapFooterDashboardElem = document.getElementById("mapFooterDashboard");
         mapFooterDashboardElem.removeEventListener("click", this.mouseClickHandlerRef);
 
-        let mapImgElem = document.getElementById("mapImg");
-        mapImgElem.removeEventListener("load", this.mapLoadHandlerRef);
-
         window.removeEventListener("resize", this.windowResizeHandlerRef);
 
         this.clinicsData.forEach((value, key) => {
@@ -508,6 +500,31 @@ export class Clinics {
         });
 
         if (this.infoCardObj != undefined) this.infoCardObj.deinitListeners();
+
+        this.observer.disconnect();
+    }
+
+    /**
+     * Handles DOM mutations.
+     * @param mutations 
+     */
+    async observerHandler(mutations) {
+        for (const mutation of mutations) {
+            for (const node of mutation.addedNodes) {
+                if (node.classList.contains("clinicPin")) {
+                    let nodeData = this.clinicsData.get(node.id);
+                    this.positionPinOnMap(node, nodeData.location.latitude, nodeData.location.longitude);
+                    node.addEventListener("click", this.clinicPinClickHandlerRef);
+                } else if (node.classList.contains("userPin")) {
+                    this.positionPinOnMap(node, this.latitude, this.longitude);
+                } else if (node.classList.contains("clinicsContent")) {
+                    this.adjustMapImgElemSize();
+                    await this.getClinics();
+                    await this.getLocation();
+                    this.initSecondaryListeners();
+                }
+            }
+        }
     }
 
     /**
@@ -654,16 +671,6 @@ export class Clinics {
         } else {
             zoomContainerElem.style.cursor = "grab";
         }
-    }
-
-    /**
-     * Executes script when 'mapImg' is fully loaded.
-     */
-    async mapLoadHandler() {
-        this.adjustMapImgElemSize();
-        await this.getClinics();
-        await this.getLocation();
-        this.initSecondaryListeners();
     }
 
     /**
