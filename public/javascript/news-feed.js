@@ -296,7 +296,7 @@ class NewsFeed {
             setTimeout(() => {
                 this.newsFeedElem.removeChild(openedNewsBackgroundElem);
                 this.newsFeedElem.removeChild(openedNewsElem);
-            }, 200);
+            }, animationDelay);
         }
     }
 
