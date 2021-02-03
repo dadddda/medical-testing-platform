@@ -31,6 +31,10 @@ export class Clinics {
         this.mouseUpHandlerRef = this.mouseUpHandler.bind(this);
         this.mouseWheelHandlerRef = this.mouseWheelHandler.bind(this);
 
+        this.mapImgLoadHandlerRef = this.mapImgLoadHandler.bind(this);
+        this.clinicPinLoadHandlerRef = this.clinicPinLoadHandler.bind(this);
+        this.userPinLoadHandlerRef = this.userPinLoadHandler.bind(this);
+
         this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
 
         this.observerHandlerRef = this.observerHandler.bind(this);
@@ -355,8 +359,8 @@ export class Clinics {
         let x = mapImgElemBr.x - zoomableContentElemBr.x;
         let y = mapImgElemBr.y - zoomableContentElemBr.y;
 
-        x -= elem.clientWidth / 2;
-        y -= elem.clientHeight;
+        x -= elem.offsetWidth / 2;
+        y -= elem.offsetHeight;
 
         return {x: x, y: y};
     }
@@ -510,16 +514,11 @@ export class Clinics {
         for (const mutation of mutations) {
             for (const node of mutation.addedNodes) {
                 if (node.classList.contains("clinicPin")) {
-                    let nodeData = this.clinicsData.get(node.id);
-                    this.positionPinOnMap(node, nodeData.location.latitude, nodeData.location.longitude);
-                    node.addEventListener("click", this.clinicPinClickHandlerRef);
+                    node.addEventListener("load", this.clinicPinLoadHandlerRef);
                 } else if (node.classList.contains("userPin")) {
-                    this.positionPinOnMap(node, this.latitude, this.longitude);
+                    node.addEventListener("load", this.userPinLoadHandlerRef);
                 } else if (node.classList.contains("clinicsContent")) {
-                    this.adjustMapImgElemSize();
-                    await this.getClinics();
-                    await this.getLocation();
-                    this.initSecondaryListeners();
+                    node.querySelector("#mapImg").addEventListener("load", this.mapImgLoadHandlerRef);
                 }
             }
         }
@@ -669,6 +668,42 @@ export class Clinics {
         } else {
             zoomContainerElem.style.cursor = "grab";
         }
+    }
+
+    /**
+     * Executes script when 'mapImg' is fully loaded and
+     * removes load event listener from it.
+     */
+    async mapImgLoadHandler(event) {
+        let mapImgElem = event.target;
+        mapImgElem.removeEventListener("load", this.mapImgLoadHandlerRef);
+
+        this.adjustMapImgElemSize();
+        await this.getClinics();
+        await this.getLocation();
+        this.initSecondaryListeners();
+    }
+
+    /**
+     * Executes script for each fully loaded 'clinicPin'.
+     */
+    clinicPinLoadHandler(event) {
+        let clinicPinElem = event.target;
+        clinicPinElem.removeEventListener("load", this.clinicPinLoadHandlerRef);
+
+        let clinicData = this.clinicsData.get(clinicPinElem.id);
+        this.positionPinOnMap(clinicPinElem, clinicData.location.latitude, clinicData.location.longitude);
+        clinicPinElem.addEventListener("click", this.clinicPinClickHandlerRef);
+    }
+
+    /**
+     * Executes script for fully loaded 'userPin'.
+     */
+    userPinLoadHandler(event) {
+        let userPinElem = event.target;
+        userPinElem.removeEventListener("load", this.userPinLoadHandlerRef);
+
+        this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
     }
 
     /**
