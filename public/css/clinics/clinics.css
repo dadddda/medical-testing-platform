@@ -62,7 +62,9 @@ div.clinics {
     height: 95%;
     position: absolute;
     object-fit: contain;
+    opacity: 0;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+    transition: opacity .2s ease-in-out;
 }
 
 .zoomableContent img.userPin {
@@ -70,8 +72,8 @@ div.clinics {
     height: 36px;
     position: absolute;
     object-fit: contain;
+    opacity: 0;
     transform-origin: bottom center;
-    animation: fade .2s ease-in-out;
     transition: opacity .2s ease-in-out;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
@@ -84,8 +86,8 @@ div.clinics {
     height: 36px;
     position: absolute;
     object-fit: contain;
+    opacity: 0;
     transform-origin: bottom center;
-    animation: fade .2s ease-in-out;
     transition: opacity .2s ease-in-out;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }

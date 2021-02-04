@@ -22,7 +22,17 @@ export class NewsFeed {
     
         this.clickHandlerRef = this.clickHandler.bind(this);
         this.scrollHandlerRef = this.scrollHandler.bind(this);
+        
+        this.newsHeaderImgLoadHandlerRef = this.newsHeaderImgLoadHandler.bind(this);
+
         this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
+
+        this.observerHandlerRef = this.observerHandler.bind(this);
+        this.observer = new MutationObserver(this.observerHandlerRef);
+        this.observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     }
 
     /**
@@ -276,6 +286,23 @@ export class NewsFeed {
         this.newsFeedElem.removeEventListener("click", this.clickHandlerRef);
         this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
         window.removeEventListener("resize", this.windowResizeHandlerRef);
+
+        this.observer.disconnect();
+    }
+
+    /**
+     * Handles DOM mutations.
+     * @param mutations 
+     */
+    async observerHandler(mutations) {
+        for (const mutation of mutations) {
+            for (const node of mutation.addedNodes) {
+                if (node.classList.contains("news")) {
+                    let newsHeaderImgElem = node.querySelector(".newsHeaderImg");
+                    newsHeaderImgElem.addEventListener("load", this.newsHeaderImgLoadHandlerRef);
+                }
+            }
+        }
     }
 
     /**
@@ -314,6 +341,17 @@ export class NewsFeed {
             this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
             this.getNews();
         }
+    }
+
+    /**
+     * Executes script for each fully loaded 'newsHeaderImg'.
+     * @param {Event} event
+     */
+    newsHeaderImgLoadHandler(event) {
+        let newsHeaderImgElem = event.target;
+        newsHeaderImgElem.removeEventListener("load", this.newsHeaderImgLoadHandlerRef);
+
+        newsHeaderImgElem.style.opacity = 1;
     }
 
     /**

@@ -673,12 +673,15 @@ export class Clinics {
     /**
      * Executes script when 'mapImg' is fully loaded and
      * removes load event listener from it.
+     * @param {Event} event
      */
     async mapImgLoadHandler(event) {
         let mapImgElem = event.target;
         mapImgElem.removeEventListener("load", this.mapImgLoadHandlerRef);
-
+        
         this.adjustMapImgElemSize();
+        mapImgElem.style.opacity = 1;
+        
         await this.getClinics();
         await this.getLocation();
         this.initSecondaryListeners();
@@ -686,6 +689,7 @@ export class Clinics {
 
     /**
      * Executes script for each fully loaded 'clinicPin'.
+     * @param {Event} event
      */
     clinicPinLoadHandler(event) {
         let clinicPinElem = event.target;
@@ -694,16 +698,21 @@ export class Clinics {
         let clinicData = this.clinicsData.get(clinicPinElem.id);
         this.positionPinOnMap(clinicPinElem, clinicData.location.latitude, clinicData.location.longitude);
         clinicPinElem.addEventListener("click", this.clinicPinClickHandlerRef);
+        
+        clinicPinElem.style.opacity = 1;
     }
 
     /**
      * Executes script for fully loaded 'userPin'.
+     * @param {Event} event
      */
     userPinLoadHandler(event) {
         let userPinElem = event.target;
         userPinElem.removeEventListener("load", this.userPinLoadHandlerRef);
-
+        
         this.positionPinOnMap(userPinElem, this.latitude, this.longitude);
+
+        userPinElem.style.opacity = 1;
     }
 
     /**
