@@ -26,10 +26,10 @@ export class Clinics {
         this.inputUpdateHandlerRef = this.inputUpdateHandler.bind(this);
 
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
-        this.mouseDownHandlerRef = this.mouseDownHandler.bind(this);
-        this.mouseMoveHandlerRef = this.mouseMoveHandler.bind(this);
-        this.mouseUpHandlerRef = this.mouseUpHandler.bind(this);
         this.mouseWheelHandlerRef = this.mouseWheelHandler.bind(this);
+        this.pointerDownHandlerRef = this.pointerDownHandler.bind(this);
+        this.pointerMoveHandlerRef = this.pointerMoveHandler.bind(this);
+        this.pointerUpHandlerRef = this.pointerUpHandler.bind(this);
 
         this.mapImgLoadHandlerRef = this.mapImgLoadHandler.bind(this);
         this.clinicPinLoadHandlerRef = this.clinicPinLoadHandler.bind(this);
@@ -469,14 +469,12 @@ export class Clinics {
     initSecondaryListeners() {
         this.clinicsElem.addEventListener("input", this.inputUpdateHandlerRef);
 
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
-        
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        zoomableContentElem.addEventListener("mousedown", this.mouseDownHandlerRef);
-
         let mapFooterDashboardElem = document.getElementById("mapFooterDashboard");
         mapFooterDashboardElem.addEventListener("click", this.mouseClickHandlerRef);
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        zoomableContentElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
@@ -485,14 +483,12 @@ export class Clinics {
     deinitListeners() {
         this.clinicsElem.removeEventListener("input", this.inputUpdateHandlerRef);
 
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
-        
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        zoomableContentElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
-
         let mapFooterDashboardElem = document.getElementById("mapFooterDashboard");
         mapFooterDashboardElem.removeEventListener("click", this.mouseClickHandlerRef);
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        zoomableContentElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
 
         window.removeEventListener("resize", this.windowResizeHandlerRef);
 
@@ -597,59 +593,6 @@ export class Clinics {
     }
 
     /**
-     * Mouse down handler.
-     * @param {Event} event
-     */
-    mouseDownHandler(event) {
-        event.preventDefault();
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
-        zoomContainerElem.style.cursor = "grabbing";
-
-        this.mapPos = {
-            left: zoomContainerElem.scrollLeft,
-            top: zoomContainerElem.scrollTop,
-            x: event.clientX,
-            y: event.clientY
-        };
-        
-        document.addEventListener("mousemove", this.mouseMoveHandlerRef);
-        document.addEventListener("mouseup", this.mouseUpHandlerRef);
-    }
-
-    /**
-     * Mouse move handler.
-     * @param {Event} event
-     */
-    mouseMoveHandler(event) {
-        event.preventDefault();
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
-
-        const dx = event.clientX - this.mapPos.x;
-        const dy = event.clientY - this.mapPos.y;
-        
-        zoomContainerElem.scrollLeft = this.mapPos.left - dx;
-        zoomContainerElem.scrollTop = this.mapPos.top - dy;
-    }
-
-    /**
-     * Mouse up handler.
-     * @param {Event} event
-     */
-    mouseUpHandler(event) {
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
-        zoomContainerElem.style.cursor = "grab";
-
-        document.removeEventListener("mousemove", this.mouseMoveHandlerRef);
-        document.removeEventListener("mouseup", this.mouseUpHandlerRef);
-    }
-
-    /**
      * Mouse wheel handler for zooming 'zoomContainer'.
      * @param {Event} event
      */
@@ -668,6 +611,59 @@ export class Clinics {
         } else {
             zoomContainerElem.style.cursor = "grab";
         }
+    }
+
+    /**
+     * Pointer down handler.
+     * @param {Event} event
+     */
+    pointerDownHandler(event) {
+        event.preventDefault();
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
+        zoomContainerElem.style.cursor = "grabbing";
+
+        this.mapPos = {
+            left: zoomContainerElem.scrollLeft,
+            top: zoomContainerElem.scrollTop,
+            x: event.clientX,
+            y: event.clientY
+        };
+        
+        document.addEventListener("pointermove", this.pointerMoveHandlerRef);
+        document.addEventListener("pointerup", this.pointerUpHandlerRef);
+    }
+
+    /**
+     * Pointer move handler.
+     * @param {Event} event
+     */
+    pointerMoveHandler(event) {
+        event.preventDefault();
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
+
+        const dx = event.clientX - this.mapPos.x;
+        const dy = event.clientY - this.mapPos.y;
+        
+        zoomContainerElem.scrollLeft = this.mapPos.left - dx;
+        zoomContainerElem.scrollTop = this.mapPos.top - dy;
+    }
+
+    /**
+     * Pointer up handler.
+     * @param {Event} event
+     */
+    pointerUpHandler(event) {
+        let zoomContainerElem = document.getElementById("zoomContainer");
+        let zoomableContentElem = document.getElementById("zoomableContent");
+        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
+        zoomContainerElem.style.cursor = "grab";
+
+        document.removeEventListener("pointermove", this.pointerMoveHandlerRef);
+        document.removeEventListener("pointerup", this.pointerUpHandlerRef);
     }
 
     /**

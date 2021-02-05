@@ -12,6 +12,10 @@
     user-select: none;
 }
 
+*:active {
+    -webkit-tap-highlight-color: transparent;
+}
+
 html, body {
     display: flex;
     flex-direction: column;
@@ -21,6 +25,7 @@ html, body {
     height: 100vh;
     background-color: rgb(250, 250, 250);
     overflow: hidden;
+    touch-action: none;
 }
 
 ::-webkit-scrollbar {

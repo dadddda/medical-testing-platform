@@ -17,9 +17,10 @@ export class InfoCard {
         this.parentElem = parentElem;
 
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
-        this.mouseDownHandlerRef = this.mouseDownHandler.bind(this);
-        this.mouseMoveHandlerRef = this.mouseMoveHandler.bind(this);
-        this.mouseUpHandlerRef = this.mouseUpHandler.bind(this);
+
+        this.pointerDownHandlerRef = this.pointerDownHandler.bind(this);
+        this.pointerMoveHandlerRef = this.pointerMoveHandler.bind(this);
+        this.pointerUpHandlerRef = this.pointerUpHandler.bind(this);
     }
 
     /**
@@ -132,17 +133,16 @@ export class InfoCard {
      * Initializes event listeners.
      */
     initListeners() {
-        this.infoCardElem.addEventListener("mousedown", this.mouseDownHandlerRef);
+        this.infoCardElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
      * Deinitializes event listeners.
      */
     deinitListeners() {
-        this.infoCardElem.removeEventListener("mousedown", this.mouseDownHandlerRef);
-
         let closeBtnElem = document.getElementById("closeBtn");
         if (closeBtnElem) closeBtnElem.removeEventListener("click", this.mouseClickHandlerRef);
+        this.infoCardElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
@@ -155,29 +155,29 @@ export class InfoCard {
     }
 
     /**
-     * Info card mouse down handler.
+     * Info card pointer down handler.
      * @param {Event} event 
      */
-    mouseDownHandler(event) {
+    pointerDownHandler(event) {
         event.preventDefault();
         if (event.target.id != "clinicName" && event.target.id != "nameText") return;
         let clinicNameElem = document.getElementById("clinicName");
         clinicNameElem.style.cursor = "grabbing";
-
+        
         this.cardPos = {
             x: event.clientX,
             y: event.clientY
         };
         
-        document.addEventListener("mousemove", this.mouseMoveHandlerRef);
-        document.addEventListener("mouseup", this.mouseUpHandlerRef);
+        document.addEventListener("pointermove", this.pointerMoveHandlerRef);
+        document.addEventListener("pointerup", this.pointerUpHandlerRef);
     }
 
     /**
-     * Info card mouse move handler.
+     * Info card pointer move handler.
      * @param {Event} event 
      */
-    mouseMoveHandler(event) {
+    pointerMoveHandler(event) {
         event.preventDefault();
         let parentElemBr = this.parentElem.getBoundingClientRect();
         let infoCardElemBr = this.infoCardElem.getBoundingClientRect();
@@ -205,13 +205,13 @@ export class InfoCard {
     }
 
     /**
-     * Info card mouse up handler.
+     * Info card pointer up handler.
      */
-    mouseUpHandler() {
+    pointerUpHandler() {
         let clinicNameElem = document.getElementById("clinicName");
         clinicNameElem.style.cursor = "grab";
 
-        document.removeEventListener("mousemove", this.mouseMoveHandlerRef);
-        document.removeEventListener("mouseup", this.mouseUpHandlerRef);
+        document.removeEventListener("pointermove", this.pointerMoveHandlerRef);
+        document.removeEventListener("pointerup", this.pointerUpHandlerRef);
     }
 }
