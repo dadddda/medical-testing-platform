@@ -35,7 +35,7 @@ export class InfoCard {
         let html = `
             <div class="clinicName" id="clinicName">
                 <text class="nameText" id="nameText">${clinicInfo.name}</text>
-                <img class="actionBtn" id="closeBtn" src="../svgs/close.svg">
+                <img class="actionBtn" id="closeBtn" src="./svgs/close.svg">
             </div>
             <dl class="clinicDescription">
                 <dt class="categoryName">Address:</dt>

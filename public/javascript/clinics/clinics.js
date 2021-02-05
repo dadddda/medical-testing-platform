@@ -57,7 +57,7 @@ export class Clinics {
                     <div class="mapContent">
                         <div class="zoomContainer" id="zoomContainer">
                             <div class="zoomableContent" id="zoomableContent">
-                                <img class="mapImg" id="mapImg" src="../svgs/map.svg">
+                                <img class="mapImg" id="mapImg" src="./svgs/map.svg">
                             </div>
                         </div>
                         <div class="mapFooterDashboard" id="mapFooterDashboard">
@@ -69,9 +69,9 @@ export class Clinics {
                                 <button class="actionBtnLng" id="filterBtn">Filter</button>
                             </div>
                             <div class="footerDashboardRight">
-                                <img class="actionBtnSqr" id="zoomInBtn" src="../svgs/plus.svg">
-                                <img class="actionBtnSqr" id="zoomOutBtn" src="../svgs/minus.svg">
-                                <img class="actionBtnSqr" id="centerBtn" src="../svgs/center.svg">
+                                <img class="actionBtnSqr" id="zoomInBtn" src="./svgs/plus.svg">
+                                <img class="actionBtnSqr" id="zoomOutBtn" src="./svgs/minus.svg">
+                                <img class="actionBtnSqr" id="centerBtn" src="./svgs/center.svg">
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@ export class Clinics {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
 
-        let html = `<img class="userPin" id="userPin" src="../svgs/pin.svg">`;
+        let html = `<img class="userPin" id="userPin" src="./svgs/pin.svg">`;
         let zoomableContentElem = document.getElementById("zoomableContent");
         appendHtml(html, zoomableContentElem);
     }
@@ -177,7 +177,7 @@ export class Clinics {
                 location: location
             };
             
-            let html = `<img class="clinicPin" id="${id}" src="../svgs/clinic.svg">`;
+            let html = `<img class="clinicPin" id="${id}" src="./svgs/clinic.svg">`;
             appendHtml(html, zoomableContentElem);
 
             this.clinicsData.set(id, currClinicInfo);
