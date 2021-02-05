@@ -150,7 +150,7 @@ export class NewsFeed {
                     <div class="openedNews" style="top: ${this.newsFeedElem.scrollTop + 50}px;">
                         <div class="openedNewsTitle">
                             <text class="titleText">${newsData.title}</text>
-                            <img class="actionBtn" id="closeBtn" src="../svgs/close-black.svg">
+                            <img class="actionBtn" id="closeBtn" src="./svgs/close-black.svg">
                         </div>
                         <hr class="solid">
                         <div class="openedNewsContent">
@@ -351,7 +351,7 @@ export class NewsFeed {
         let newsHeaderImgElem = event.target;
         newsHeaderImgElem.removeEventListener("load", this.newsHeaderImgLoadHandlerRef);
 
-        newsHeaderImgElem.style.opacity = 1;
+        newsHeaderImgElem.parentElement.style.opacity = 1;
     }
 
     /**
