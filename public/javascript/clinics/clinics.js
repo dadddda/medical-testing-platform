@@ -432,9 +432,7 @@ export class Clinics {
         if (mapW > zoomableContentW * mapSizePct / 100) {
             mapImgElem.style.width = `${mapSizePct}%`;
             mapImgElem.style.height = "unset";
-        }
-
-        if (mapH > zoomableContentH * mapSizePct / 100) {
+        } else if (mapH > zoomableContentH * mapSizePct / 100) {
             mapImgElem.style.width = "unset";
             mapImgElem.style.height = `${mapSizePct}%`;
         }
