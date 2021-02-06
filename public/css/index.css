@@ -41,7 +41,7 @@ html, body {
 hr.solid {
     display: block;
     width: 100%;
-    margin: 5px 0 5px 0;
+    margin: 5px 0;
     border: 0;
     border-top: 2px solid rgb(180, 180, 180);
 }
@@ -82,7 +82,7 @@ div.header {
     margin-right: 10px;
 }
 
-.headerLeft text.headerText {
+.headerLeft div.headerText {
     width: max-content;
     font-size: 2rem;
     color: rgb(235, 235, 235);
@@ -105,24 +105,33 @@ div.header {
     background-color: transparent;
     font-size: 1.1rem;
     color: rgb(235, 235, 235);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
+}
+
+.headerRight button.redirectBtn img {
+    display: none;
+    transition: filter .2s ease-in-out;
 }
 
 .headerRight button.redirectBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
-    transition: all .2s ease-in-out;
     cursor: pointer;
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
 }
 
 .headerRight button.redirectBtn:focus {
     background-color: rgb(245, 50, 50);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
 }
 
 div.mainContent {
     display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -162,19 +171,30 @@ div.mainContent {
     background-color: transparent;
     font-size: 1.1rem;
     color: rgb(10, 10, 10);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
+}
+
+.leftPanelBtns button.leftPanelBtn img {
+    display: none;
+    transition: filter .2s ease-in-out;
 }
 
 .leftPanelBtns button.leftPanelBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
-    transition: all .2s ease-in-out;
     cursor: pointer;
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
 }
 
 .leftPanelBtns button.leftPanelBtn.active {
     color: rgb(235, 235, 235);
     background-color: rgb(245, 50, 50);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
 }
 
 .mainContent div.rightPanel {
@@ -245,5 +265,86 @@ div.footer {
 }
 
 @media screen and (max-width: 1132px) {
-    /* ... */
+    div.mainContent {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .mainContent div.leftPanel {
+        width: 100%;
+        height: max-content;
+        padding: 0 15px;
+    }
+
+    .leftPanel div.leftPanelBtns {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    #leftPanelDivider1 { display: none; }
+    #leftPanelDivider2 { display: none; }
+
+    .leftPanelBtns button.leftPanelBtn {
+        width: 150px;
+        margin: 5px;
+    }
+
+    .mainContent div.rightPanel {
+        min-height: 0;
+    }
+}
+
+@media screen and (max-width: 990px) {
+    .leftPanel div.leftPanelBtns {
+        justify-content: space-around;
+        width: 100%;
+    }
+    
+    .leftPanelBtns button.leftPanelBtn {
+        position: relative;
+        width: 100%;
+        min-width: 35px;
+    }
+
+    .leftPanelBtns button.leftPanelBtn img {
+        display: unset;
+        width: 35px;
+    }
+
+    .leftPanelBtns button.leftPanelBtn.active img {
+        filter: brightness(0) saturate(100%) 
+                invert(100%) sepia(7%) saturate(281%) 
+                hue-rotate(183deg) brightness(116%) 
+                contrast(84%);
+    }
+
+    .leftPanelBtns button.leftPanelBtn span { display: none; }
+}
+
+@media screen and (max-width: 682px) {
+    div.header {
+        padding: 10px 10px 10px 20px;
+    }
+
+    .headerLeft div.headerText span { display: none; }
+
+    .headerLeft div.headerText:after {
+        content: "MTP";
+    }
+
+    .headerRight #accountBtn {
+        position: relative;
+        width: 35px;
+    }
+
+    .headerRight #accountBtn img {
+        display: unset;
+        width: 35px;
+    }
+
+    .headerRight #accountBtn span { display: none; }
+
+    .headerRight #logoutBtn {
+        width: 90px;
+    }
 }
