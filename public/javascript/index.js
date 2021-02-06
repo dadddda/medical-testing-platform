@@ -56,12 +56,15 @@ let tempClass = null;
 function initBtns() {
     for (let i = 0; i < btns.length; i++) {
         btns[i].addEventListener("click", function(event) {
+            let clickedBtn = event.target;
+            if (clickedBtn.id == "") clickedBtn = clickedBtn.parentElement;
+
             let curr = leftPanelBtns.getElementsByClassName("active");
             if (curr.length != 0) {
-                if (curr[0].id == event.target.id) return;
+                if (curr[0].id == clickedBtn.id) return;
                 curr[0].classList.remove("active");
             }
-            event.target.classList.add("active");
+            clickedBtn.classList.add("active");
 
             if (tempClass != null) {
                 tempClass.deinitListeners();
@@ -75,7 +78,7 @@ function initBtns() {
                 rightPanelElem.classList.remove("hidden");
                 let newElem = document.createElement("div");
 
-                switch (event.target.id) {
+                switch (clickedBtn.id) {
                     case "newsFeedBtn":
                         newElem.className = "newsFeed";
                         rightPanelElem.appendChild(newElem);
