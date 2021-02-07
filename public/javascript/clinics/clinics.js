@@ -63,10 +63,16 @@ export class Clinics {
                         <div class="mapFooterDashboard" id="mapFooterDashboard">
                             <div class="footerDashboardLeft">
                                 <div class="searchFieldContainer">
-                                    <label class="searchFieldLabel" for="searchField">Search:</label>
+                                    <label class="searchFieldLabel" for="searchField">
+                                        <img src="./svgs/search-icon.svg">
+                                        <span>Search:</span>
+                                    </label>
                                     <input class="searchField" type="text" id="searchField">
                                 </div>
-                                <button class="actionBtnLng" id="filterBtn">Filter</button>
+                                <button class="actionBtnLng" id="filterBtn">
+                                    <img id="filterBtnImg" src="./svgs/filter-icon.svg">
+                                    <span id="filterBtnSpan">Filter</span>
+                                </button>
                             </div>
                             <div class="footerDashboardRight">
                                 <img class="actionBtnSqr" id="zoomInBtn" src="./svgs/plus.svg">
@@ -565,6 +571,8 @@ export class Clinics {
     mouseClickHandler(event) {
         switch (event.target.id) {
             case "filterBtn":
+            case "filterBtnImg":
+            case "filterBtnSpan":
                 if (this.opened == undefined) {
                     this.createFilterPopup();
                 } else {

@@ -78,9 +78,7 @@ div.clinics {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-.zoomableContent img.userPin:hover {
-    cursor: pointer;
-}
+.zoomableContent img.userPin:hover { cursor: pointer; }
 
 .zoomableContent img.clinicPin {
     height: 36px;
@@ -92,9 +90,7 @@ div.clinics {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-.zoomableContent img.clinicPin:hover {
-    cursor: pointer;
-}
+.zoomableContent img.clinicPin:hover { cursor: pointer; }
 
 .mapContent div.mapFooterDashboard {
     display: flex;
@@ -108,9 +104,7 @@ div.clinics {
     bottom: 20px;
 }
 
-.mapFooterDashboard div.footerDashboardLeft {
-    display: flex;
-}
+.mapFooterDashboard div.footerDashboardLeft { display: flex; }
 
 .footerDashboardLeft div.searchFieldContainer {
     display: flex;
@@ -126,12 +120,12 @@ div.clinics {
     background-color: rgb(240, 240, 240);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
     overflow: hidden;
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out;
 }
 
 .footerDashboardLeft div.searchFieldContainer:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out;
 }
 
 .searchFieldContainer input.searchField {
@@ -148,9 +142,12 @@ div.clinics {
     height: max-content;
 }
 
+.searchFieldContainer label.searchFieldLabel img { display: none; }
+
 .footerDashboardLeft button.actionBtnLng {
     width: 60px;
     height: 30px;
+    min-width: 60px;
     margin: 0 5px;
     outline: none;
     border: none;
@@ -159,18 +156,18 @@ div.clinics {
     font-size: 1.05rem;
     color: rgb(235, 235, 235);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out;
 }
+
+.footerDashboardLeft button.actionBtnLng img { display: none; }
 
 .footerDashboardLeft button.actionBtnLng:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out;
     cursor: pointer;
 }
 
-.mapFooterDashboard div.footerDashboardRight {
-    display: flex;
-}
+.mapFooterDashboard div.footerDashboardRight { display: flex; }
 
 .footerDashboardRight img.actionBtnSqr {
     width: 30px;
@@ -234,4 +231,43 @@ div.clinics {
     display: flex;
     margin-left: 5px;
     font-size: 0.9rem;
+}
+
+@media screen and (max-width: 682px) {
+    .mapContent div.mapFooterDashboard { padding: 0 25px; }
+
+    .footerDashboardLeft div.searchFieldContainer { width: 330px; }
+
+    .footerDashboardLeft button.actionBtnLng {
+        width: 30px;
+        min-width: 30px;
+    }
+
+    .footerDashboardLeft button.actionBtnLng img {
+        display: flex;
+        width: 30px;
+    }
+
+    .footerDashboardLeft button.actionBtnLng span { display: none; }
+
+    .clinicsContent div.filterContainer { left: 30px; }
+}
+
+@media screen and (max-width: 550px) {
+    .mapFooterDashboard div.footerDashboardLeft { width: 100%; }
+
+    .footerDashboardLeft div.searchFieldContainer { width: 100%; }
+
+    .searchFieldContainer label.searchFieldLabel img {
+        display: flex;
+        width: 30px;
+    }
+
+    .searchFieldContainer label.searchFieldLabel span { display: none; }
+
+    .clinicsContent div.filterContainer { 
+        max-width: calc(100% - 60px);
+        max-height: calc(100% - 90px);
+        min-width: 210px;
+    }
 }
