@@ -588,6 +588,8 @@ export class Clinics {
      * @param {Event} event 
      */
     mouseClickHandler(event) {
+        event.preventDefault();
+
         switch (event.target.id) {
             case "filterBtn":
             case "filterBtnImg":
@@ -622,6 +624,8 @@ export class Clinics {
      * @param {Event} event
      */
     mouseWheelHandler(event) {
+        event.preventDefault();
+
         let zoomMode = true;
         if (event.deltaY > 0) zoomMode = false;
         this.zoomMap(zoomMode);
