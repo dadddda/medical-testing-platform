@@ -1,6 +1,6 @@
 // constants
 const MAP_SCALE_FACTOR = 1.2;
-const PINCH_SCALE_FACTOR = 1.05;
+const PINCH_SCALE_FACTOR = 1.1;
 const MAP_SCALE_THRESHOLD = 4;
 const MAP_SIZE_PCT = 95;
 const PINCH_ZOOM_THRESHOLD = 5;
