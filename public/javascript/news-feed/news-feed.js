@@ -26,6 +26,7 @@ export class NewsFeed {
         this.newsHeaderImgLoadHandlerRef = this.newsHeaderImgLoadHandler.bind(this);
 
         this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
+        this.fetchNewsOnResize = true;
 
         this.observerHandlerRef = this.observerHandler.bind(this);
         this.observer = new MutationObserver(this.observerHandlerRef);
@@ -77,13 +78,14 @@ export class NewsFeed {
 
         if (data.empty) {
             this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
-            window.removeEventListener("resize", this.windowResizeHandlerRef);
+            this.fetchNewsOnResize = false;
         } else {
             let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
             if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
                 this.getNews();
             }
             this.newsFeedElem.addEventListener("scroll", this.scrollHandlerRef);
+            this.fetchNewsOnResize = true;
         }
     }
 
@@ -147,7 +149,7 @@ export class NewsFeed {
                 newsData.content = newsData.content.replace(/(?:\r\n|\r|\n)/g, "<br>");
                 let html = `
                     <div class="openedNewsBackground" style="top: ${this.newsFeedElem.scrollTop}px;"></div>
-                    <div class="openedNews" style="top: ${this.newsFeedElem.scrollTop + 50}px;">
+                    <div class="openedNews" style="top: ${this.newsFeedElem.scrollTop}px;">
                         <div class="openedNewsTitle">
                             <text class="titleText">${newsData.title}</text>
                             <img class="actionBtn" id="closeBtn" src="./svgs/close-black.svg">
@@ -226,7 +228,7 @@ export class NewsFeed {
         let month = dateObj.getMonth() + 1;
         let year = dateObj.getFullYear();
 
-        let formattedDate = hours + ":" + minutes + " - ";
+        let formattedDate = hours + ":" + minutes + " ";
         formattedDate += date + "." + month + "." + year;
 
         return formattedDate;
@@ -359,10 +361,19 @@ export class NewsFeed {
      * to fetch additional data.
      */
     windowResizeHandler() {
-        let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
-        if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
-            window.removeEventListener("resize", this.windowResizeHandlerRef);
-            this.getNews();
+        if (this.moreBtnClicked) {
+            let openedNewsBackgroundElem = document.getElementsByClassName("openedNewsBackground")[0];
+            let openedNewsElem = document.getElementsByClassName("openedNews")[0];
+            openedNewsBackgroundElem.style.top = `${this.newsFeedElem.scrollTop}px`;
+            openedNewsElem.style.top = `${this.newsFeedElem.scrollTop}px`;
+        }
+
+        if (!this.fetchNewsOnResize) {
+            let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
+            if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+                this.fetchNewsOnResize = false;
+                this.getNews();
+            }
         }
     }
 }
