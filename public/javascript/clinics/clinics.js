@@ -1,7 +1,8 @@
 // constants
-const mapScaleFactor = 1.2;
-const mapScaleThreshold = 4;
-const mapSizePct = 95;
+const MAP_SCALE_FACTOR = 1.2;
+const MAP_SCALE_THRESHOLD = 4;
+const MAP_SIZE_PCT = 95;
+const PINCH_ZOOM_THRESHOLD = 25;
 import {animationDelay} from "../utils/utils.js";
 
 // classes
@@ -22,6 +23,10 @@ export class Clinics {
         this.clinicsRef = firebase.firestore().collection("clinics");
         this.clinicsData = new Map();
         this.scale = 1;
+
+        this.eventCache = new Array();
+        this.prevDiff = -1;
+        this.wasPinched = false;
 
         this.inputUpdateHandlerRef = this.inputUpdateHandler.bind(this);
 
@@ -302,9 +307,9 @@ export class Clinics {
         let userPinElem = document.getElementById("userPin");
 
         if (!zoomIn && this.scale > 1) {
-            this.scale /= mapScaleFactor;
-        } else if (zoomIn && this.scale < mapScaleThreshold) {
-            this.scale *= mapScaleFactor;
+            this.scale /= MAP_SCALE_FACTOR;
+        } else if (zoomIn && this.scale < MAP_SCALE_THRESHOLD) {
+            this.scale *= MAP_SCALE_FACTOR;
         } else {
             return;
         }
@@ -435,12 +440,12 @@ export class Clinics {
         let zoomableContentW = zoomableContentElem.getBoundingClientRect().width;
         let zoomableContentH = zoomableContentElem.getBoundingClientRect().height;
 
-        if (mapW > zoomableContentW * mapSizePct / 100) {
-            mapImgElem.style.width = `${mapSizePct}%`;
+        if (mapW > zoomableContentW * MAP_SIZE_PCT / 100) {
+            mapImgElem.style.width = `${MAP_SIZE_PCT}%`;
             mapImgElem.style.height = "unset";
-        } else if (mapH > zoomableContentH * mapSizePct / 100) {
+        } else if (mapH > zoomableContentH * MAP_SIZE_PCT / 100) {
             mapImgElem.style.width = "unset";
-            mapImgElem.style.height = `${mapSizePct}%`;
+            mapImgElem.style.height = `${MAP_SIZE_PCT}%`;
         }
     }
 
@@ -477,8 +482,14 @@ export class Clinics {
         mapFooterDashboardElem.addEventListener("click", this.mouseClickHandlerRef);
         let zoomContainerElem = document.getElementById("zoomContainer");
         zoomContainerElem.addEventListener("wheel", this.mouseWheelHandlerRef);
+
         let zoomableContentElem = document.getElementById("zoomableContent");
         zoomableContentElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
+        zoomableContentElem.addEventListener("pointermove", this.pointerMoveHandlerRef);
+        zoomableContentElem.addEventListener("pointerup", this.pointerUpHandlerRef);
+        zoomableContentElem.addEventListener("pointercancel", this.pointerUpHandlerRef);
+        zoomableContentElem.addEventListener("pointerout", this.pointerUpHandlerRef);
+        zoomableContentElem.addEventListener("pointerleave", this.pointerUpHandlerRef);
     }
 
     /**
@@ -491,8 +502,14 @@ export class Clinics {
         mapFooterDashboardElem.removeEventListener("click", this.mouseClickHandlerRef);
         let zoomContainerElem = document.getElementById("zoomContainer");
         zoomContainerElem.removeEventListener("wheel", this.mouseWheelHandlerRef);
+
         let zoomableContentElem = document.getElementById("zoomableContent");
         zoomableContentElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
+        zoomableContentElem.removeEventListener("pointermove", this.pointerMoveHandlerRef);
+        zoomableContentElem.removeEventListener("pointerup", this.pointerUpHandlerRef);
+        zoomableContentElem.removeEventListener("pointercancel", this.pointerUpHandlerRef);
+        zoomableContentElem.removeEventListener("pointerout", this.pointerUpHandlerRef);
+        zoomableContentElem.removeEventListener("pointerleave", this.pointerUpHandlerRef);
 
         window.removeEventListener("resize", this.windowResizeHandlerRef);
 
@@ -603,8 +620,6 @@ export class Clinics {
      * @param {Event} event
      */
     mouseWheelHandler(event) {
-        event.preventDefault();
-
         let zoomMode = true;
         if (event.deltaY > 0) zoomMode = false;
         this.zoomMap(zoomMode);
@@ -625,10 +640,17 @@ export class Clinics {
      */
     pointerDownHandler(event) {
         event.preventDefault();
+
         let zoomContainerElem = document.getElementById("zoomContainer");
         let zoomableContentElem = document.getElementById("zoomableContent");
-        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
-        zoomContainerElem.style.cursor = "grabbing";
+
+        this.eventCache.push(event);
+        if (this.eventCache.length == 2) {
+            this.wasPinched = true;
+        } else if (this.eventCache.length == 1) {
+            if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
+            zoomContainerElem.style.cursor = "grabbing";
+        }
 
         this.mapPos = {
             left: zoomContainerElem.scrollLeft,
@@ -636,9 +658,6 @@ export class Clinics {
             x: event.clientX,
             y: event.clientY
         };
-        
-        document.addEventListener("pointermove", this.pointerMoveHandlerRef);
-        document.addEventListener("pointerup", this.pointerUpHandlerRef);
     }
 
     /**
@@ -647,15 +666,49 @@ export class Clinics {
      */
     pointerMoveHandler(event) {
         event.preventDefault();
-        let zoomContainerElem = document.getElementById("zoomContainer");
-        let zoomableContentElem = document.getElementById("zoomableContent");
-        if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
 
-        const dx = event.clientX - this.mapPos.x;
-        const dy = event.clientY - this.mapPos.y;
-        
-        zoomContainerElem.scrollLeft = this.mapPos.left - dx;
-        zoomContainerElem.scrollTop = this.mapPos.top - dy;
+        for (let i = 0; i < this.eventCache.length; i++) {
+            if (event.pointerId == this.eventCache[i].pointerId) {
+                this.eventCache[i] = event;
+                break;
+            }
+        }
+
+        if (this.eventCache.length == 2) {
+            let currDiff = Math.abs(this.eventCache[0].clientX - this.eventCache[1].clientX);
+            if (Math.abs(currDiff - this.prevDiff) < PINCH_ZOOM_THRESHOLD) return;
+
+            if (this.prevDiff > 0) {
+                if (currDiff > this.prevDiff) {
+                    this.zoomMap(true);
+                } else if (currDiff < this.prevDiff) {
+                    this.zoomMap(false);
+                }
+            }
+
+            this.prevDiff = currDiff;
+        } else if (this.eventCache.length == 1) {
+            let zoomContainerElem = document.getElementById("zoomContainer");
+            let zoomableContentElem = document.getElementById("zoomableContent");
+            if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
+
+            if (this.wasPinched) {
+                this.mapPos = {
+                    left: zoomContainerElem.scrollLeft,
+                    top: zoomContainerElem.scrollTop,
+                    x: event.clientX,
+                    y: event.clientY
+                };
+
+                this.wasPinched = false;
+            }
+
+            const dx = event.clientX - this.mapPos.x;
+            const dy = event.clientY - this.mapPos.y;
+            
+            zoomContainerElem.scrollLeft = this.mapPos.left - dx;
+            zoomContainerElem.scrollTop = this.mapPos.top - dy;
+        }
     }
 
     /**
@@ -663,13 +716,21 @@ export class Clinics {
      * @param {Event} event
      */
     pointerUpHandler(event) {
+        event.preventDefault();
+
+        for (var i = 0; i < this.eventCache.length; i++) {
+            if (this.eventCache[i].pointerId == event.pointerId) {
+                this.eventCache.splice(i, 1);
+                break;
+            }
+        }
+        
+        if (this.eventCache.length < 2) this.prevDiff = -1;
+
         let zoomContainerElem = document.getElementById("zoomContainer");
         let zoomableContentElem = document.getElementById("zoomableContent");
         if (!this.overflows(zoomableContentElem, zoomContainerElem)) return;
         zoomContainerElem.style.cursor = "grab";
-
-        document.removeEventListener("pointermove", this.pointerMoveHandlerRef);
-        document.removeEventListener("pointerup", this.pointerUpHandlerRef);
     }
 
     /**
