@@ -334,3 +334,17 @@ div.footer {
 
     .headerRight #logoutBtn { width: 90px; }
 }
+
+@media screen and (max-width: 425px) {
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+    }
+}
