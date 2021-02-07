@@ -1,8 +1,9 @@
 // constants
 const MAP_SCALE_FACTOR = 1.2;
+const PINCH_SCALE_FACTOR = 1.05;
 const MAP_SCALE_THRESHOLD = 4;
 const MAP_SIZE_PCT = 95;
-const PINCH_ZOOM_THRESHOLD = 25;
+const PINCH_ZOOM_THRESHOLD = 5;
 import {animationDelay} from "../utils/utils.js";
 
 // classes
@@ -301,21 +302,22 @@ export class Clinics {
      * Zooms in/out map according to given parameter and constants.
      * @param {Boolean} zoomIn 
      */
-    zoomMap(zoomIn) {
+    zoomMap(zoomIn, zoomScale = MAP_SCALE_FACTOR) {
         let zoomContainerElem = document.getElementById("zoomContainer");
         let zoomableContentElem = document.getElementById("zoomableContent");
         let userPinElem = document.getElementById("userPin");
 
         if (!zoomIn && this.scale > 1) {
-            this.scale /= MAP_SCALE_FACTOR;
+            this.scale /= zoomScale;
+            this.scale = Math.max(this.scale, 1);
         } else if (zoomIn && this.scale < MAP_SCALE_THRESHOLD) {
-            this.scale *= MAP_SCALE_FACTOR;
+            this.scale *= zoomScale;
         } else {
             return;
         }
 
-        let elemWidth = zoomContainerElem.clientWidth;
-        let elemHeight = zoomContainerElem.clientHeight;
+        let elemWidth = zoomContainerElem.offsetWidth;
+        let elemHeight = zoomContainerElem.offsetHeight;
         let lastScrollWidth = zoomContainerElem.scrollWidth;
         let lastScrollHeight = zoomContainerElem.scrollHeight;
 
@@ -334,8 +336,8 @@ export class Clinics {
             zoomContainerElem.scrollLeft -= (zoomContainerElem.scrollLeft + elemWidth / 2) * pctW;
             zoomContainerElem.scrollTop -= (zoomContainerElem.scrollTop + elemHeight / 2) * pctH;
         } else if (zoomIn) {
-            zoomContainerElem.scrollLeft += (zoomContainerElem.scrollLeft + elemWidth / 2) * 0.2;
-            zoomContainerElem.scrollTop += (zoomContainerElem.scrollTop + elemHeight / 2) * 0.2;
+            zoomContainerElem.scrollLeft += (zoomContainerElem.scrollLeft + elemWidth / 2) * (zoomScale - 1);
+            zoomContainerElem.scrollTop += (zoomContainerElem.scrollTop + elemHeight / 2) * (zoomScale - 1);
         }
     }
 
@@ -675,14 +677,15 @@ export class Clinics {
         }
 
         if (this.eventCache.length == 2) {
-            let currDiff = Math.abs(this.eventCache[0].clientX - this.eventCache[1].clientX);
+            let currDiff = Math.sqrt(Math.pow(this.eventCache[0].clientX - this.eventCache[1].clientX, 2) 
+                                        + Math.pow(this.eventCache[0].clientY - this.eventCache[1].clientY, 2));
             if (Math.abs(currDiff - this.prevDiff) < PINCH_ZOOM_THRESHOLD) return;
 
             if (this.prevDiff > 0) {
                 if (currDiff > this.prevDiff) {
-                    this.zoomMap(true);
+                    this.zoomMap(true, PINCH_SCALE_FACTOR);
                 } else if (currDiff < this.prevDiff) {
-                    this.zoomMap(false);
+                    this.zoomMap(false, PINCH_SCALE_FACTOR);
                 }
             }
 
