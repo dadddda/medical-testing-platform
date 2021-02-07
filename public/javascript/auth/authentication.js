@@ -15,7 +15,7 @@ export function validateInput(email, password) {
         assignNormal(passwordLabelClasses, "passwordLabel", "Enter password:");
     }
     
-    answer = true;
+    let answer = true;
     if (!validateEmail(email)) {
         assignError(emailLabelClasses, "emailLabel", "Email invalid!");
         answer = false;
@@ -56,7 +56,7 @@ function validatePassword(password) {
  * @param {string} id
  * @param {string} text 
  */
-function assignNormal(classes, id, text) {
+export function assignNormal(classes, id, text) {
     classes.remove("error");
     classes.add("normal");
     document.getElementById(id).innerText = text;
@@ -69,7 +69,7 @@ function assignNormal(classes, id, text) {
  * @param {string} id
  * @param {string} text 
  */
-function assignError(classes, id, text) {
+export function assignError(classes, id, text) {
     classes.remove("normal");
     classes.add("error");
     document.getElementById(id).innerText = text;

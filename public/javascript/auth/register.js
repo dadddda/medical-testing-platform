@@ -1,5 +1,5 @@
 // functions
-import {validateInput} from "./authentication.js";
+import * as Auth from "./authentication.js";
 
 /**
  * Redirects page to index.html if the user is already logged in.
@@ -34,17 +34,17 @@ function registerUser(event) {
     let checkbox = document.getElementById("agreement").checked;
 
     // validate...
-    answer = true;
-    answer = validateInput(email, password);
+    let answer = true;
+    answer = Auth.validateInput(email, password);
 
     let agreementLabelClasses = document.getElementById("agreementLabel").classList;
 
     if (agreementLabelClasses.contains("error")) {
-        assignNormal(agreementLabelClasses, "agreementLabel", "I agree to user licence and terms");
+        Auth.assignNormal(agreementLabelClasses, "agreementLabel", "I agree to user licence and terms");
     }
 
     if (checkbox === false) {
-        assignError(agreementLabelClasses, "agreementLabel", "Check this to register!");
+        Auth.assignError(agreementLabelClasses, "agreementLabel", "Check this to register!");
         answer = false;
     }
     if (!answer) return;
