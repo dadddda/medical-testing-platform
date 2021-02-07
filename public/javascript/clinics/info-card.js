@@ -1,5 +1,5 @@
 // constants
-import {animationDelay, timeoutDelay} from "../utils/utils.js";
+import {ANIMATION_DELAY, TIMEOUT_DELAY} from "../utils/utils.js";
 
 // functions
 import {appendHtml} from "../utils/utils.js";
@@ -55,7 +55,7 @@ export class InfoCard {
                 <text>Clinic Dashboard</text>
             </div>
         `;
-        let currAnimationDelay = animationDelay;
+        let currAnimationDelay = ANIMATION_DELAY;
         if (this.infoCardElem.innerHTML.length == 0) {
             currAnimationDelay = 0;
             this.infoCardElem.style.display = "flex";
@@ -79,8 +79,8 @@ export class InfoCard {
 
                     let closeBtnElem = document.getElementById("closeBtn");
                     closeBtnElem.addEventListener("click", this.mouseClickHandlerRef);
-                }, timeoutDelay);
-            }, timeoutDelay);
+                }, TIMEOUT_DELAY);
+            }, TIMEOUT_DELAY);
 
             this.infoCardElem.style.opacity = `${100}%`;
         }, currAnimationDelay);
@@ -97,7 +97,7 @@ export class InfoCard {
         setTimeout(() => {
             this.infoCardElem.innerHTML = "";
             this.infoCardElem.style.display = "none";
-        }, animationDelay);
+        }, ANIMATION_DELAY);
     }
 
     /**

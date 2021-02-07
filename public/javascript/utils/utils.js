@@ -1,6 +1,6 @@
 // constants
-export const animationDelay = 200;
-export const timeoutDelay = 20;
+export const ANIMATION_DELAY = 200;
+export const TIMEOUT_DELAY = 20;
 
 // functions
 /**

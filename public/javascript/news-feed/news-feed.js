@@ -1,6 +1,6 @@
 // constants
 const triggerThreshold = 0.8;
-import {animationDelay} from "../utils/utils.js";
+import {ANIMATION_DELAY} from "../utils/utils.js";
 
 // functions
 import {appendHtml} from "../utils/utils.js";
@@ -329,7 +329,7 @@ export class NewsFeed {
             setTimeout(() => {
                 this.newsFeedElem.removeChild(openedNewsBackgroundElem);
                 this.newsFeedElem.removeChild(openedNewsElem);
-            }, animationDelay);
+            }, ANIMATION_DELAY);
         }
     }
 

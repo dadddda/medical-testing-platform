@@ -4,7 +4,7 @@ const PINCH_SCALE_FACTOR = 1.05;
 const MAP_SCALE_THRESHOLD = 4;
 const MAP_SIZE_PCT = 95;
 const PINCH_ZOOM_THRESHOLD = 5;
-import {animationDelay} from "../utils/utils.js";
+import {ANIMATION_DELAY} from "../utils/utils.js";
 
 // classes
 import {InfoCard} from "./info-card.js";
@@ -288,7 +288,7 @@ export class Clinics {
             filterContainerElem.style.opacity = 0;
             setTimeout(() => {
                 filterContainerElem.style.display = "none";
-            }, animationDelay);
+            }, ANIMATION_DELAY);
         } else {
             this.opened = true;
 

@@ -1,7 +1,7 @@
 // constants
 const leftPanelBtns = document.getElementById("leftPanelBtns");
 const btns = leftPanelBtns.getElementsByClassName("leftPanelBtn");
-import {animationDelay} from "./utils/utils.js";
+import {ANIMATION_DELAY} from "./utils/utils.js";
 
 // classes
 import {NewsFeed} from "./news-feed/news-feed.js";
@@ -24,7 +24,7 @@ document.getElementById("headerLeftBtn").addEventListener("click", function() {
     rightPanelElem.classList.add("hidden");
     setTimeout(function() {
         window.location.assign("index.html");
-    }, animationDelay);
+    }, ANIMATION_DELAY);
 })
 
 /**
@@ -120,7 +120,7 @@ function initBtns() {
 
                         break;
                 }
-            }, animationDelay);
+            }, ANIMATION_DELAY);
         });
     }
 }
