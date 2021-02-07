@@ -12,9 +12,7 @@
     user-select: none;
 }
 
-*:active {
-    -webkit-tap-highlight-color: transparent;
-}
+*:active { -webkit-tap-highlight-color: transparent; }
 
 html, body {
     display: flex;
@@ -72,9 +70,7 @@ div.header {
     border: none;
 }
 
-.header button.headerLeft:hover {
-    cursor: pointer;
-}
+.header button.headerLeft:hover { cursor: pointer; }
 
 .headerLeft img.headerImg {
     width: 25px;
@@ -289,9 +285,7 @@ div.footer {
         margin: 5px;
     }
 
-    .mainContent div.rightPanel {
-        min-height: 0;
-    }
+    .mainContent div.rightPanel { min-height: 0; }
 }
 
 @media screen and (max-width: 990px) {
@@ -301,7 +295,6 @@ div.footer {
     }
     
     .leftPanelBtns button.leftPanelBtn {
-        position: relative;
         width: 100%;
         min-width: 35px;
     }
@@ -322,20 +315,13 @@ div.footer {
 }
 
 @media screen and (max-width: 682px) {
-    div.header {
-        padding: 10px 10px 10px 20px;
-    }
+    div.header { padding: 10px 10px 10px 20px; }
 
     .headerLeft div.headerText span { display: none; }
 
-    .headerLeft div.headerText:after {
-        content: "MTP";
-    }
+    .headerLeft div.headerText:after { content: "MTP"; }
 
-    .headerRight #accountBtn {
-        position: relative;
-        width: 35px;
-    }
+    .headerRight #accountBtn { width: 35px; }
 
     .headerRight #accountBtn img {
         display: unset;
@@ -344,7 +330,5 @@ div.footer {
 
     .headerRight #accountBtn span { display: none; }
 
-    .headerRight #logoutBtn {
-        width: 90px;
-    }
+    .headerRight #logoutBtn { width: 90px; }
 }
