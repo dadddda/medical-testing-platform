@@ -272,3 +272,7 @@ div.clinics {
         min-width: 210px;
     }
 }
+
+@media screen and (max-width: 375px) {
+    .mapContent div.mapFooterDashboard { padding: 0 10px; }
+}
