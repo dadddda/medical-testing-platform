@@ -10,10 +10,13 @@
     padding: 0;
     font-family: 'Quicksand', sans-serif;
     user-select: none;
-    touch-action: none;
 }
 
 *:active { -webkit-tap-highlight-color: transparent; }
+
+html {
+    touch-action: none;
+}
 
 html, body {
     display: flex;
