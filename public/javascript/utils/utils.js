@@ -2,6 +2,8 @@
 export const ANIMATION_DELAY = 200;
 export const TIMEOUT_DELAY = 20;
 
+export const MOBILE_M = 375;
+
 // functions
 /**
  * Appends given html to given element.

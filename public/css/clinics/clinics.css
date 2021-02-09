@@ -42,6 +42,7 @@ div.clinics {
 }
 
 .mapContent div.zoomContainer {
+    z-index: 1;
     display: flex;
     width: 100%;
     height: 100%;
@@ -68,7 +69,7 @@ div.clinics {
 }
 
 .zoomableContent img.userPin {
-    z-index: 1;
+    z-index: 2;
     height: 36px;
     position: absolute;
     object-fit: contain;
@@ -93,6 +94,7 @@ div.clinics {
 .zoomableContent img.clinicPin:hover { cursor: pointer; }
 
 .mapContent div.mapFooterDashboard {
+    z-index: 3;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -178,17 +180,17 @@ div.clinics {
     border-radius: 5px;
     background-color: rgb(245, 50, 50);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out;
 }
 
 .footerDashboardRight img.actionBtnSqr:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out;
     cursor: pointer;
 }
 
 .clinicsContent div.filterContainer {
-    z-index: 2;
+    z-index: 3;
     display: none;
     flex-wrap: wrap;
     width: 370px;

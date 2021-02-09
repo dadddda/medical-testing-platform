@@ -1,5 +1,5 @@
 // constants
-import {ANIMATION_DELAY, TIMEOUT_DELAY} from "../utils/utils.js";
+import {ANIMATION_DELAY, TIMEOUT_DELAY, MOBILE_M} from "../utils/utils.js";
 
 // functions
 import {appendHtml} from "../utils/utils.js";
@@ -50,8 +50,8 @@ export class InfoCard {
                     <ul class="categoryDescList" id="categoryDescList"></ul>
                 </dd>
             </dl>
-            <hr class="solid">
             <div class="clinicDashboard">
+                <hr class="solid">
                 <text>Clinic Dashboard</text>
             </div>
         `;
@@ -105,6 +105,7 @@ export class InfoCard {
      * 'this.parentElem' bounds.
      */
     adjustCardElemPos() {
+        if (window.innerWidth <= MOBILE_M) return;
         if (this.infoCardElem.innerHTML.length == 0) return;
 
         let parentElemBr = this.parentElem.getBoundingClientRect();
@@ -160,6 +161,8 @@ export class InfoCard {
      */
     pointerDownHandler(event) {
         event.preventDefault();
+
+        if (window.innerWidth <= MOBILE_M) return;
         if (event.target.id != "clinicName" && event.target.id != "nameText") return;
         let clinicNameElem = document.getElementById("clinicName");
         clinicNameElem.style.cursor = "grabbing";
@@ -207,7 +210,8 @@ export class InfoCard {
     /**
      * Info card pointer up handler.
      */
-    pointerUpHandler() {
+    pointerUpHandler(event) {
+        event.preventDefault();
         let clinicNameElem = document.getElementById("clinicName");
         clinicNameElem.style.cursor = "grab";
 
