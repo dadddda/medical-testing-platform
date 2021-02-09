@@ -26,6 +26,7 @@ export class NewsFeed {
         this.newsHeaderImgLoadHandlerRef = this.newsHeaderImgLoadHandler.bind(this);
 
         this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
+        this.fetchNewsOnScroll = true;
         this.fetchNewsOnResize = true;
 
         this.observerHandlerRef = this.observerHandler.bind(this);
@@ -77,14 +78,14 @@ export class NewsFeed {
         this.latestDoc = data.docs[data.docs.length - 1];
 
         if (data.empty) {
-            this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
+            this.fetchNewsOnScroll = false;
             this.fetchNewsOnResize = false;
         } else {
             let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
             if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
                 this.getNews();
             }
-            this.newsFeedElem.addEventListener("scroll", this.scrollHandlerRef);
+            this.fetchNewsOnScroll = true;
             this.fetchNewsOnResize = true;
         }
     }
@@ -338,10 +339,12 @@ export class NewsFeed {
      * to fetch additional data.
      */
     scrollHandler() {
-        let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
-        if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
-            this.newsFeedElem.removeEventListener("scroll", this.scrollHandlerRef);
-            this.getNews();
+        if (this.fetchNewsOnScroll) {
+            let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
+            if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+                this.fetchNewsOnScroll = false;
+                this.getNews();
+            }
         }
     }
 
@@ -368,7 +371,7 @@ export class NewsFeed {
             openedNewsElem.style.top = `${this.newsFeedElem.scrollTop}px`;
         }
 
-        if (!this.fetchNewsOnResize) {
+        if (this.fetchNewsOnResize) {
             let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
             if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
                 this.fetchNewsOnResize = false;
