@@ -216,8 +216,8 @@ div.mainContent {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: max-content;
-    height: max-content;
+    width: 100%;
+    height: 100%;
     animation: fade .2s ease-in-out;
 }
 
@@ -225,7 +225,7 @@ div.mainContent {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: max-content;
+    width: 100%;
     height: max-content;
     margin: 5px;
 }
@@ -317,6 +317,12 @@ div.footer {
     }
 
     .leftPanelBtns button.leftPanelBtn span { display: none; }
+
+    .rightPanel div.welcomeScreen { padding: 30px; }
+    .rightPanelTextBox text.greetings { font-size: 2.5rem; }
+    .rightPanelTextBox text.info { font-size: 1.25rem; }
+
+    .footer text.footerText { font-size: 0.6rem; }
 }
 
 @media screen and (max-width: 682px) {
@@ -336,6 +342,9 @@ div.footer {
     .headerRight #accountBtn span { display: none; }
 
     .headerRight #logoutBtn { width: 90px; }
+
+    .rightPanelTextBox text.greetings { font-size: 2rem; }
+    .rightPanelTextBox text.info { font-size: 1rem; }
 }
 
 @media screen and (max-width: 425px) {
@@ -350,4 +359,9 @@ div.footer {
         width: 3px;
         height: 3px;
     }
+
+    .rightPanelTextBox text.greetings { font-size: 1.75rem; }
+    .rightPanelTextBox text.info { font-size: 0.9rem; }
+
+    .footer text.footerText { font-size: 0.55rem; }
 }
