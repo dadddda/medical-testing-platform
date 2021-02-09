@@ -355,6 +355,7 @@ export class Clinics {
 
         pin.style.left = `${relativeCoordinates.x}px`;
         pin.style.top = `${relativeCoordinates.y}px`;
+        pin.style.zIndex = `${Math.round(relativeCoordinates.y)}`;
     }
 
     /**
