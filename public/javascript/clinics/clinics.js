@@ -58,7 +58,7 @@ export class Clinics {
     drawContent() {
         let html = `
             <div class="clinicsContent">
-                <div class="infoCard" id="infoCard"></div>
+                <div class="window" id="infoCard"></div>
                 <div class="mapContainer">
                     <div class="mapContent">
                         <div class="zoomContainer" id="zoomContainer">
@@ -211,15 +211,18 @@ export class Clinics {
 
         let clinicInfo = this.clinicsData.get(clinicPinElem.id);
 
-        if (this.infoCardObj != undefined) {
-            this.infoCardObj.drawInfoCard(clinicInfo);
-        } else {
-            let infoCardElem = document.getElementById("infoCard");
+        let infoCardElem = document.getElementById("infoCard");
+        let customAnimationDelay = 0;
+        if (infoCardElem.innerHTML.length != 0) {
+            this.infoCardObj.closeInfoCard();
+            customAnimationDelay = ANIMATION_DELAY;
+        }
+
+        setTimeout(() => {
             let clinicsContentElem = this.clinicsElem.firstElementChild;
             this.infoCardObj = new InfoCard(infoCardElem, clinicsContentElem);
             this.infoCardObj.drawInfoCard(clinicInfo);
-            this.infoCardObj.initListeners();
-        }
+        }, customAnimationDelay);
     }
 
     /**
@@ -521,7 +524,8 @@ export class Clinics {
             currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
         });
 
-        if (this.infoCardObj != undefined) this.infoCardObj.deinitListeners();
+        let infoCardElem = document.getElementById("infoCard");
+        if (infoCardElem.innerHTML.length != 0) this.infoCardObj.closeInfoCard();
 
         this.observer.disconnect();
     }
@@ -793,7 +797,8 @@ export class Clinics {
      */
     windowResizeHandler() {
         this.adjustMapImgElemSize();
-        if (this.infoCardObj != undefined) this.infoCardObj.adjustCardElemPos();
+        let infoCardElem = document.getElementById("infoCard");
+        if (infoCardElem.innerHTML.length != 0) this.infoCardObj.adjustInfoCardElemPos();
         
         let userPinElem = document.getElementById("userPin");
         if (userPinElem != undefined) {

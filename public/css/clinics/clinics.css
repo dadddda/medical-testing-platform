@@ -23,6 +23,10 @@ div.clinics {
     position: relative;
 }
 
+.clinicsContent #infoCard {
+    z-index: 4;
+}
+
 .clinicsContent div.mapContainer {
     display: flex;
     flex-direction: column;
