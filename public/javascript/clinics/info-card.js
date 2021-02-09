@@ -52,7 +52,16 @@ export class InfoCard {
             </dl>
             <div class="clinicDashboard">
                 <hr class="solid">
-                <text>Clinic Dashboard</text>
+                <div class="dashboardBtns">
+                    <button class="dashboardBtn" id="registerBtn">
+                        <span id="registerBtnSpan">Register</span>
+                        <img id="registerBtnImg" src="./svgs/close.svg">
+                    </button>
+                    <button class="dashboardBtn" id="contactBtn">
+                        <span id="contactBtnSpan">Contact</span>
+                        <img id="contactBtnImg" src="./svgs/contact-icon-light.svg">
+                    </button>
+                </div>
             </div>
         `;
         let currAnimationDelay = ANIMATION_DELAY;
@@ -76,9 +85,6 @@ export class InfoCard {
 
                 setTimeout(() => {
                     this.adjustCardElemPos();
-
-                    let closeBtnElem = document.getElementById("closeBtn");
-                    closeBtnElem.addEventListener("click", this.mouseClickHandlerRef);
                 }, TIMEOUT_DELAY);
             }, TIMEOUT_DELAY);
 
@@ -134,6 +140,7 @@ export class InfoCard {
      * Initializes event listeners.
      */
     initListeners() {
+        this.infoCardElem.addEventListener("click", this.mouseClickHandlerRef);
         this.infoCardElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
@@ -151,8 +158,23 @@ export class InfoCard {
      * @param {Event} event 
      */
     mouseClickHandler(event) {
-        event.target.removeEventListener("click", this.mouseClickHandlerRef);
-        this.closeInfoCard();
+        event.preventDefault();
+
+        switch (event.target.id) {
+            case "closeBtn":
+                this.closeInfoCard();
+                break;
+            case "registerBtn":
+            case "registerBtnSpan":
+            case "registerBtnImg":
+                console.log("register");
+                break;
+            case "contactBtn":
+            case "contactBtnSpan":
+            case "contactBtnImg":
+                console.log("contact");
+                break;
+        }
     }
 
     /**
