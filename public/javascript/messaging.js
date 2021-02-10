@@ -1,5 +1,5 @@
 // constants
-import {ANIMATION_DELAY, TIMEOUT_DELAY} from "./utils/utils.js";
+import {ANIMATION_DELAY, TIMEOUT_DELAY, MOBILE_L} from "./utils/utils.js";
 
 // functions
 import {appendHtml} from "./utils/utils.js";
@@ -32,12 +32,16 @@ export class Messaging {
                 <img class="actionBtn" id="messagingCloseBtn" src="./svgs/close.svg">
             </div>
             <div class="windowContent">
-                <div class="messagingContent"></div>
+                <div class="messagingContent">
+                    <div class="bubbleRight">Hello!</div>
+                    <div class="bubbleLeft">How may we help you?</div>
+                    <div class="bubbleRight">What does blood glucose test cost for children? I mean younger than 12 years.</div>
+                </div>
             </div>
             <div class="windowFooter">
                 <hr class="solid">
                 <div class="windowDashboard">
-                    <input class="windowDashboardInput" type="text"></input>
+                    <input class="windowDashboardInput" type="text">
                     <button class="windowDashboardBtn">
                         <img src="./svgs/send-msg-icon.svg">
                     </button>
@@ -59,7 +63,7 @@ export class Messaging {
      * Deinitializes listeners, clears messaging window HTML content and sets 
      * it's opacity to 0 and display property to 'none'.
      */
-    closeInfoCard() {
+    closeMessagingWindow() {
         this.deinitListeners();
 
         this.messagingElem.style.opacity = 0;
@@ -74,7 +78,9 @@ export class Messaging {
      * 'this.parentElem' bounds.
      */
     adjustMessagingElemPos() {
-        Window.adjustWindowElemPos(this.messagingElem, this.parentElem);
+        if (window.innerWidth > MOBILE_L) {
+            Window.adjustWindowElemPos(this.messagingElem, this.parentElem);
+        }
     }
 
     /**
@@ -102,7 +108,7 @@ export class Messaging {
 
         switch (event.target.id) {
             case "messagingCloseBtn":
-                this.closeInfoCard();
+                this.closeMessagingWindow();
                 break;
         }
     }
@@ -112,6 +118,8 @@ export class Messaging {
      * @param {Event} event 
      */
     pointerDownHandler(event) {
-        Window.pointerDownHandler(event, this.messagingElem, this.parentElem);
+        if (window.innerWidth > MOBILE_L) {
+            Window.pointerDownHandler(event, this.messagingElem, this.parentElem);
+        }
     }
 }

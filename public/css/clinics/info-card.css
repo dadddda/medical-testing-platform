@@ -5,6 +5,7 @@
     justify-content: flex-start;
     width: 100%;
     height: max-content;
+    padding: 0 10px;
 }
 
 #infoCard .clinicDescription dt.categoryName {

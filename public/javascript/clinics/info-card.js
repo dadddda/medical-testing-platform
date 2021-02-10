@@ -1,5 +1,5 @@
 // constants
-import {ANIMATION_DELAY, TIMEOUT_DELAY} from "../utils/utils.js";
+import {ANIMATION_DELAY, TIMEOUT_DELAY, MOBILE_M} from "../utils/utils.js";
 
 // functions
 import {appendHtml} from "../utils/utils.js";
@@ -97,11 +97,16 @@ export class InfoCard {
     }
 
     /**
-     * Adjusts info card element position so that it never goes out of
-     * 'this.parentElem' bounds.
+     * Adjusts info card and it's child messaging window positions so that they never 
+     * go out of 'this.parentElem' bounds.
      */
     adjustInfoCardElemPos() {
-        Window.adjustWindowElemPos(this.infoCardElem, this.parentElem);
+        let messagingElem = document.getElementById("messaging");
+        if (messagingElem.innerHTML.length != 0) this.messagingObj.adjustMessagingElemPos();
+
+        if (window.innerWidth > MOBILE_M) {
+            Window.adjustWindowElemPos(this.infoCardElem, this.parentElem);
+        }
     }
 
     /**
@@ -127,8 +132,10 @@ export class InfoCard {
     mouseClickHandler(event) {
         event.preventDefault();
 
+        let messagingElem = document.getElementById("messaging");
         switch (event.target.id) {
             case "infoCardCloseBtn":
+                if (messagingElem.innerHTML != 0) this.messagingObj.closeMessagingWindow();
                 this.closeInfoCard();
                 break;
             case "registerBtn":
@@ -139,7 +146,7 @@ export class InfoCard {
             case "contactBtn":
             case "contactBtnSpan":
             case "contactBtnImg":
-                let messagingElem = document.getElementById("messaging");
+                if (messagingElem.innerHTML != 0) break;
                 this.messagingObj = new Messaging(messagingElem, this.parentElem);
                 this.messagingObj.drawMessagingWindow();
                 break;
@@ -151,6 +158,8 @@ export class InfoCard {
      * @param {Event} event 
      */
     pointerDownHandler(event) {
-        Window.pointerDownHandler(event, this.infoCardElem, this.parentElem);
+        if (window.innerWidth > MOBILE_M) {
+            Window.pointerDownHandler(event, this.infoCardElem, this.parentElem);
+        }
     }
 }

@@ -2,6 +2,7 @@
 export const ANIMATION_DELAY = 200;
 export const TIMEOUT_DELAY = 20;
 
+export const MOBILE_L = 425;
 export const MOBILE_M = 375;
 
 // functions

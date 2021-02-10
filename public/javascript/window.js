@@ -1,6 +1,3 @@
-// constants
-import { MOBILE_M } from "./utils/utils.js"
-
 // variables
 let windowElemVar = null;
 let parentElemVar = null;
@@ -13,8 +10,6 @@ let cardPos = null;
  * @param {HTMLElement} parentElem
  */
 export function adjustWindowElemPos(windowElem, parentElem) {
-    if (window.innerWidth <= MOBILE_M) return;
-
     windowElemVar = windowElem;
     parentElemVar = parentElem;
 
@@ -53,8 +48,7 @@ export function pointerDownHandler(event, windowElem, parentElem) {
 
     windowElemVar = windowElem;
     parentElemVar = parentElem;
-
-    if (window.innerWidth <= MOBILE_M) return;
+    
     if (event.target.className != "windowHeader" && event.target.className != "windowHeaderText") return;
     windowElemVar.getElementsByClassName("windowHeader")[0].style.cursor = "grabbing";
     
