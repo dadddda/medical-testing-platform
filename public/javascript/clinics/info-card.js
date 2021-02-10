@@ -18,6 +18,8 @@ export class InfoCard {
         this.infoCardElem = infoCardElem;
         this.parentElem = parentElem;
 
+        this.currClinicId = null;
+
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
         this.pointerDownHandlerRef = this.pointerDownHandler.bind(this);
     }
@@ -25,10 +27,13 @@ export class InfoCard {
     /**
      * Builds new template of HTML element of clinic info card
      * according to given 'clinicInfo' object and renders created
-     * element.
+     * element. Also stores ID from given object to use it for
+     * messaging purposes.
      * @param clinicInfo
      */
     drawInfoCard(clinicInfo) {
+        this.currClinicId = clinicInfo.id;
+
         let html = `
             <div class="windowHeader">
                 <text class="windowHeaderText">${clinicInfo.name}</text>
@@ -88,6 +93,7 @@ export class InfoCard {
      */
     closeInfoCard() {
         this.deinitListeners();
+        this.currClinicId = null;
 
         let messagingElem = document.getElementById("messaging");
         if (messagingElem.innerHTML != 0) this.messagingObj.closeMessagingWindow();
@@ -152,7 +158,7 @@ export class InfoCard {
                 let messagingElem = document.getElementById("messaging");
                 if (messagingElem.innerHTML != 0) break;
                 this.messagingObj = new Messaging(messagingElem, this.parentElem);
-                this.messagingObj.drawMessagingWindow();
+                this.messagingObj.drawMessagingWindow(this.currClinicId);
                 break;
         }
     }

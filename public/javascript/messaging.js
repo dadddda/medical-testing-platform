@@ -17,33 +17,35 @@ export class Messaging {
         this.messagingElem = messagingElem;
         this.parentElem = parentElem;
 
+        this.chatsRef = firebase.firestore().collection("chats");
+        this.currClinicId = null;
+
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
         this.pointerDownHandlerRef = this.pointerDownHandler.bind(this);
     }
 
     /**
      * Builds new template of HTML element of messaging window and renders 
-     * created element.
+     * created element. Also stores given clinic id to fetch appropriate
+     * chat messages from database.
      */
-    drawMessagingWindow() {
+    async drawMessagingWindow(currClinicId) {
+        this.currClinicId = currClinicId;
+
         let html = `
             <div class="windowHeader">
                 <text class="windowHeaderText">Messaging</text>
                 <img class="actionBtn" id="messagingCloseBtn" src="./svgs/close.svg">
             </div>
             <div class="windowContent">
-                <div class="messagingContent">
-                    <div class="bubbleRight">Hello!</div>
-                    <div class="bubbleLeft">How may we help you?</div>
-                    <div class="bubbleRight">What does blood glucose test cost for children? I mean younger than 12 years.</div>
-                </div>
+                <div class="messagingContent"></div>
             </div>
             <div class="windowFooter">
                 <hr class="solid">
                 <div class="windowDashboard">
                     <input class="windowDashboardInput" type="text">
-                    <button class="windowDashboardBtn">
-                        <img src="./svgs/send-msg-icon.svg">
+                    <button class="windowDashboardBtn" id="sendBtn">
+                        <img id="sendBtnImg" src="./svgs/send-msg-icon.svg">
                     </button>
                 </div>
             </div>
@@ -51,12 +53,82 @@ export class Messaging {
 
         appendHtml(html, this.messagingElem);
 
-        setTimeout(() => {
+        setTimeout(async () => {
             this.messagingElem.style.display = "flex";
             this.messagingElem.style.opacity = 1;
             this.adjustMessagingElemPos();
+            await this.fetchMessages();
             this.initListeners();
         }, TIMEOUT_DELAY);
+    }
+
+    /**
+     * Fetches appropriate messages using current user id and clinic id and renders
+     * them in 'messagingContent' html element. If current combination of user and
+     * clinic doesn't exsist in database, new document is created.
+     */
+    async fetchMessages() {
+        let chats = await this.chatsRef
+            .where("userId", "==", firebase.auth().currentUser.uid)
+            .where("clinicId", "==", this.currClinicId)
+            .get();
+
+        if (chats.docs.length == 0) {
+            console.log("no chats found");
+            await this.createChatDocument();
+            
+            chats = await this.chatsRef
+                .where("userId", "==", firebase.auth().currentUser.uid)
+                .where("clinicId", "==", this.currClinicId)
+                .get();
+        }
+
+        this.messagesRef = firebase.firestore().collection("chats/" + chats.docs[0].id + "/messages");
+        let messages = await this.messagesRef
+            .orderBy("date")
+            .get();
+
+        for (let i = 0; i < messages.docs.length; i++) {
+            let currDoc = messages.docs[i];
+            console.log(currDoc.data().text);
+
+            let html = ``;
+            if (currDoc.data().sender == "user") {
+                html = `<div class="bubbleRight">${currDoc.data().text}</div>`;
+            } else if (currDoc.data().sender == "clinic") {
+                html = `<div class="bubbleLeft">${currDoc.data().text}</div>`;
+            }
+
+            let messagingContentElem = this.messagingElem.querySelector(".messagingContent");
+            appendHtml(html, messagingContentElem);
+        }
+    }
+
+    /**
+     * Creates new chat document of current user and clinic combination
+     * in Firestore database.
+     */
+    async createChatDocument() {
+        await this.chatsRef.add({
+            userId: firebase.auth().currentUser.uid,
+            clinicId: this.currClinicId
+        });
+    }
+
+    /**
+     * Stores given message to current messages collection in Firestore database.
+     * @param {String} message 
+     */
+    async sendMessage(message) {
+        await this.messagesRef.add({
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+            sender: "user",
+            text: message
+        });
+
+        let html = `<div class="bubbleRight">${message}</div>`;
+        let messagingContentElem = this.messagingElem.querySelector(".messagingContent");
+        appendHtml(html, messagingContentElem);
     }
 
     /**
@@ -65,6 +137,7 @@ export class Messaging {
      */
     closeMessagingWindow() {
         this.deinitListeners();
+        this.currClinicId = null;
 
         this.messagingElem.style.opacity = 0;
         setTimeout(() => {
@@ -111,6 +184,15 @@ export class Messaging {
         switch (event.target.id) {
             case "messagingCloseBtn":
                 this.closeMessagingWindow();
+                break;
+            case "sendBtn":
+            case "sendBtnImg":
+                let windowDashboardInputElem = this.messagingElem.querySelector(".windowDashboardInput");
+                let message = windowDashboardInputElem.value;
+                if (message.length != 0) {
+                    windowDashboardInputElem.value = "";
+                    this.sendMessage(message);
+                }
                 break;
         }
     }
