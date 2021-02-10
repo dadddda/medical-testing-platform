@@ -1,11 +1,14 @@
 // functions
 import * as Auth from "./authentication.js";
 
+// variables
+let newUid = null;
+
 /**
  * Redirects page to index.html if the user is already logged in.
  */
 firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
+    if (user && !newUid) {
         window.location.replace("index.html");
     }
 });
@@ -29,7 +32,7 @@ document.getElementById("loginBtn").addEventListener("click", function() {
 function registerUser(event) {
     event.preventDefault();
 
-    let email = document.getElementById("email").value;
+    let email = document.getElementById("email").value.toLowerCase();
     let password = document.getElementById("password").value;
     let checkbox = document.getElementById("agreement").checked;
 
@@ -48,10 +51,25 @@ function registerUser(event) {
         answer = false;
     }
     if (!answer) return;
-
+    
     firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((user) => {
-        window.location.assign("index.html");
+    .then((userCredential) => {
+        newUid = userCredential.user.uid;
+        let usersRef = firebase.firestore().collection("users");
+        usersRef.doc(newUid).set({
+            email: email,
+            type: "user"
+        })
+        .then(() => {
+            window.location.assign("index.html");
+        })
+        .catch((error) => {
+            let errorCode = error.code;
+            let errorMessage = error.message;
+
+            console.log(errorCode);
+            console.log(errorMessage);
+        });
     })
     .catch((error) => {
         let errorCode = error.code;

@@ -26,11 +26,11 @@ document.getElementById("registerBtn").addEventListener("click", function() {
 function loginUser(event) {
     event.preventDefault();
 
-    let email = document.getElementById("email").value;
+    let email = document.getElementById("email").value.toLowerCase();
     let password = document.getElementById("password").value;
 
     firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((user) => {
+    .then((userCredential) => {
         window.location.assign("index.html");
     })
     .catch((error) => {
