@@ -9,6 +9,8 @@ let cardPos = null;
 /**
  * Adjusts window element position so that it never goes out of
  * given 'parentElem' bounds.
+ * @param {HTMLElement} windowElem
+ * @param {HTMLElement} parentElem
  */
 export function adjustWindowElemPos(windowElem, parentElem) {
     if (window.innerWidth <= MOBILE_M) return;
@@ -43,6 +45,8 @@ export function adjustWindowElemPos(windowElem, parentElem) {
 /**
  * Window pointer down handler.
  * @param {Event} event 
+ * @param {HTMLElement} windowElem
+ * @param {HTMLElement} parentElem
  */
 export function pointerDownHandler(event, windowElem, parentElem) {
     event.preventDefault();
@@ -51,9 +55,8 @@ export function pointerDownHandler(event, windowElem, parentElem) {
     parentElemVar = parentElem;
 
     if (window.innerWidth <= MOBILE_M) return;
-    if (event.target.id != "windowHeader" && event.target.id != "windowHeaderText") return;
-    let windowHeaderElem = document.getElementById("windowHeader");
-    windowHeaderElem.style.cursor = "grabbing";
+    if (event.target.className != "windowHeader" && event.target.className != "windowHeaderText") return;
+    windowElemVar.getElementsByClassName("windowHeader")[0].style.cursor = "grabbing";
     
     cardPos = {
         x: event.clientX,
@@ -103,8 +106,7 @@ function pointerMoveHandler(event) {
 function pointerUpHandler(event) {
     event.preventDefault();
 
-    let windowHeaderElem = document.getElementById("windowHeader");
-    windowHeaderElem.style.cursor = "grab";
+    windowElemVar.getElementsByClassName("windowHeader")[0].style.cursor = "grab";
 
     document.removeEventListener("pointermove", pointerMoveHandler);
     document.removeEventListener("pointerup", pointerUpHandler);

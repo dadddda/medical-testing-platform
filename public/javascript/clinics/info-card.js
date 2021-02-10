@@ -30,9 +30,9 @@ export class InfoCard {
      */
     drawInfoCard(clinicInfo) {
         let html = `
-            <div class="windowHeader" id="windowHeader">
-                <text class="windowHeaderText" id="windowHeaderText">${clinicInfo.name}</text>
-                <img class="actionBtn" id="closeBtn" src="./svgs/close.svg">
+            <div class="windowHeader">
+                <text class="windowHeaderText">${clinicInfo.name}</text>
+                <img class="actionBtn" id="infoCardCloseBtn" src="./svgs/close.svg">
             </div>
             <div class="windowContent">
                 <dl class="clinicDescription">
@@ -128,7 +128,7 @@ export class InfoCard {
         event.preventDefault();
 
         switch (event.target.id) {
-            case "closeBtn":
+            case "infoCardCloseBtn":
                 this.closeInfoCard();
                 break;
             case "registerBtn":

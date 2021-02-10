@@ -18,6 +18,7 @@ export class Messaging {
         this.parentElem = parentElem;
 
         this.mouseClickHandlerRef = this.mouseClickHandler.bind(this);
+        this.pointerDownHandlerRef = this.pointerDownHandler.bind(this);
     }
 
     /**
@@ -28,7 +29,7 @@ export class Messaging {
         let html = `
             <div class="windowHeader">
                 <text class="windowHeaderText">Messaging</text>
-                <img class="actionBtn" id="closeBtn" src="./svgs/close.svg">
+                <img class="actionBtn" id="messagingCloseBtn" src="./svgs/close.svg">
             </div>
             <div class="windowContent">
                 <div class="messagingContent"></div>
@@ -81,6 +82,7 @@ export class Messaging {
      */
     initListeners() {
         this.messagingElem.addEventListener("click", this.mouseClickHandlerRef);
+        this.messagingElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
@@ -88,6 +90,7 @@ export class Messaging {
      */
     deinitListeners() {
         this.messagingElem.removeEventListener("click", this.mouseClickHandlerRef);
+        this.messagingElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
@@ -98,9 +101,17 @@ export class Messaging {
         event.preventDefault();
 
         switch (event.target.id) {
-            case "closeBtn":
+            case "messagingCloseBtn":
                 this.closeInfoCard();
                 break;
         }
+    }
+
+    /**
+     * Window pointer down handler.
+     * @param {Event} event 
+     */
+    pointerDownHandler(event) {
+        Window.pointerDownHandler(event, this.messagingElem, this.parentElem);
     }
 }
