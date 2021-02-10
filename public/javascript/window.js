@@ -10,10 +10,10 @@ let cardPos = null;
  * @param {HTMLElement} parentElem
  */
 export function adjustWindowElemPos(windowElem, parentElem) {
+    if (windowElem.innerHTML.length == 0) return;
+    
     windowElemVar = windowElem;
     parentElemVar = parentElem;
-
-    if (windowElemVar.innerHTML.length == 0) return;
 
     let parentElemVarBr = parentElemVar.getBoundingClientRect();
     let windowElemVarBr = windowElemVar.getBoundingClientRect();
@@ -45,11 +45,10 @@ export function adjustWindowElemPos(windowElem, parentElem) {
  */
 export function pointerDownHandler(event, windowElem, parentElem) {
     event.preventDefault();
-
+    
     windowElemVar = windowElem;
     parentElemVar = parentElem;
-    
-    if (event.target.className != "windowHeader" && event.target.className != "windowHeaderText") return;
+
     windowElemVar.getElementsByClassName("windowHeader")[0].style.cursor = "grabbing";
     
     cardPos = {

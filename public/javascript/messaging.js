@@ -88,7 +88,8 @@ export class Messaging {
      */
     initListeners() {
         this.messagingElem.addEventListener("click", this.mouseClickHandlerRef);
-        this.messagingElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
+        let windowHeaderElem = this.messagingElem.querySelector(".windowHeader");
+        windowHeaderElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
@@ -96,7 +97,8 @@ export class Messaging {
      */
     deinitListeners() {
         this.messagingElem.removeEventListener("click", this.mouseClickHandlerRef);
-        this.messagingElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
+        let windowHeaderElem = this.messagingElem.querySelector(".windowHeader");
+        windowHeaderElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
@@ -105,7 +107,7 @@ export class Messaging {
      */
     mouseClickHandler(event) {
         event.preventDefault();
-
+        
         switch (event.target.id) {
             case "messagingCloseBtn":
                 this.closeMessagingWindow();

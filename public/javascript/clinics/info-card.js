@@ -89,6 +89,9 @@ export class InfoCard {
     closeInfoCard() {
         this.deinitListeners();
 
+        let messagingElem = document.getElementById("messaging");
+        if (messagingElem.innerHTML != 0) this.messagingObj.closeMessagingWindow();
+
         this.infoCardElem.style.opacity = 0;
         setTimeout(() => {
             this.infoCardElem.style.display = "none";
@@ -114,7 +117,8 @@ export class InfoCard {
      */
     initListeners() {
         this.infoCardElem.addEventListener("click", this.mouseClickHandlerRef);
-        this.infoCardElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
+        let infoCardHeaderElem = this.infoCardElem.getElementsByClassName("windowHeader")[0];
+        infoCardHeaderElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
@@ -122,7 +126,8 @@ export class InfoCard {
      */
     deinitListeners() {
         this.infoCardElem.removeEventListener("click", this.mouseClickHandlerRef);
-        this.infoCardElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
+        let infoCardHeaderElem = this.infoCardElem.getElementsByClassName("windowHeader")[0];
+        infoCardHeaderElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
@@ -132,10 +137,8 @@ export class InfoCard {
     mouseClickHandler(event) {
         event.preventDefault();
 
-        let messagingElem = document.getElementById("messaging");
         switch (event.target.id) {
             case "infoCardCloseBtn":
-                if (messagingElem.innerHTML != 0) this.messagingObj.closeMessagingWindow();
                 this.closeInfoCard();
                 break;
             case "registerBtn":
@@ -146,6 +149,7 @@ export class InfoCard {
             case "contactBtn":
             case "contactBtnSpan":
             case "contactBtnImg":
+                let messagingElem = document.getElementById("messaging");
                 if (messagingElem.innerHTML != 0) break;
                 this.messagingObj = new Messaging(messagingElem, this.parentElem);
                 this.messagingObj.drawMessagingWindow();
