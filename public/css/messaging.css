@@ -52,13 +52,12 @@
 }
 
 #messaging .windowDashboard button.windowDashboardBtn {
-    width: 60px;
+    width: 50px;
+    min-width: 50px;
     margin: 0 0 0 5px;
 }
 
-#messaging .windowDashboard button.windowDashboardBtn img {
-    margin: auto;
-}
+#messaging .windowDashboard button.windowDashboardBtn img { margin: auto; }
 
 @media screen and (max-width: 425px) {
     #messaging.window {
