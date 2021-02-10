@@ -74,7 +74,6 @@ export class Messaging {
             .get();
 
         if (chats.docs.length == 0) {
-            console.log("no chats found");
             await this.createChatDocument();
             
             chats = await this.chatsRef
@@ -90,7 +89,6 @@ export class Messaging {
 
         for (let i = 0; i < messages.docs.length; i++) {
             let currDoc = messages.docs[i];
-            console.log(currDoc.data().text);
 
             let html = ``;
             if (currDoc.data().sender == "user") {
