@@ -66,7 +66,7 @@ div.window {
     justify-content: flex-start;
     width: 100%;
     height: 100%;
-    padding: 5px 10px;
+    padding: 5px 10px 0 10px;
     overflow: overlay;
 }
 
@@ -80,7 +80,7 @@ div.window {
     padding: 0 10px 10px 10px;
 }
 
-.windowFooter div.windowFooterBtns {
+.windowFooter div.windowDashboard {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -88,7 +88,24 @@ div.window {
     height: 30px;
 }
 
-.windowFooterBtns button.windowFooterBtn {
+.windowDashboard input.windowDashboardInput {
+    display: flex;
+    width: 220px;
+    height: 100%;
+    padding: 0 5px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: box-shadow .2s ease-in-out;
+}
+
+.windowDashboard input.windowDashboardInput:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: box-shadow .2s ease-in-out;
+}
+
+.windowDashboard button.windowDashboardBtn {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -102,36 +119,21 @@ div.window {
     transition: box-shadow .2s ease-in-out;
 }
 
-.windowFooterBtns button.windowFooterBtn:hover {
+.windowDashboard button.windowDashboardBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: box-shadow .2s ease-in-out;
     cursor: pointer;
 }
 
-.windowFooterBtns button.windowFooterBtn span {
+.windowDashboard button.windowDashboardBtn span {
     display: flex;
     margin: auto;
     font-size: 0.9rem;
     color: rgb(235, 235, 235);
 }
 
-.windowFooterBtns button.windowFooterBtn img {
+.windowDashboard button.windowDashboardBtn img {
     display: flex;
     width: 30px;
     height: 30px;
-}
-
-@media screen and (max-width: 375px) {
-    div.window {
-        width: 100%;
-        height: 100%;
-        min-height: min-content;
-        top: 0 !important;
-        left: 0 !important;
-        border-radius: 0;
-    }
-
-    .window div.windowFooter {
-        margin-top: auto;
-    }
 }

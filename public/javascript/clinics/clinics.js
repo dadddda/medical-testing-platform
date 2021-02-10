@@ -58,7 +58,6 @@ export class Clinics {
     drawContent() {
         let html = `
             <div class="clinicsContent">
-                <div class="window" id="infoCard"></div>
                 <div class="mapContainer">
                     <div class="mapContent">
                         <div class="zoomContainer" id="zoomContainer">
@@ -89,6 +88,8 @@ export class Clinics {
                     </div>
                 </div>
                 <div class="filterContainer" id="filterContainer"></div>
+                <div class="window" id="infoCard"></div>
+                <div class="window" id="messaging"></div>
             </div>
         `;
 
@@ -563,7 +564,7 @@ export class Clinics {
                 if (currClinicName.includes(searchFieldValue)) this.enableClinicPin(currClinicPinElem);
                 else this.disableClinicPin(currClinicPinElem);
             });
-        } else {
+        } else if (event.target.id.includes("ck")) {
             let checkedTests = new Set();
 
             this.filterTestsMap.forEach((value, key) => {

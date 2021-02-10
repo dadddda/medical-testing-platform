@@ -1,4 +1,4 @@
-.windowContent dl.clinicDescription {
+#infoCard .windowContent dl.clinicDescription {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -7,37 +7,44 @@
     height: max-content;
 }
 
-.clinicDescription dt.categoryName {
+#infoCard .clinicDescription dt.categoryName {
     margin-top: 10px;
     font-size: 1rem;
     font-weight: bold;
     color: rgb(10, 10, 10);
 }
 
-.clinicDescription dd.categoryDesc {
+#infoCard .clinicDescription dd.categoryDesc {
     margin-bottom: 10px;
     font-size: 1rem;
     color: rgb(10, 10, 10);
 }
 
-.categoryDesc ul.categoryDescList {
+#infoCard .categoryDesc ul.categoryDescList {
     margin-left: 20px;
 }
 
 @media screen and (max-width: 375px) {
-    .windowContent dl.clinicDescription {
-        overflow: overlay;
+    #infoCard.window {
+        width: 100%;
+        height: 100%;
+        min-height: min-content;
+        top: 0 !important;
+        left: 0 !important;
+        border-radius: 0;
     }
 
-    .clinicDescription dt.categoryName {
+    #infoCard .clinicDescription dt.categoryName {
         margin-top: 5px;
         font-size: 0.9rem;
     }
 
-    .clinicDescription dd.categoryDesc {
+    #infoCard .clinicDescription dd.categoryDesc {
         margin-bottom: 5px;
         font-size: 0.9rem;
     }
 
-    .categoryDesc ul.categoryDescList { margin-left: 20px; }
+    #infoCard .categoryDesc ul.categoryDescList { margin-left: 20px; }
+
+    #infoCard.window div.windowFooter { margin-top: auto; }
 }

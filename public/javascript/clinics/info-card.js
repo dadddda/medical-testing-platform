@@ -1,9 +1,10 @@
 // constants
-import {ANIMATION_DELAY, TIMEOUT_DELAY, MOBILE_M} from "../utils/utils.js";
+import {ANIMATION_DELAY, TIMEOUT_DELAY} from "../utils/utils.js";
 
 // functions
 import {appendHtml} from "../utils/utils.js";
 import * as Window from "../window.js";
+import {Messaging} from "../messaging.js";
 
 export class InfoCard {
 
@@ -49,12 +50,12 @@ export class InfoCard {
             </div>
             <div class="windowFooter">
                 <hr class="solid">
-                <div class="windowFooterBtns">
-                    <button class="windowFooterBtn" id="registerBtn">
+                <div class="windowDashboard">
+                    <button class="windowDashboardBtn" id="registerBtn">
                         <span id="registerBtnSpan">Register</span>
                         <img id="registerBtnImg" src="./svgs/close.svg">
                     </button>
-                    <button class="windowFooterBtn" id="contactBtn">
+                    <button class="windowDashboardBtn" id="contactBtn">
                         <span id="contactBtnSpan">Contact</span>
                         <img id="contactBtnImg" src="./svgs/contact-icon-light.svg">
                     </button>
@@ -73,7 +74,7 @@ export class InfoCard {
             });
 
             setTimeout(() => {
-                this.infoCardElem.style.display = "flex"
+                this.infoCardElem.style.display = "flex";
                 this.infoCardElem.style.opacity = 1;
                 this.adjustInfoCardElemPos();
                 this.initListeners();
@@ -138,7 +139,9 @@ export class InfoCard {
             case "contactBtn":
             case "contactBtnSpan":
             case "contactBtnImg":
-                console.log("contact");
+                let messagingElem = document.getElementById("messaging");
+                this.messagingObj = new Messaging(messagingElem, this.parentElem);
+                this.messagingObj.drawMessagingWindow();
                 break;
         }
     }
