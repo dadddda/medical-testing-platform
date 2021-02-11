@@ -16,7 +16,7 @@ export class NewsFeed {
         this.newsFeedElem = newsFeedElem;
         this.newsRef = firebase.firestore().collection("news");
         this.storageRef = firebase.storage();
-        this.latestInit = false;
+        this.initialized = false;
         this.latestDoc = null;
         this.moreBtnClicked = false;
     
@@ -46,19 +46,13 @@ export class NewsFeed {
      */
     async getNews() {
         let data = null;
-        if (!this.latestInit) {
+        if (!this.initialized) {
             data = await this.newsRef
                 .orderBy("date", "desc")
-                .get();
-
-            this.latestDoc = data.docs[0];
-            this.latestInit = true;
-
-            data = await this.newsRef
-                .orderBy("date", "desc")
-                .startAt(this.latestDoc)
                 .limit(2)
                 .get();
+
+            this.initialized = true;
         } else {
             data = await this.newsRef
                 .orderBy("date", "desc")
