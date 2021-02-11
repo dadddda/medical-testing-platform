@@ -7,7 +7,7 @@ const PINCH_ZOOM_THRESHOLD = 5;
 import {ANIMATION_DELAY} from "../utils/utils.js";
 
 // classes
-import {InfoCard} from "./info-card.js";
+import {ClinicWindow} from "./clinic-window.js";
 
 // functions
 import {appendHtml} from "../utils/utils.js";
@@ -88,8 +88,8 @@ export class Clinics {
                     </div>
                 </div>
                 <div class="filterContainer" id="filterContainer"></div>
-                <div class="window" id="infoCard"></div>
-                <div class="window" id="messaging"></div>
+                <div class="window" id="clinicWindow"></div>
+                <div class="window" id="chatWindow"></div>
             </div>
         `;
 
@@ -212,17 +212,17 @@ export class Clinics {
 
         let clinicInfo = this.clinicsData.get(clinicPinElem.id);
 
-        let infoCardElem = document.getElementById("infoCard");
+        let clinicWindowElem = document.getElementById("clinicWindow");
         let customAnimationDelay = 0;
-        if (infoCardElem.innerHTML.length != 0) {
-            this.infoCardObj.closeInfoCard();
+        if (clinicWindowElem.innerHTML.length != 0) {
+            this.clinicWindowObj.closeClinicWindow();
             customAnimationDelay = ANIMATION_DELAY;
         }
 
         setTimeout(() => {
             let clinicsContentElem = this.clinicsElem.firstElementChild;
-            this.infoCardObj = new InfoCard(infoCardElem, clinicsContentElem);
-            this.infoCardObj.drawInfoCard(clinicInfo);
+            this.clinicWindowObj = new ClinicWindow(clinicWindowElem, clinicsContentElem);
+            this.clinicWindowObj.drawClinicWindow(clinicInfo);
         }, customAnimationDelay);
     }
 
@@ -525,8 +525,8 @@ export class Clinics {
             currClinicPinElem.removeEventListener("click", this.clinicPinClickHandlerRef);
         });
 
-        let infoCardElem = document.getElementById("infoCard");
-        if (infoCardElem.innerHTML.length != 0) this.infoCardObj.closeInfoCard();
+        let clinicWindowElem = document.getElementById("clinicWindow");
+        if (clinicWindowElem.innerHTML.length != 0) this.clinicWindowObj.closeClinicWindow();
 
         this.observer.disconnect();
     }
@@ -798,8 +798,8 @@ export class Clinics {
      */
     windowResizeHandler() {
         this.adjustMapImgElemSize();
-        let infoCardElem = document.getElementById("infoCard");
-        if (infoCardElem.innerHTML.length != 0) this.infoCardObj.adjustInfoCardElemPos();
+        let clinicWindowElem = document.getElementById("clinicWindow");
+        if (clinicWindowElem.innerHTML.length != 0) this.clinicWindowObj.adjustClinicWindowElemPos();
         
         let userPinElem = document.getElementById("userPin");
         if (userPinElem != undefined) {

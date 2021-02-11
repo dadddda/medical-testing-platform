@@ -4,18 +4,18 @@ import {ANIMATION_DELAY, TIMEOUT_DELAY, MOBILE_M} from "../utils/utils.js";
 // functions
 import {appendHtml} from "../utils/utils.js";
 import * as Window from "../window.js";
-import {Messaging} from "../messaging.js";
+import {ChatWindow} from "./chat-window.js";
 
-export class InfoCard {
+export class ClinicWindow {
 
     /**
-     * Constructs new 'InfoCard' object with given 'infoCardElem'
+     * Constructs new 'ClinicWindow' object with given 'clinicWindowElem'
      * element and given parent element.
-     * @param {HTMLElement} infoCardElem 
+     * @param {HTMLElement} clinicWindowElem 
      * @param {HTMLElement} parentElem
      */
-    constructor(infoCardElem, parentElem) {
-        this.infoCardElem = infoCardElem;
+    constructor(clinicWindowElem, parentElem) {
+        this.clinicWindowElem = clinicWindowElem;
         this.parentElem = parentElem;
 
         this.currClinicId = null;
@@ -25,19 +25,19 @@ export class InfoCard {
     }
 
     /**
-     * Builds new template of HTML element of clinic info card
+     * Builds new template of HTML element of clinic window
      * according to given 'clinicInfo' object and renders created
      * element. Also stores ID from given object to use it for
      * messaging purposes.
      * @param clinicInfo
      */
-    drawInfoCard(clinicInfo) {
+    drawClinicWindow(clinicInfo) {
         this.currClinicId = clinicInfo.id;
 
         let html = `
             <div class="windowHeader">
                 <text class="windowHeaderText">${clinicInfo.name}</text>
-                <img class="actionBtn" id="infoCardCloseBtn" src="./svgs/close.svg">
+                <img class="actionBtn" id="clinicWindowCloseBtn" src="./svgs/close.svg">
             </div>
             <div class="windowContent">
                 <dl class="clinicDescription">
@@ -68,7 +68,7 @@ export class InfoCard {
             </div>
         `;
 
-        appendHtml(html, this.infoCardElem);
+        appendHtml(html, this.clinicWindowElem);
 
         setTimeout(() => {
             let categoryDescListElem = document.getElementById("categoryDescList");
@@ -79,42 +79,42 @@ export class InfoCard {
             });
 
             setTimeout(() => {
-                this.infoCardElem.style.display = "flex";
-                this.infoCardElem.style.opacity = 1;
-                this.adjustInfoCardElemPos();
+                this.clinicWindowElem.style.display = "flex";
+                this.clinicWindowElem.style.opacity = 1;
+                this.adjustClinicWindowElemPos();
                 this.initListeners();
             }, TIMEOUT_DELAY);
         }, TIMEOUT_DELAY);
     }
 
     /**
-     * Deinitializes listeners, clears info card HTML content and sets 
+     * Deinitializes listeners, clears clinic window HTML content and sets 
      * it's opacity to 0 and display property to 'none'.
      */
-    closeInfoCard() {
+    closeClinicWindow() {
         this.deinitListeners();
         this.currClinicId = null;
 
-        let messagingElem = document.getElementById("messaging");
-        if (messagingElem.innerHTML != 0) this.messagingObj.closeMessagingWindow();
+        let chatWindowElem = document.getElementById("chatWindow");
+        if (chatWindowElem.innerHTML != 0) this.chatWindowObj.closeChatWindow();
 
-        this.infoCardElem.style.opacity = 0;
+        this.clinicWindowElem.style.opacity = 0;
         setTimeout(() => {
-            this.infoCardElem.style.display = "none";
-            this.infoCardElem.innerHTML = "";
+            this.clinicWindowElem.style.display = "none";
+            this.clinicWindowElem.innerHTML = "";
         }, ANIMATION_DELAY);
     }
 
     /**
-     * Adjusts info card and it's child messaging window positions so that they never 
+     * Adjusts clinic window and it's child chat window positions so that they never 
      * go out of 'this.parentElem' bounds.
      */
-    adjustInfoCardElemPos() {
-        let messagingElem = document.getElementById("messaging");
-        if (messagingElem.innerHTML.length != 0) this.messagingObj.adjustMessagingElemPos();
+    adjustClinicWindowElemPos() {
+        let chatWindowElem = document.getElementById("chatWindow");
+        if (chatWindowElem.innerHTML.length != 0) this.chatWindowObj.adjustChatWindowElemPos();
 
         if (window.innerWidth > MOBILE_M) {
-            Window.adjustWindowElemPos(this.infoCardElem, this.parentElem);
+            Window.adjustWindowElemPos(this.clinicWindowElem, this.parentElem);
         }
     }
 
@@ -122,30 +122,30 @@ export class InfoCard {
      * Initializes event listeners.
      */
     initListeners() {
-        this.infoCardElem.addEventListener("click", this.mouseClickHandlerRef);
-        let infoCardHeaderElem = this.infoCardElem.getElementsByClassName("windowHeader")[0];
-        infoCardHeaderElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
+        this.clinicWindowElem.addEventListener("click", this.mouseClickHandlerRef);
+        let windowHeaderElem = this.clinicWindowElem.querySelector(".windowHeader");
+        windowHeaderElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
      * Deinitializes event listeners.
      */
     deinitListeners() {
-        this.infoCardElem.removeEventListener("click", this.mouseClickHandlerRef);
-        let infoCardHeaderElem = this.infoCardElem.getElementsByClassName("windowHeader")[0];
-        infoCardHeaderElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
+        this.clinicWindowElem.removeEventListener("click", this.mouseClickHandlerRef);
+        let windowHeaderElem = this.clinicWindowElem.querySelector(".windowHeader");
+        windowHeaderElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
-     * Info card mouse click handler.
+     * Clinic window mouse click handler.
      * @param {Event} event 
      */
     mouseClickHandler(event) {
         event.preventDefault();
 
         switch (event.target.id) {
-            case "infoCardCloseBtn":
-                this.closeInfoCard();
+            case "clinicWindowCloseBtn":
+                this.closeClinicWindow();
                 break;
             case "registerBtn":
             case "registerBtnSpan":
@@ -155,10 +155,10 @@ export class InfoCard {
             case "contactBtn":
             case "contactBtnSpan":
             case "contactBtnImg":
-                let messagingElem = document.getElementById("messaging");
-                if (messagingElem.innerHTML != 0) break;
-                this.messagingObj = new Messaging(messagingElem, this.parentElem);
-                this.messagingObj.drawMessagingWindow(this.currClinicId);
+                let chatWindowElem = document.getElementById("chatWindow");
+                if (chatWindowElem.innerHTML != 0) break;
+                this.chatWindowObj = new ChatWindow(chatWindowElem, this.parentElem);
+                this.chatWindowObj.drawChatWindow(this.currClinicId);
                 break;
         }
     }
@@ -169,7 +169,7 @@ export class InfoCard {
      */
     pointerDownHandler(event) {
         if (window.innerWidth > MOBILE_M) {
-            Window.pointerDownHandler(event, this.infoCardElem, this.parentElem);
+            Window.pointerDownHandler(event, this.clinicWindowElem, this.parentElem);
         }
     }
 }

@@ -1,21 +1,21 @@
 // constants
-import {ANIMATION_DELAY, TIMEOUT_DELAY, MOBILE_L} from "./utils/utils.js";
+import {ANIMATION_DELAY, TIMEOUT_DELAY, MOBILE_L} from "../utils/utils.js";
 
 // functions
-import {appendHtml} from "./utils/utils.js";
-import * as Window from "./window.js";
-import * as Database from "./database.js";
+import {appendHtml} from "../utils/utils.js";
+import * as Window from "../window.js";
+import * as Database from "../database.js";
 
-export class Messaging {
+export class ChatWindow {
 
     /**
-     * Constructs new 'Messaging' object with given 'messagingElem'
+     * Constructs new 'ChatWindow' object with given 'chatWindowElem'
      * and given parent element.
-     * @param {HTMLElement} messagingElem 
+     * @param {HTMLElement} chatWindowElem 
      * @param {HTMLElement} parentElem 
      */
-    constructor(messagingElem, parentElem) {
-        this.messagingElem = messagingElem;
+    constructor(chatWindowElem, parentElem) {
+        this.chatWindowElem = chatWindowElem;
         this.parentElem = parentElem;
 
         this.chatsRef = firebase.firestore().collection("chats");
@@ -26,20 +26,20 @@ export class Messaging {
     }
 
     /**
-     * Builds new template of HTML element of messaging window and renders 
+     * Builds new template of HTML element of chat window and renders 
      * created element. Also stores given clinic id to fetch appropriate
      * chat messages from database.
      */
-    async drawMessagingWindow(currClinicId) {
+    async drawChatWindow(currClinicId) {
         this.currClinicId = currClinicId;
 
         let html = `
             <div class="windowHeader">
-                <text class="windowHeaderText">Messaging</text>
-                <img class="actionBtn" id="messagingCloseBtn" src="./svgs/close.svg">
+                <text class="windowHeaderText">Chat</text>
+                <img class="actionBtn" id="chatWindowCloseBtn" src="./svgs/close.svg">
             </div>
             <div class="windowContent">
-                <div class="messagingContent"></div>
+                <div class="chatWindowContent"></div>
             </div>
             <div class="windowFooter">
                 <hr class="solid">
@@ -52,12 +52,12 @@ export class Messaging {
             </div>
         `;
 
-        appendHtml(html, this.messagingElem);
+        appendHtml(html, this.chatWindowElem);
 
         setTimeout(async () => {
-            this.messagingElem.style.display = "flex";
-            this.messagingElem.style.opacity = 1;
-            this.adjustMessagingElemPos();
+            this.chatWindowElem.style.display = "flex";
+            this.chatWindowElem.style.opacity = 1;
+            this.adjustChatWindowElemPos();
             await this.fetchAndRenderMessages();
             this.initListeners();
         }, TIMEOUT_DELAY);
@@ -65,7 +65,7 @@ export class Messaging {
 
     /**
      * Fetches appropriate messages using current user id and clinic id and renders
-     * them in 'messagingContent' html element.
+     * them in 'chatWindowContent' html element.
      */
     async fetchAndRenderMessages() {
         let messagesData = await Database.fetchMessages(firebase.auth().currentUser.uid, this.currClinicId);
@@ -82,8 +82,8 @@ export class Messaging {
                 html = `<div class="bubbleLeft">${currDoc.data().text}</div>`;
             }
 
-            let messagingContentElem = this.messagingElem.querySelector(".messagingContent");
-            appendHtml(html, messagingContentElem);
+            let chatWindowContentElem = this.chatWindowElem.querySelector(".chatWindowContent");
+            appendHtml(html, chatWindowContentElem);
         }
     }
 
@@ -96,32 +96,32 @@ export class Messaging {
         await Database.sendMessage("user", message, this.messagesRef);
 
         let html = `<div class="bubbleRight">${message}</div>`;
-        let messagingContentElem = this.messagingElem.querySelector(".messagingContent");
-        appendHtml(html, messagingContentElem);
+        let chatWindowContentElem = this.chatWindowElem.querySelector(".chatWindowContent");
+        appendHtml(html, chatWindowContentElem);
     }
 
     /**
-     * Deinitializes listeners, clears messaging window HTML content and sets 
+     * Deinitializes listeners, clears chat window HTML content and sets 
      * it's opacity to 0 and display property to 'none'.
      */
-    closeMessagingWindow() {
+    closeChatWindow() {
         this.deinitListeners();
         this.currClinicId = null;
 
-        this.messagingElem.style.opacity = 0;
+        this.chatWindowElem.style.opacity = 0;
         setTimeout(() => {
-            this.messagingElem.style.display = "none";
-            this.messagingElem.innerHTML = "";
+            this.chatWindowElem.style.display = "none";
+            this.chatWindowElem.innerHTML = "";
         }, ANIMATION_DELAY);
     }
 
     /**
-     * Adjusts messaging window element position so that it never goes out of
+     * Adjusts chat window element position so that it never goes out of
      * 'this.parentElem' bounds.
      */
-    adjustMessagingElemPos() {
+    adjustChatWindowElemPos() {
         if (window.innerWidth > MOBILE_L) {
-            Window.adjustWindowElemPos(this.messagingElem, this.parentElem);
+            Window.adjustWindowElemPos(this.chatWindowElem, this.parentElem);
         }
     }
 
@@ -129,8 +129,8 @@ export class Messaging {
      * Initializes event listeners.
      */
     initListeners() {
-        this.messagingElem.addEventListener("click", this.mouseClickHandlerRef);
-        let windowHeaderElem = this.messagingElem.querySelector(".windowHeader");
+        this.chatWindowElem.addEventListener("click", this.mouseClickHandlerRef);
+        let windowHeaderElem = this.chatWindowElem.querySelector(".windowHeader");
         windowHeaderElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
@@ -138,25 +138,25 @@ export class Messaging {
      * Deinitializes event listeners.
      */
     deinitListeners() {
-        this.messagingElem.removeEventListener("click", this.mouseClickHandlerRef);
-        let windowHeaderElem = this.messagingElem.querySelector(".windowHeader");
+        this.chatWindowElem.removeEventListener("click", this.mouseClickHandlerRef);
+        let windowHeaderElem = this.chatWindowElem.querySelector(".windowHeader");
         windowHeaderElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
     }
 
     /**
-     * Messaging window mouse click handler.
+     * Chat window mouse click handler.
      * @param {Event} event 
      */
     mouseClickHandler(event) {
         event.preventDefault();
         
         switch (event.target.id) {
-            case "messagingCloseBtn":
-                this.closeMessagingWindow();
+            case "chatWindowCloseBtn":
+                this.closeChatWindow();
                 break;
             case "sendBtn":
             case "sendBtnImg":
-                let windowDashboardInputElem = this.messagingElem.querySelector(".windowDashboardInput");
+                let windowDashboardInputElem = this.chatWindowElem.querySelector(".windowDashboardInput");
                 let message = windowDashboardInputElem.value;
                 if (message.length != 0) {
                     windowDashboardInputElem.value = "";
@@ -172,7 +172,7 @@ export class Messaging {
      */
     pointerDownHandler(event) {
         if (window.innerWidth > MOBILE_L) {
-            Window.pointerDownHandler(event, this.messagingElem, this.parentElem);
+            Window.pointerDownHandler(event, this.chatWindowElem, this.parentElem);
         }
     }
 }

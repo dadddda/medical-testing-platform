@@ -23,8 +23,8 @@ div.clinics {
     position: relative;
 }
 
-.clinicsContent #infoCard { z-index: 4; }
-.clinicsContent #messaging { z-index: 5; }
+.clinicsContent #clinicWindow { z-index: 4; }
+.clinicsContent #chatWindow { z-index: 5; }
 
 .clinicsContent div.mapContainer {
     display: flex;
