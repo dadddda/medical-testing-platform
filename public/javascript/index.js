@@ -99,18 +99,18 @@ function initBtns() {
                         
                         tempClass = clinicsObj;
                         break;
+                    case "testResultsBtn":
+                        newElem.className = "testResults";
+                        rightPanelElem.appendChild(newElem);
+                        
+                        break;
+                    case "messagesBtn":
+                        newElem.className = "messages";
+                        rightPanelElem.appendChild(newElem);
+                        
+                        break;
                     case "supportedTestsBtn":
                         newElem.className = "supportedTests";
-                        rightPanelElem.appendChild(newElem);
-
-                        break;
-                    case "testingResultsBtn":
-                        newElem.className = "testingResults";
-                        rightPanelElem.appendChild(newElem);
-
-                        break;
-                    case "contactUsBtn":
-                        newElem.className = "contactUs";
                         rightPanelElem.appendChild(newElem);
 
                         break;
