@@ -4,7 +4,7 @@
     }
 }
 
-.newsFeed div.openedNewsBackground {
+div.newsFeed > div.openedNewsBackground {
     z-index: 1;
     display: flex;
     width: 100%;
@@ -18,7 +18,7 @@
     transition: opacity .2s ease-in-out;
 }
 
-.newsFeed div.openedNews {
+div.newsFeed > div.openedNews {
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -38,7 +38,7 @@
     transition: opacity .2s ease-in-out;
 }
 
-.openedNews div.openedNewsTitle {
+div.openedNews > div.openedNewsTitle {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -47,12 +47,12 @@
     padding: 5px;
 }
 
-.openedNewsTitle text.titleText {
+div.openedNewsTitle > text.titleText {
     font-size: 1.5rem;
     color: rgb(10, 10, 10);
 }
 
-.openedNewsTitle img.actionBtn {
+div.openedNewsTitle > img.actionBtn {
     width: 30px;
     height: 30px;
     outline: none;
@@ -62,13 +62,13 @@
     transition: all .2s ease-in-out;
 }
 
-.openedNewsTitle img.actionBtn:hover {
+div.openedNewsTitle > img.actionBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: all .2s ease-in-out;
     cursor: pointer;
 }
 
-.openedNews div.openedNewsContent {
+div.openedNews > div.openedNewsContent {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -79,7 +79,7 @@
 }
 
 @media screen and (max-width: 990px) {
-    .newsFeed div.openedNews {
+    div.newsFeed > div.openedNews {
         width: calc(100% - 50px);
         height: calc(100% - 50px);
         margin: 25px auto;
@@ -88,25 +88,25 @@
 }
 
 @media screen and (max-width: 425px) {
-    .newsFeed div.openedNews {
+    div.newsFeed > div.openedNews {
         width: calc(100% - 40px);
         height: calc(100% - 40px);
         margin: 20px auto;
         padding: 10px;
     }
 
-    .openedNewsTitle text.titleText { font-size: 1.25rem; }
-    .openedNews div.openedNewsContent { font-size: 0.85rem; }
+    div.openedNewsTitle > text.titleText { font-size: 1.25rem; }
+    div.openedNews > div.openedNewsContent { font-size: 0.85rem; }
 }
 
 @media screen and (max-width: 375px) {
-    .newsFeed div.openedNews {
+    div.newsFeed > div.openedNews {
         width: calc(100% - 30px);
         height: calc(100% - 30px);
         margin: 15px auto;
         padding: 5px;
     }
 
-    .openedNewsTitle text.titleText { font-size: 1rem; }
-    .openedNews div.openedNewsContent { font-size: 0.75rem; }
+    div.openedNewsTitle > text.titleText { font-size: 1rem; }
+    div.openedNews > div.openedNewsContent { font-size: 0.75rem; }
 }

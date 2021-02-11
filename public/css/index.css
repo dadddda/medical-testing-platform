@@ -62,7 +62,7 @@ div.header {
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
 }
 
-.header button.headerLeft {
+div.header > button.headerLeft {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -73,21 +73,21 @@ div.header {
     border: none;
 }
 
-.header button.headerLeft:hover { cursor: pointer; }
+div.header > button.headerLeft:hover { cursor: pointer; }
 
-.headerLeft img.headerImg {
+button.headerLeft > img.headerImg {
     width: 25px;
     height: 25px;
     margin-right: 10px;
 }
 
-.headerLeft div.headerText {
+button.headerLeft > div.headerText {
     width: max-content;
     font-size: 2rem;
     color: rgb(235, 235, 235);
 }
 
-.header div.headerRight {
+div.header > div.headerRight {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -95,7 +95,7 @@ div.header {
     height: max-content;
 }
 
-.headerRight button.redirectBtn {
+div.headerRight > button.redirectBtn {
     width: 110px;
     height: 35px;
     outline: none;
@@ -109,12 +109,12 @@ div.header {
                 background-color .2s ease-in-out;
 }
 
-.headerRight button.redirectBtn img {
+div.headerRight > button.redirectBtn img {
     display: none;
     transition: filter .2s ease-in-out;
 }
 
-.headerRight button.redirectBtn:hover {
+div.headerRight > button.redirectBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
     cursor: pointer;
     transition: box-shadow .2s ease-in-out, 
@@ -122,7 +122,7 @@ div.header {
                 background-color .2s ease-in-out;
 }
 
-.headerRight button.redirectBtn:focus {
+div.headerRight > button.redirectBtn:focus {
     background-color: rgb(245, 50, 50);
     transition: box-shadow .2s ease-in-out, 
                 color .2s ease-in-out,
@@ -136,7 +136,7 @@ div.mainContent {
     overflow: hidden;
 }
 
-.mainContent div.leftPanel {
+div.mainContent > div.leftPanel {
     z-index: 90;
     display: flex;
     align-items: flex-start;
@@ -151,7 +151,7 @@ div.mainContent {
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
 }
 
-.leftPanel div.leftPanelBtns {
+div.leftPanel > div.leftPanelBtns {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -160,7 +160,7 @@ div.mainContent {
     height: max-content;
 }
 
-.leftPanelBtns button.leftPanelBtn {
+div.leftPanelBtns > button.leftPanelBtn {
     width: 170px;
     height: 35px;
     margin: 5px 0 5px 0;
@@ -175,12 +175,12 @@ div.mainContent {
                 background-color .2s ease-in-out;
 }
 
-.leftPanelBtns button.leftPanelBtn img {
+div.leftPanelBtns > button.leftPanelBtn img {
     display: none;
     transition: filter .2s ease-in-out;
 }
 
-.leftPanelBtns button.leftPanelBtn:hover {
+div.leftPanelBtns > button.leftPanelBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
     cursor: pointer;
     transition: box-shadow .2s ease-in-out, 
@@ -188,7 +188,7 @@ div.mainContent {
                 background-color .2s ease-in-out;
 }
 
-.leftPanelBtns button.leftPanelBtn.active {
+div.leftPanelBtns > button.leftPanelBtn.active {
     color: rgb(235, 235, 235);
     background-color: rgb(245, 50, 50);
     transition: box-shadow .2s ease-in-out, 
@@ -196,7 +196,7 @@ div.mainContent {
                 background-color .2s ease-in-out;
 }
 
-.mainContent div.rightPanel {
+div.mainContent > div.rightPanel {
     z-index: 80;
     display: flex;
     align-items: center;
@@ -206,12 +206,12 @@ div.mainContent {
     transition: opacity .2s ease-in-out;
 }
 
-.mainContent div.rightPanel.hidden {
+div.mainContent > div.rightPanel.hidden {
     opacity: 0;
     transition: opacity .2s ease-in-out;
 }
 
-.rightPanel div.welcomeScreen {
+div.rightPanel > div.welcomeScreen {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -221,7 +221,7 @@ div.mainContent {
     animation: fade .2s ease-in-out;
 }
 
-.welcomeScreen div.rightPanelTextBox {
+div.welcomeScreen > div.rightPanelTextBox {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -230,13 +230,13 @@ div.mainContent {
     margin: 5px;
 }
 
-.rightPanelTextBox text.greetings {
+div.rightPanelTextBox > text.greetings {
     font-size: 3rem;
     color: rgb(10, 10, 10);
     text-align: center;
 }
 
-.rightPanelTextBox text.info {
+div.rightPanelTextBox > text.info {
     font-size: 1.5rem;
     color: rgb(120, 120, 120);
     text-align: center;
@@ -256,7 +256,7 @@ div.footer {
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
 }
 
-.footer text.footerText {
+div.footer > text.footerText {
     width: max-content;
     font-size: 0.75rem;
     color: rgb(10, 10, 10);
@@ -269,82 +269,82 @@ div.footer {
         flex-direction: column;
     }
 
-    .mainContent div.leftPanel {
+    div.mainContent > div.leftPanel {
         width: 100%;
         height: max-content;
         padding: 0 15px;
     }
 
-    .leftPanel div.leftPanelBtns {
+    div.leftPanel > div.leftPanelBtns {
         flex-direction: row;
         justify-content: center;
     }
 
-    #leftPanelDivider1 { display: none; }
-    #leftPanelDivider2 { display: none; }
+    hr#leftPanelDivider1 { display: none; }
+    hr#leftPanelDivider2 { display: none; }
 
-    .leftPanelBtns button.leftPanelBtn {
+    div.leftPanelBtns > button.leftPanelBtn {
         width: 150px;
         margin: 5px;
     }
 
-    .mainContent div.rightPanel { min-height: 0; }
+    div.mainContent > div.rightPanel { min-height: 0; }
 }
 
 @media screen and (max-width: 990px) {
     div.mainContent { flex-direction: column-reverse; }
 
-    .leftPanel div.leftPanelBtns {
+    div.leftPanel > div.leftPanelBtns {
         justify-content: space-around;
         width: 100%;
     }
     
-    .leftPanelBtns button.leftPanelBtn {
+    div.leftPanelBtns > button.leftPanelBtn {
         width: 100%;
         min-width: 35px;
     }
 
-    .leftPanelBtns button.leftPanelBtn img {
+    div.leftPanelBtns > button.leftPanelBtn img {
         display: unset;
         width: 35px;
     }
 
-    .leftPanelBtns button.leftPanelBtn.active img {
+    div.leftPanelBtns > button.leftPanelBtn.active img {
         filter: brightness(0) saturate(100%) 
                 invert(100%) sepia(7%) saturate(281%) 
                 hue-rotate(183deg) brightness(116%) 
                 contrast(84%);
     }
 
-    .leftPanelBtns button.leftPanelBtn span { display: none; }
+    div.leftPanelBtns > button.leftPanelBtn span { display: none; }
 
-    .rightPanel div.welcomeScreen { padding: 30px; }
-    .rightPanelTextBox text.greetings { font-size: 2.5rem; }
-    .rightPanelTextBox text.info { font-size: 1.25rem; }
+    div.rightPanel > div.welcomeScreen { padding: 30px; }
+    div.rightPanelTextBox > text.greetings { font-size: 2.5rem; }
+    div.rightPanelTextBox > text.info { font-size: 1.25rem; }
 
-    .footer text.footerText { font-size: 0.6rem; }
+    div.footer > text.footerText { font-size: 0.6rem; }
 }
 
 @media screen and (max-width: 682px) {
     div.header { padding: 10px 10px 10px 20px; }
 
-    .headerLeft div.headerText span { display: none; }
+    button.headerLeft > div.headerText span { display: none; }
 
-    .headerLeft div.headerText:after { content: "MTP"; }
+    button.headerLeft > div.headerText:after { content: "MTP"; }
 
-    .headerRight #accountBtn { width: 35px; }
+    div.headerRight button#accountBtn { width: 35px; }
 
-    .headerRight #accountBtn img {
+    div.headerRight button#accountBtn img {
         display: unset;
         width: 35px;
     }
 
-    .headerRight #accountBtn span { display: none; }
+    div.headerRight button#accountBtn span { display: none; }
 
-    .headerRight #logoutBtn { width: 90px; }
+    div.headerRight button#logoutBtn { width: 90px; }
 
-    .rightPanelTextBox text.greetings { font-size: 2rem; }
-    .rightPanelTextBox text.info { font-size: 1rem; }
+    div.rightPanelTextBox > text.greetings { font-size: 2rem; }
+    div.rightPanelTextBox > text.info { font-size: 1rem; }
 }
 
 @media screen and (max-width: 425px) {
@@ -360,8 +360,8 @@ div.footer {
         height: 3px;
     }
 
-    .rightPanelTextBox text.greetings { font-size: 1.75rem; }
-    .rightPanelTextBox text.info { font-size: 0.9rem; }
+    div.rightPanelTextBox > text.greetings { font-size: 1.75rem; }
+    div.rightPanelTextBox > text.info { font-size: 0.9rem; }
 
-    .footer text.footerText { font-size: 0.55rem; }
+    div.footer > text.footerText { font-size: 0.55rem; }
 }

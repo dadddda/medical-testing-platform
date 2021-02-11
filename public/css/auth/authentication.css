@@ -41,7 +41,7 @@ div.mainContent {
     min-height: min-content;
 }
 
-.mainContent div.contentWindow {
+div.mainContent > div.contentWindow {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -49,7 +49,7 @@ div.mainContent {
     height: 475px;
 }
 
-.contentWindow div.titleWindow {
+div.contentWindow > div.titleWindow {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -59,18 +59,18 @@ div.mainContent {
     margin-right: 100px;
 }
 
-.titleWindow text.titleText {
+div.titleWindow > text.titleText {
     font-size: 3rem;
     color: rgb(10, 10, 10);
 }
 
-.titleWindow text.infoText {
+div.titleWindow > text.infoText {
     margin-top: 20px;
     font-size: 1.5rem;
     color: rgb(120, 120, 120);
 }
 
-.contentWindow div.formWindow {
+div.contentWindow > div.formWindow {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -84,7 +84,7 @@ div.mainContent {
     background: linear-gradient(135deg, rgb(175, 0, 0) 0%, rgb(245, 35, 35) 80%);
 }
 
-.formWindow div.formHeader {
+div.formWindow > div.formHeader {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -93,12 +93,12 @@ div.mainContent {
     padding: 20px 0;
 }
 
-.formHeader text.headerText {
+div.formHeader > text.headerText {
     font-size: 2.5rem;
     color: rgb(235, 235, 235);
 }
 
-.formWindow div.formContent {
+div.formWindow > div.formContent {
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -106,7 +106,7 @@ div.mainContent {
     height: 100%;
 }
 
-.formContent form.form {
+div.formContent > form.form {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -114,18 +114,16 @@ div.mainContent {
     width: max-content;
 }
 
-.form .normal {
-    color: rgb(235, 235, 235);
-}
+form.form .normal { color: rgb(235, 235, 235); }
 
-.form .error {
+form.form .error {
     padding: 0 2px;
     color: rgb(255, 20, 20);
     border-radius: 2.5px;
     background-color: rgb(235, 235, 235);
 }
 
-.form label.inputLabel {
+form.form > label.inputLabel {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -134,7 +132,7 @@ div.mainContent {
     margin: 5px 0;
 }
 
-.form input.inputField {
+form.form > input.inputField {
     width: 300px;
     height: 35px;
     padding: 0 5px;
@@ -144,7 +142,7 @@ div.mainContent {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
 }
 
-.form div.checkboxField {
+form.form > div.checkboxField {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -154,11 +152,9 @@ div.mainContent {
     color: rgb(235, 235, 235);
 }
 
-.checkboxField label.checkboxLabel {
-    margin-left: 10px;
-}
+div.checkboxField > label.checkboxLabel { margin-left: 10px; }
 
-.form div.btnGroup {
+form.form > div.btnGroup {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -166,7 +162,7 @@ div.mainContent {
     margin-top: 40px;
 }
 
-.btnGroup button.formBtn {
+div.btnGroup > button.formBtn {
     width: 125px;
     height: 40px;
     outline: none;
@@ -177,21 +173,21 @@ div.mainContent {
     transition: box-shadow .2s ease-in-out;
 }
 
-.btnGroup button.formBtn.transparent {
+div.btnGroup > button.formBtn.transparent {
     background-color: transparent;
 }
 
-.btnGroup button.formBtn.focused {
+div.btnGroup > button.formBtn.focused {
     background-color: rgb(245, 50, 50);
 }
 
-.btnGroup button.formBtn:hover {
+div.btnGroup > button.formBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: box-shadow .2s ease-in-out;
     cursor: pointer;
 }
 
-.form text.errorText {
+form.form > text.errorText {
     width: 300px;
     height: max-content;
     visibility: hidden;
@@ -199,7 +195,7 @@ div.mainContent {
     margin-top: 20px;
 }
 
-.formWindow div.formFooter {
+div.formWindow > div.formFooter {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -208,138 +204,138 @@ div.mainContent {
     padding: 15px 0;
 }
 
-.formFooter text.footerText {
+div.formFooter > text.footerText {
     font-size: 0.75rem;
     color: rgb(235, 235, 235);
 }
 
 @media screen and (max-width: 990px) {
-    .mainContent div.contentWindow { height: 400px; }
+    div.mainContent > div.contentWindow { height: 400px; }
 
-    .contentWindow div.titleWindow { 
+    div.contentWindow > div.titleWindow { 
         width: 350px;
         margin-right: 25px;
     }
 
-    .titleWindow text.titleText { font-size: 2.5rem; }
-    .titleWindow text.infoText { font-size: 1.25rem; }
+    div.titleWindow > text.titleText { font-size: 2.5rem; }
+    div.titleWindow > text.infoText { font-size: 1.25rem; }
 
-    .contentWindow div.formWindow { padding: 0 35px; }
-    .formWindow div.formHeader { padding: 15px 0; }
-    .formHeader text.headerText { font-size: 2rem; }
+    div.contentWindow > div.formWindow { padding: 0 35px; }
+    div.formWindow > div.formHeader { padding: 15px 0; }
+    div.formHeader > text.headerText { font-size: 2rem; }
 
-    .form label.inputLabel { font-size: 0.9rem; }
+    form.form > label.inputLabel { font-size: 0.9rem; }
 
-    .form input.inputField { 
+    form.form > input.inputField { 
         width: 250px;
         height: 30px; 
     }
 
-    .form div.checkboxField { width: 250px; }
-    .checkboxField label.checkboxLabel { font-size: 0.9rem; }
+    form.form > div.checkboxField { width: 250px; }
+    div.checkboxField > label.checkboxLabel { font-size: 0.9rem; }
 
-    .form div.btnGroup {
+    form.form > div.btnGroup {
         width: 250px; 
         margin-top: 35px;
     }
 
-    .btnGroup button.formBtn { 
+    div.btnGroup > button.formBtn { 
         width: 100px; 
         height: 35px;
         font-size: 1rem;
     }
 
-    .form text.errorText { 
+    form.form > text.errorText { 
         width: 250px;
         font-size: 0.9rem;
     }
 
-    .formWindow div.formFooter { padding: 12.5px 0; }
-    .formFooter text.footerText { font-size: 0.6rem; }
+    div.formWindow > div.formFooter { padding: 12.5px 0; }
+    div.formFooter > text.footerText { font-size: 0.6rem; }
 }
 
 @media screen and (max-width: 768px) {
-    .mainContent div.contentWindow {
+    div.mainContent > div.contentWindow {
         flex-direction: column;
         width: 100%;
         height: 560px;
     }
 
-    .contentWindow div.titleWindow { 
+    div.contentWindow > div.titleWindow { 
         width: 300px;
         margin-right: unset;
         margin-bottom: 20px;
     }
 
-    .titleWindow text.titleText { 
+    div.titleWindow > text.titleText { 
         font-size: 2rem;
         text-align: center;
     }
 
-    .titleWindow text.infoText { 
+    div.titleWindow > text.infoText { 
         font-size: 1rem;
         text-align: center;
     }
 }
 
 @media screen and (max-width: 425px) {
-    .mainContent div.contentWindow {
+    div.mainContent > div.contentWindow {
         height: 100%;
     }
 
-    .contentWindow div.titleWindow { margin-top: 20px; }
+    div.contentWindow > div.titleWindow { margin-top: 20px; }
 
-    .contentWindow div.formWindow {
+    div.contentWindow > div.formWindow {
         width: 100%;
         border-radius: unset;
     }
 }
 
 @media screen and (max-width: 375px) {
-    .contentWindow div.titleWindow { 
+    div.contentWindow > div.titleWindow { 
         width: 250px;
         margin-top: 10px; 
         margin-bottom: 10px;
     }
 
-    .titleWindow text.titleText { 
+    div.titleWindow > text.titleText { 
         font-size: 1.75rem;
     }
 
-    .titleWindow text.infoText { 
+    div.titleWindow > text.infoText { 
         font-size: 0.9rem;
         margin-top: 10px;
     }
 
-    .formWindow div.formHeader { padding: 10px 0; }
-    .formHeader text.headerText { font-size: 1.75rem; }
+    div.formWindow > div.formHeader { padding: 10px 0; }
+    div.formHeader > text.headerText { font-size: 1.75rem; }
 
-    .form label.inputLabel { font-size: 0.8rem; }
-    .form input.inputField { 
+    form.form > label.inputLabel { font-size: 0.8rem; }
+    form.form > input.inputField { 
         width: 220px;
         height: 27.5px;
     }
 
-    .form div.checkboxField { width: 220px; }
-    .checkboxField label.checkboxLabel { font-size: 0.8rem; }
+    form.form > div.checkboxField { width: 220px; }
+    div.checkboxField > label.checkboxLabel { font-size: 0.8rem; }
 
-    .form div.btnGroup {
+    form.form > div.btnGroup {
         width: 220px;
         margin-top: 25px;
     }
 
-    .btnGroup button.formBtn { 
+    div.btnGroup > button.formBtn { 
         width: 85px; 
         height: 30px;
         font-size: 0.9rem;
     }
 
-    .form text.errorText { 
+    form.form > text.errorText { 
         width: 220px;
         margin-top: 10px;
         font-size: 0.8rem;
     }
 
-    .formWindow div.formFooter { padding: 10px 0; }
-    .formFooter text.footerText { font-size: 0.55rem; }
+    div.formWindow > div.formFooter { padding: 10px 0; }
+    div.formFooter > text.footerText { font-size: 0.55rem; }
 }

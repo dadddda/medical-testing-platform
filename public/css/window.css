@@ -23,7 +23,7 @@ div.window {
     animation: fade .2s ease-in-out;
 }
 
-.window div.windowHeader {
+div.window > div.windowHeader {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -34,16 +34,16 @@ div.window {
     background: linear-gradient(135deg, rgb(175, 0, 0) -100%, rgb(245, 35, 35) 100%);
 }
 
-.window div.windowHeader:hover {
+div.window > div.windowHeader:hover {
     cursor: grab;
 }
 
-.windowHeader text.windowHeaderText {
+div.windowHeader > text.windowHeaderText {
     font-size: 1.5rem;
     color: rgb(235, 235, 235);
 }
 
-.windowHeader img.actionBtn {
+div.windowHeader > img.actionBtn {
     width: 30px;
     height: 30px;
     margin: 0 0 0 5px;
@@ -54,13 +54,13 @@ div.window {
     transition: box-shadow .2s ease-in-out;
 }
 
-.windowHeader img.actionBtn:hover {
+div.windowHeader > img.actionBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: box-shadow .2s ease-in-out;
     cursor: pointer;
 }
 
-.window div.windowContent {
+div.window > div.windowContent {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -69,7 +69,7 @@ div.window {
     overflow: overlay;
 }
 
-.window div.windowFooter {
+div.window > div.windowFooter {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -79,7 +79,7 @@ div.window {
     padding: 0 10px 10px 10px;
 }
 
-.windowFooter div.windowDashboard {
+div.windowFooter > div.windowDashboard {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -87,7 +87,7 @@ div.window {
     height: 30px;
 }
 
-.windowDashboard input.windowDashboardInput {
+div.windowDashboard > input.windowDashboardInput {
     display: flex;
     width: 220px;
     height: 100%;
@@ -99,12 +99,12 @@ div.window {
     transition: box-shadow .2s ease-in-out;
 }
 
-.windowDashboard input.windowDashboardInput:hover {
+div.windowDashboard > input.windowDashboardInput:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: box-shadow .2s ease-in-out;
 }
 
-.windowDashboard button.windowDashboardBtn {
+div.windowDashboard > button.windowDashboardBtn {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -118,20 +118,20 @@ div.window {
     transition: box-shadow .2s ease-in-out;
 }
 
-.windowDashboard button.windowDashboardBtn:hover {
+div.windowDashboard > button.windowDashboardBtn:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     transition: box-shadow .2s ease-in-out;
     cursor: pointer;
 }
 
-.windowDashboard button.windowDashboardBtn span {
+div.windowDashboard > button.windowDashboardBtn span {
     display: flex;
     margin: auto;
     font-size: 0.9rem;
     color: rgb(235, 235, 235);
 }
 
-.windowDashboard button.windowDashboardBtn img {
+div.windowDashboard > button.windowDashboardBtn img {
     display: flex;
     width: 30px;
     height: 30px;
