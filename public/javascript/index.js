@@ -1,39 +1,45 @@
 // constants
 const leftPanelBtns = document.getElementById("leftPanelBtns");
 const btns = leftPanelBtns.getElementsByClassName("leftPanelBtn");
-import {ANIMATION_DELAY} from "./utils/utils.js";
+import {ANIMATION_DELAY, fadeAndReplace} from "./utils/utils.js";
 
 // classes
 import {NewsFeed} from "./news-feed/news-feed.js";
 import {Clinics} from "./clinics/clinics.js";
+import {Messages} from "./messages/messages.js"
+
+// variables
+let tempClass = null;
 
 /**
- * Redirects page to login.html if the user isn't logged in.
+ * Initializes listeners and main page buttons if user is signed in.
+ * Redirects page to login.html if the user isn't signed in.
  */
 firebase.auth().onAuthStateChanged(function(user) {
-    if (!user) {
-        window.location.replace("login.html");
+    if (user) {
+        document.getElementById("headerLeftBtn").addEventListener("click", headerLeftClickHandler);
+        document.getElementById("logoutBtn").addEventListener("click", logoutClickHandler);
+        initBtns();
+        document.body.style.display = "flex";
+    } else {
+        fadeAndReplace("login.html");
     }
 });
 
 /**
  * Event listener for header left button.
  */
-document.getElementById("headerLeftBtn").addEventListener("click", function() {
-    let rightPanelElem = document.getElementById("rightPanel");
-    rightPanelElem.classList.add("hidden");
-    setTimeout(function() {
-        window.location.assign("index.html");
-    }, ANIMATION_DELAY);
-})
+function headerLeftClickHandler() {
+    fadeAndReplace("index.html");
+}
 
 /**
  * Event listener for logout button.
  */
-document.getElementById("logoutBtn").addEventListener("click", function() {
+function logoutClickHandler() {
     firebase.auth().signOut()
     .then((user) => {
-        window.location.assign("login.html");
+        // 'onAuthStateChanged()' handles login action
     })
     .catch((error) => {
         let errorCode = error.code;
@@ -42,13 +48,7 @@ document.getElementById("logoutBtn").addEventListener("click", function() {
         console.log(errorCode);
         console.log(errorMessage);
     });
-});
-
-// initBtns() is called after pageload.
-window.addEventListener("DOMContentLoaded", initBtns);
-
-// Used to store a class reference.
-let tempClass = null;
+}
 
 /**
  * Left navigation panel button listeners.
@@ -73,7 +73,7 @@ function initBtns() {
             
             let rightPanelElem = document.getElementById("rightPanel");
             rightPanelElem.classList.add("hidden");
-            setTimeout(function() {
+            setTimeout(async function() {
                 rightPanelElem.removeChild(rightPanelElem.firstElementChild);
                 rightPanelElem.classList.remove("hidden");
                 let newElem = document.createElement("div");
@@ -107,7 +107,12 @@ function initBtns() {
                     case "messagesBtn":
                         newElem.className = "messages";
                         rightPanelElem.appendChild(newElem);
+
+                        let messagesObj = new Messages(newElem);
+                        await messagesObj.drawContent();
+                        messagesObj.initListeners();
                         
+                        tempClass = messagesObj;
                         break;
                     case "supportedTestsBtn":
                         newElem.className = "supportedTests";
