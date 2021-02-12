@@ -1,5 +1,8 @@
 // constants
 const CHATS_REF = firebase.firestore().collection("chats");
+const CLINICS_REF = firebase.firestore().collection("clinics");
+
+// ---------------------------------------------------------------------- CHATS
 
 /**
  * Returns documents from Firestore chats collection with given
@@ -86,6 +89,18 @@ export async function fetchMessageDocs(userId, clinicId) {
 }
 
 /**
+ * Returns document from path built from given chat document ID and message document ID.
+ * @param {String} chatDocId 
+ * @param {String} messageDocId 
+ */
+export async function fetchMessageDoc(chatDocId, messageDocId) {
+    let messagesRef = firebase.firestore().collection("chats/" + chatDocId + "/messages");
+    let messageDoc = await messagesRef.doc(messageDocId).get();
+
+    return messageDoc;
+}
+
+/**
  * Creates new chat document of current user and clinic combination
  * in Firestore database.
  * @param {String} userId
@@ -118,10 +133,14 @@ export async function sendMessage(sender, message, chatDoc) {
     });
 
     let messagesRef = firebase.firestore().collection("chats/" + chatDoc.id + "/messages");
-    await messagesRef.add({
+    let latestMessageRef = await messagesRef.add({
         date: firebase.firestore.FieldValue.serverTimestamp(),
         sender: sender,
         text: message
+    });
+
+    await CHATS_REF.doc(chatDoc.id).update({
+        latestMessageId: latestMessageRef.id
     });
 }
 
@@ -137,4 +156,16 @@ export async function markAsRead(reader, chatDoc) {
     await CHATS_REF.doc(chatDoc.id).update({
         [reader + "Seen"] : true
     });
+}
+
+// ---------------------------------------------------------------------- CLINICS
+
+/**
+ * Returns document from clinics collection with given ID.
+ * @param {String} clinicId 
+ */
+export async function fetchClinicDoc(clinicId) {
+    let clinicDoc = await CLINICS_REF.doc(clinicId).get();
+    
+    return clinicDoc;
 }

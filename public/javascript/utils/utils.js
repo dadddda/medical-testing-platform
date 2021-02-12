@@ -32,3 +32,19 @@ export function fadeAndReplace(destination) {
         window.location.replace(destination);
     }, ANIMATION_DELAY);
 }
+
+/**
+ * Returns ID of an element which contains a class named 'parentClassName' and
+ * 'clickedElem' is it's child.
+ * @param {HTMLElement} clickedElem 
+ * @param {String} parentClassName 
+ */
+export function getClickedParentId(clickedElem, parentClassName) {
+    let elemsByClassName = document.getElementsByClassName(parentClassName);
+
+    for (let i = 0; i < elemsByClassName.length; i++) {
+        if (elemsByClassName[i].contains(clickedElem)) {
+            return elemsByClassName[i].id;
+        }
+    }
+}
