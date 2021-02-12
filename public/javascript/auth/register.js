@@ -1,4 +1,5 @@
 // functions
+import {fadeAndReplace} from "../utils/utils.js";
 import * as Auth from "./authentication.js";
 
 // variables
@@ -8,21 +9,15 @@ let newUid = null;
  * Redirects page to index.html if the user is already logged in.
  */
 firebase.auth().onAuthStateChanged(function(user) {
-    if (user && !newUid) {
-        window.location.replace("index.html");
+    if (!user) {
+        document.getElementById("registerForm").addEventListener("submit", registerUser);
+        document.getElementById("loginBtn").addEventListener("click", function() {
+            fadeAndReplace("login.html");
+        });
+        document.body.style.display = "flex";
+    } else if (user && !newUid) {
+        fadeAndReplace("index.html");
     }
-});
-
-/**
- * Event listener for registration form.
- */
-document.getElementById("registerForm").addEventListener("submit", registerUser);
-
-/**
- * Event listener for redirection to login page.
- */
-document.getElementById("loginBtn").addEventListener("click", function() {
-    window.location.assign("login.html");
 });
 
 /**
@@ -61,7 +56,7 @@ function registerUser(event) {
             type: "user"
         })
         .then(() => {
-            window.location.assign("index.html");
+            fadeAndReplace("index.html");
         })
         .catch((error) => {
             let errorCode = error.code;

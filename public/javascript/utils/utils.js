@@ -21,3 +21,14 @@ export function appendHtml(html, element) {
         element.appendChild(templateChildren[i]);
     }
 }
+
+/**
+ * Set's body opacity to 0 and replaces given URL to window.
+ * @param {String} destination
+ */
+export function fadeAndReplace(destination) {
+    document.body.style.opacity = 0;    
+    setTimeout(function() {
+        window.location.replace(destination);
+    }, ANIMATION_DELAY);
+}
