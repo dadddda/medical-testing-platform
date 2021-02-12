@@ -68,12 +68,12 @@ export class ChatWindow {
      * them in 'chatWindowContent' html element.
      */
     async fetchAndRenderMessages() {
-        let messagesData = await Database.fetchMessages(firebase.auth().currentUser.uid, this.currClinicId);
-        let messages = messagesData.messages;
-        this.messagesRef = messagesData.messagesRef;
+        let data = await Database.fetchMessageDocs(firebase.auth().currentUser.uid, this.currClinicId);
+        this.chatDoc = data.chatDoc;
+        let messageDocs = data.messageDocs;
 
-        for (let i = 0; i < messages.docs.length; i++) {
-            let currDoc = messages.docs[i];
+        for (let i = 0; i < messageDocs.length; i++) {
+            let currDoc = messageDocs[i];
 
             let html = ``;
             if (currDoc.data().sender == "user") {
@@ -85,15 +85,16 @@ export class ChatWindow {
             let chatWindowContentElem = this.chatWindowElem.querySelector(".chatWindowContent");
             appendHtml(html, chatWindowContentElem);
         }
+
+        await Database.markAsRead("user", this.chatDoc);
     }
 
     /**
-     * Stores given message to current messages collection in Firestore database
-     * and renders new message bubble.
+     * Sends given message and renders new message bubble.
      * @param {String} message 
      */
     async sendMessage(message) {
-        await Database.sendMessage("user", message, this.messagesRef);
+        await Database.sendMessage("user", message, this.chatDoc);
 
         let html = `<div class="bubbleRight">${message}</div>`;
         let chatWindowContentElem = this.chatWindowElem.querySelector(".chatWindowContent");
@@ -147,7 +148,7 @@ export class ChatWindow {
      * Chat window mouse click handler.
      * @param {Event} event 
      */
-    mouseClickHandler(event) {
+    async mouseClickHandler(event) {
         event.preventDefault();
         
         switch (event.target.id) {
@@ -160,7 +161,7 @@ export class ChatWindow {
                 let message = windowDashboardInputElem.value;
                 if (message.length != 0) {
                     windowDashboardInputElem.value = "";
-                    this.sendMessage(message);
+                    await this.sendMessage(message);
                 }
                 break;
         }
