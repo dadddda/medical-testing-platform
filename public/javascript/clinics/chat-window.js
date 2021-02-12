@@ -68,7 +68,8 @@ export class ChatWindow {
      * them in 'chatWindowContent' html element.
      */
     async fetchAndRenderMessages() {
-        let data = await Database.fetchMessageDocs(firebase.auth().currentUser.uid, this.currClinicId);
+        let uid = firebase.auth().currentUser.uid;
+        let data = await Database.createAndFetchMessageDocs(uid, this.currClinicId);
         this.chatDoc = data.chatDoc;
         let messageDocs = data.messageDocs;
 
@@ -86,7 +87,7 @@ export class ChatWindow {
             appendHtml(html, chatWindowContentElem);
         }
 
-        await Database.markAsRead("user", this.chatDoc);
+        await Database.markAsRead("user", this.chatDoc.id);
     }
 
     /**
@@ -94,7 +95,7 @@ export class ChatWindow {
      * @param {String} message 
      */
     async sendMessage(message) {
-        await Database.sendMessage("user", message, this.chatDoc);
+        await Database.sendMessage("user", message, this.chatDoc.id);
 
         let html = `<div class="bubbleRight">${message}</div>`;
         let chatWindowContentElem = this.chatWindowElem.querySelector(".chatWindowContent");

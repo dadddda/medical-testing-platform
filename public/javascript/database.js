@@ -69,7 +69,7 @@ export async function fetchChatDoc(userId, clinicId) {
  * @param {String} userId
  * @param {String} clinicId
  */
-export async function fetchMessageDocs(userId, clinicId) {
+export async function createAndFetchMessageDocs(userId, clinicId) {
     let chatDoc = await fetchChatDoc(userId, clinicId);
 
     if (chatDoc == undefined) {
@@ -86,6 +86,19 @@ export async function fetchMessageDocs(userId, clinicId) {
         chatDoc: chatDoc,
         messageDocs: messages.docs
     };
+}
+
+/**
+ * Returns documents from path built from given chat document ID.
+ * @param {String} chatDocId 
+ */
+export async function fetchMessageDocs(chatDocId) {
+    let messagesRef = firebase.firestore().collection("chats/" + chatDocId + "/messages");
+    let messages = await messagesRef
+        .orderBy("date")
+        .get();
+
+    return messages.docs;
 }
 
 /**
@@ -117,43 +130,43 @@ async function createChatDoc(userId, clinicId) {
 }
 
 /**
- * Stores given message to given chatDoc's messages collection in Firestore database
- * and updates appropriate fields.
+ * Stores given message to chatDoc's messages collection with given ID 
+ * in Firestore database and updates appropriate fields.
  * @param {String} sender
  * @param {String} message 
  * @param chatDoc
  */
-export async function sendMessage(sender, message, chatDoc) {
+export async function sendMessage(sender, message, chatDocId) {
     if (sender != "user" && sender != "clinic") return;
 
     let key = (sender == "user") ? "clinicSeen" : "userSeen";
-    await CHATS_REF.doc(chatDoc.id).update({
+    await CHATS_REF.doc(chatDocId).update({
         latestMessageDate: firebase.firestore.FieldValue.serverTimestamp(),
         [key]: false
     });
 
-    let messagesRef = firebase.firestore().collection("chats/" + chatDoc.id + "/messages");
+    let messagesRef = firebase.firestore().collection("chats/" + chatDocId + "/messages");
     let latestMessageRef = await messagesRef.add({
         date: firebase.firestore.FieldValue.serverTimestamp(),
         sender: sender,
         text: message
     });
 
-    await CHATS_REF.doc(chatDoc.id).update({
+    await CHATS_REF.doc(chatDocId).update({
         latestMessageId: latestMessageRef.id
     });
 }
 
 /**
- * Marks given readers 'seen' status in given chat document
- * in Firestore database.
+ * Marks given readers 'seen' status in chat document with
+ * given ID in Firestore database.
  * @param {String} reader 
  * @param chatDoc 
  */
-export async function markAsRead(reader, chatDoc) {
+export async function markAsRead(reader, chatDocId) {
     if (reader != "user" && reader != "clinic") return;
 
-    await CHATS_REF.doc(chatDoc.id).update({
+    await CHATS_REF.doc(chatDocId).update({
         [reader + "Seen"] : true
     });
 }
