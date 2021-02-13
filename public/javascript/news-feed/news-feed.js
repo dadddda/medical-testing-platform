@@ -1,5 +1,6 @@
 // constants
-const triggerThreshold = 0.8;
+const TRIGGER_THRESHOLD = 0.8;
+const FETCH_AT_ONCE = 4;
 import {ANIMATION_DELAY} from "../utils/utils.js";
 
 // functions
@@ -49,7 +50,7 @@ export class NewsFeed {
         if (!this.initialized) {
             data = await this.newsRef
                 .orderBy("date", "desc")
-                .limit(2)
+                .limit(FETCH_AT_ONCE)
                 .get();
 
             this.initialized = true;
@@ -57,7 +58,7 @@ export class NewsFeed {
             data = await this.newsRef
                 .orderBy("date", "desc")
                 .startAfter(this.latestDoc)
-                .limit(2)
+                .limit(FETCH_AT_ONCE)
                 .get();
         }
 
@@ -69,14 +70,14 @@ export class NewsFeed {
             this.buildAndAppendNews(newsData);
         }
 
-        this.latestDoc = data.docs[data.docs.length - 1];
-
         if (data.empty) {
             this.fetchNewsOnScroll = false;
             this.fetchNewsOnResize = false;
         } else {
+            this.latestDoc = data.docs[data.docs.length - 1];
+
             let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
-            if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+            if (triggerHeight >= this.newsFeedElem.scrollHeight * TRIGGER_THRESHOLD) {
                 this.getNews();
             }
             this.fetchNewsOnScroll = true;
@@ -314,7 +315,7 @@ export class NewsFeed {
             this.drawOpenedNews(parentElem.id);
         } else if (event.target.id == "closeBtn") {
             this.moreBtnClicked = false;
-            this.newsFeedElem.style.overflow = "overlay";
+            this.newsFeedElem.style.overflow = "auto";
 
             let openedNewsBackgroundElem = document.getElementsByClassName("openedNewsBackground")[0];
             let openedNewsElem = document.getElementsByClassName("openedNews")[0];
@@ -335,7 +336,7 @@ export class NewsFeed {
     scrollHandler() {
         if (this.fetchNewsOnScroll) {
             let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
-            if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+            if (triggerHeight >= this.newsFeedElem.scrollHeight * TRIGGER_THRESHOLD) {
                 this.fetchNewsOnScroll = false;
                 this.getNews();
             }
@@ -367,7 +368,7 @@ export class NewsFeed {
 
         if (this.fetchNewsOnResize) {
             let triggerHeight = this.newsFeedElem.scrollTop + this.newsFeedElem.offsetHeight;
-            if (triggerHeight >= this.newsFeedElem.scrollHeight * triggerThreshold) {
+            if (triggerHeight >= this.newsFeedElem.scrollHeight * TRIGGER_THRESHOLD) {
                 this.fetchNewsOnResize = false;
                 this.getNews();
             }
