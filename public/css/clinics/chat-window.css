@@ -19,7 +19,7 @@ div#chatWindow div.windowContent > div.chatWindowContent {
     width: 100%;
     height: 100%;
     padding: 0 10px;
-    overflow: overlay;
+    overflow: auto;
 }
 
 div#chatWindow div.windowContent > div.chatWindowContent:after {

@@ -13,7 +13,7 @@ div.newsFeed {
     width: 100%;
     height: 100%;
     position: relative;
-    overflow-y: overlay;
+    overflow: auto;
     animation: fade .2s ease-in-out;
 }
 
