@@ -2,7 +2,7 @@
 import {ANIMATION_DELAY, TIMEOUT_DELAY, MOBILE_L} from "../utils/utils.js";
 
 // functions
-import {appendHtml} from "../utils/utils.js";
+import {appendHtml, prependHtml} from "../utils/utils.js";
 import * as Window from "../window.js";
 import * as Database from "../database.js";
 
@@ -58,36 +58,52 @@ export class ChatWindow {
             this.chatWindowElem.style.display = "flex";
             this.chatWindowElem.style.opacity = 1;
             this.adjustChatWindowElemPos();
-            await this.fetchAndRenderMessages();
+            await this.getMessages();
             this.initListeners();
         }, TIMEOUT_DELAY);
     }
 
     /**
      * Fetches appropriate messages using current user id and clinic id and renders
-     * them in 'chatWindowContent' html element.
+     * them in 'chatWindowContent' HTML element dynamically using Firestore listener.
      */
-    async fetchAndRenderMessages() {
+    async getMessages() {
         let uid = firebase.auth().currentUser.uid;
-        let data = await Database.createAndFetchMessageDocs(uid, this.currClinicId);
-        this.chatDoc = data.chatDoc;
-        let messageDocs = data.messageDocs;
+        let chatData = await Database.createAndFetchMessageDocs(uid, this.currClinicId);
+        let messageDocs = chatData.messageDocs;
+        this.chatDoc = chatData.chatDoc;
+        this.appendCount = messageDocs.length;
 
-        for (let i = 0; i < messageDocs.length; i++) {
-            let currDoc = messageDocs[i];
-
-            let html = ``;
-            if (currDoc.data().sender == "user") {
-                html = `<div class="bubbleRight">${currDoc.data().text}</div>`;
-            } else if (currDoc.data().sender == "clinic") {
-                html = `<div class="bubbleLeft">${currDoc.data().text}</div>`;
-            }
-
-            let chatWindowContentElem = this.chatWindowElem.querySelector(".chatWindowContent");
-            appendHtml(html, chatWindowContentElem);
-        }
+        let drawChatBubblesRef = this.drawChatBubbles.bind(this);
+        this.unsubscribeMsg = Database.executeOnMessageDocsChanges(this.chatDoc.id, drawChatBubblesRef);
 
         await Database.markAsRead("user", this.chatDoc.id);
+    }
+
+    /**
+     * Draws message bubbles according to data from given 'messageDoc' document.
+     * If 'this.appendCount' is more than zero this means that it's a first fetch 
+     * from the Firestore database and the HTML elements are appended to 'chatWindowContentElem', 
+     * if 'this.appendCount' equals zero that means that every element that was already in
+     * database is fetched and next HTML elements will prepended to 'chatWindowContentElem'. 
+     * That's because 'chatWindowContentElem' has CSS property of 'flex-direction: column-reverse'.
+     * @param messageDoc
+     */
+    drawChatBubbles(messageDoc) {
+        let html = ``;
+        if (messageDoc.data().sender == "user") {
+            html = `<div class="bubbleRight">${messageDoc.data().text}</div>`;
+        } else if (messageDoc.data().sender == "clinic") {
+            html = `<div class="bubbleLeft">${messageDoc.data().text}</div>`;
+        }
+
+        let chatWindowContentElem = this.chatWindowElem.querySelector(".chatWindowContent");
+        if (this.appendCount > 0) {
+            appendHtml(html, chatWindowContentElem);
+            this.appendCount--;
+        } else {
+            prependHtml(html, chatWindowContentElem);
+        }
     }
 
     /**
@@ -96,10 +112,6 @@ export class ChatWindow {
      */
     async sendMessage(message) {
         await Database.sendMessage("user", message, this.chatDoc.id);
-
-        let html = `<div class="bubbleRight">${message}</div>`;
-        let chatWindowContentElem = this.chatWindowElem.querySelector(".chatWindowContent");
-        appendHtml(html, chatWindowContentElem);
     }
 
     /**
@@ -143,6 +155,8 @@ export class ChatWindow {
         this.chatWindowElem.removeEventListener("click", this.mouseClickHandlerRef);
         let windowHeaderElem = this.chatWindowElem.querySelector(".windowHeader");
         windowHeaderElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
+
+        if (this.unsubscribeMsg) this.unsubscribeMsg();
     }
 
     /**
