@@ -13,14 +13,27 @@ div.messages {
     animation: fade .2s ease-in-out;
 }
 
+div.messages div.infoContainer {
+    display: flex;
+    width: max-content;
+    height: max-content;
+    transition: opacity .2s ease-in-out;
+}
+
+div.infoContainer > text.infoText {
+    font-size: 1.25rem;
+    color: rgb(200, 200, 200);
+    text-align: center;
+}
+
 div.messages > div.leftPanel {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     min-width: 320px;
     height: 100%;
-    padding: 10px 10px 0 10px;
+    padding: 0 10px;
     background-color: rgb(240, 240, 240);
     overflow: auto;
 }
@@ -145,8 +158,8 @@ div.chatBox.unread > div.boxContent > text.contentText {
 div.messages > div.rightPanel {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
     transition: opacity .2s ease-in-out;

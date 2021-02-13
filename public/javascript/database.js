@@ -54,7 +54,7 @@ export async function fetchChatDocs(sender, senderId, limit = 0) {
  * @param {String} senderId 
  * @param {Function} functionRef 
  */
-export function executeOnChatDocsModify(sender, senderId, functionRef) {
+export function executeOnChatDocsChanges(sender, senderId, functionRef) {
     if (sender != "user" && sender != "clinic") return;
 
     let unsubscribe = CHATS_REF
@@ -65,8 +65,9 @@ export function executeOnChatDocsModify(sender, senderId, functionRef) {
                 let changeType = change.type;
                 let changeSource = change.doc.metadata.hasPendingWrites ? "local" : "server";
 
-                if (changeType == "modified" && changeSource == "server") {
-                    functionRef(change.doc);
+                if (changeType == "added" && changeSource == "server"
+                    || changeType == "modified" && changeSource == "server") {
+                    functionRef(change.doc, changeType);
                 }
             });
         });
@@ -145,9 +146,8 @@ export function executeOnMessageDocsChanges(chatDocId, functionRef) {
                 let changeType = change.type;
                 let changeSource = change.doc.metadata.hasPendingWrites ? "local" : "server";
 
-                if (changeType == "added" && changeSource == "server") {
-                    functionRef(change.doc, changeType);
-                } else if (changeType == "modified" && changeSource == "server") {
+                if (changeType == "added" && changeSource == "server"
+                    || changeType == "modified" && changeSource == "server") {
                     functionRef(change.doc, changeType);
                 }
             });

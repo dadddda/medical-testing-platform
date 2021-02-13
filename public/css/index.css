@@ -180,6 +180,31 @@ div.leftPanelBtns > button.leftPanelBtn {
                 background-color .2s ease-in-out;
 }
 
+div.leftPanelBtns > button#messagesBtn.leftPanelBtn {
+    position: relative;
+    overflow: hidden;
+}
+
+button#messagesBtn.leftPanelBtn > div.notificationDot {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 35px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    background-color: rgb(245, 50, 50);
+    transition: opacity .2s ease-in-out;
+    animation: fade .2s ease-in-out;
+}
+
+button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+    color: rgb(235, 235, 235);
+    font-size: 1rem;
+}
+
 div.leftPanelBtns > button.leftPanelBtn img {
     display: none;
     transition: filter .2s ease-in-out;
@@ -293,6 +318,10 @@ div.footer > text.footerText {
         margin: 5px;
     }
 
+    button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+        font-size: 0.9rem;
+    }
+    
     div.mainContent > div.rightPanel { min-height: 0; }
 }
 
@@ -305,13 +334,28 @@ div.footer > text.footerText {
     }
     
     div.leftPanelBtns > button.leftPanelBtn {
-        width: 100%;
-        min-width: 35px;
+        width: 35px;
     }
 
     div.leftPanelBtns > button.leftPanelBtn img {
         display: unset;
         width: 35px;
+    }
+
+    div.leftPanelBtns > button#messagesBtn.leftPanelBtn {
+        overflow: visible;
+    }
+    
+    button#messagesBtn.leftPanelBtn > div.notificationDot {
+        width: 20px;
+        height: 20px;
+        top: -8px;
+        right: -8px;
+        border-radius: 100%;
+    }
+    
+    button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+        font-size: 0.85rem;
     }
 
     div.leftPanelBtns > button.leftPanelBtn.active img {
@@ -357,12 +401,34 @@ div.footer > text.footerText {
         width: 5px;
         height: 5px;
     }
+
+    button#messagesBtn.leftPanelBtn > div.notificationDot {
+        width: 18px;
+        height: 18px;
+        top: -6px;
+        right: -6px;
+    }
+    
+    button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+        font-size: 0.75rem;
+    }
 }
 
 @media screen and (max-width: 375px) {
     ::-webkit-scrollbar {
         width: 3px;
         height: 3px;
+    }
+
+    button#messagesBtn.leftPanelBtn > div.notificationDot {
+        width: 17px;
+        height: 17px;
+        top: -5px;
+        right: -5px;
+    }
+    
+    button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+        font-size: 0.7rem;
     }
 
     div.rightPanelTextBox > text.greetings { font-size: 1.75rem; }

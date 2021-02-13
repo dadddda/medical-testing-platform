@@ -44,7 +44,7 @@ export class ChatWindow {
             <div class="windowFooter">
                 <hr class="solid">
                 <form class="chatDashboard" id="chatForm" novalidate>
-                    <input class="chatInput" type="text">
+                    <input class="chatInput" type="text" placeholder="Type a message...">
                     <button class="chatBtn" type="submit">
                         <img src="./svgs/send-msg-icon.svg">
                     </button>

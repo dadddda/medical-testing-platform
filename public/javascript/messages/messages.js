@@ -3,7 +3,7 @@ const TRIGGER_THRESHOLD = 0.8;
 const FETCH_AT_ONCE = 4;
 
 //functions
-import {ANIMATION_DELAY, TIMEOUT_DELAY, appendHtml, prependHtml, getClickedParentId} from "../utils/utils.js";
+import {ANIMATION_DELAY, TIMEOUT_DELAY, appendHtml, prependHtml, getClickedParent} from "../utils/utils.js";
 import * as Database from "../database.js";
 
 export class Messages {
@@ -33,8 +33,20 @@ export class Messages {
      */
     async drawContent() {
         let html = `
-            <div class="leftPanel" id="messagesLeftPanel"></div>
-            <div class="rightPanel" id="messagesRightPanel"></div>
+            <div class="leftPanel" id="messagesLeftPanel">
+                <div class="infoContainer">
+                    <text class="infoText">
+                        No chats yet
+                    </text>
+                </div>
+            </div>
+            <div class="rightPanel" id="messagesRightPanel">
+                <div class="infoContainer">
+                    <text class="infoText">
+                        Open a chat to see messages
+                    </text>
+                </div>
+            </div>
         `;
 
         appendHtml(html, this.messagesElem);
@@ -45,7 +57,7 @@ export class Messages {
 
         let uid = firebase.auth().currentUser.uid;
         let updateChatBoxRef = this.updateChatBox.bind(this);
-        this.unsubscribeChat = Database.executeOnChatDocsModify("user", uid, updateChatBoxRef);
+        this.unsubscribeChat = Database.executeOnChatDocsChanges("user", uid, updateChatBoxRef);
     }
 
     /**
@@ -96,7 +108,7 @@ export class Messages {
             <div class="chatFooter">
                 <hr class="solid">
                 <form class="chatDashboard" id="chatForm" novalidate>
-                    <input class="chatInput" type="text">
+                    <input class="chatInput" type="text" placeholder="Type a message...">
                     <button class="chatBtn" type="submit">
                         <img src="./svgs/send-msg-icon.svg">
                     </button>
@@ -126,11 +138,25 @@ export class Messages {
     }
 
     /**
-     * Draws chat box according to given chat document.
+     * Draws chat box according to given chat document. If the chat box is the first
+     * one to be drawn, info text is removed from the left panel.
      * @param chatDoc 
      */
     async drawChatBox(chatDoc) {
         if (chatDoc.data().latestMessageId == undefined) return;
+
+        if (!this.firstChatBox) {
+            this.leftPanelElem.querySelector(".infoContainer").style.opacity = 0;
+            setTimeout(() => {
+                this.leftPanelElem.querySelector(".infoContainer").style.display = "none";
+                this.leftPanelElem.style.alignItems = "flex-start";
+                this.leftPanelElem.style.justifyContent = "flex-start";
+                this.leftPanelElem.style.padding = "10px 10px 0 10px";
+            }, ANIMATION_DELAY);
+
+            this.firstChatBox = false;
+        }
+
         let html = await this.createChatBox(chatDoc);
         appendHtml(html, this.leftPanelElem);
         setTimeout(() => {
@@ -141,8 +167,11 @@ export class Messages {
     /**
      * Updates already drawn chat box according to given new chat document.
      * @param chatDoc 
+     * @param changeType
      */
-    async updateChatBox(chatDoc) {
+    async updateChatBox(chatDoc, changeType) {
+        if (changeType == "added") return;
+
         let chatBoxElem = this.leftPanelElem.querySelector("#" + chatDoc.id);
         let chatBoxData = await this.getChatBoxData(chatDoc);
 
@@ -301,10 +330,8 @@ export class Messages {
      * @param {Event} event 
      */
     leftPanelClickHandler(event) {
-        let chatBoxId = getClickedParentId(event.target, "chatBox");
+        let chatBoxId = getClickedParent(event.target, "chatBox").id;
         if (chatBoxId == undefined) return;
-
-        let customAnimationDelay = 0;
 
         let activeChatBoxElem = document.querySelector(".chatBox.active");
         if (activeChatBoxElem != undefined) {
@@ -314,7 +341,11 @@ export class Messages {
             this.chatFormElem.removeEventListener("submit", this.chatFormHandlerRef);
             this.unsubscribeMsg();
             this.rightPanelElem.style.opacity = 0;
-            customAnimationDelay = ANIMATION_DELAY;
+        } else {
+            this.rightPanelElem.querySelector(".infoContainer").style.opacity = 0;
+            setTimeout(() => {
+                this.rightPanelElem.querySelector(".infoContainer").style.display = "none";
+            }, ANIMATION_DELAY);
         }
 
         let clickedChatBoxElem = document.getElementById(chatBoxId);
@@ -326,7 +357,7 @@ export class Messages {
                 await Database.markAsRead("user", this.currChatDocId);
             }
             await this.getMessages(chatBoxId);
-        }, customAnimationDelay);
+        }, ANIMATION_DELAY);
     }
 
     /**
