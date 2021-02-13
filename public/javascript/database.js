@@ -106,7 +106,7 @@ export async function createAndFetchMessageDocs(userId, clinicId) {
 
     let messagesRef = firebase.firestore().collection("chats/" + chatDoc.id + "/messages");
     let messages = await messagesRef
-        .orderBy("date")
+        .orderBy("date", "desc")
         .get();
 
     return {
@@ -122,7 +122,7 @@ export async function createAndFetchMessageDocs(userId, clinicId) {
 export async function fetchMessageDocs(chatDocId) {
     let messagesRef = firebase.firestore().collection("chats/" + chatDocId + "/messages");
     let messages = await messagesRef
-        .orderBy("date")
+        .orderBy("date", "desc")
         .get();
 
     return messages.docs;
@@ -174,7 +174,7 @@ export async function fetchMessageDoc(chatDocId, messageDocId) {
  * @param {String} userId
  * @param {String} clinicId
  */
-async function createChatDoc(userId, clinicId) {
+export async function createChatDoc(userId, clinicId) {
     await CHATS_REF.add({
         userId: userId,
         clinicId: clinicId,

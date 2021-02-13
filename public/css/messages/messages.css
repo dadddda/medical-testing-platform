@@ -164,6 +164,13 @@ div.rightPanel > div.chatContent {
     animation: fade .2s ease-in-out;
 }
 
+div.rightPanel > div.chatContent:after {
+    content: "";
+    display: flex;
+    width: 100%;
+    height: 1px;
+}
+
 div.chatContent > div.bubbleLeft {
     display: flex;
     align-self: flex-start;

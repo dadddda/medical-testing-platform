@@ -1,6 +1,6 @@
 // constants
 const TRIGGER_THRESHOLD = 0.8;
-const FETCH_AT_ONCE = 1;
+const FETCH_AT_ONCE = 4;
 
 //functions
 import {ANIMATION_DELAY, TIMEOUT_DELAY, appendHtml, prependHtml, getClickedParentId} from "../utils/utils.js";
@@ -106,6 +106,9 @@ export class Messages {
         `;
 
         appendHtml(html, this.rightPanelElem);
+        
+        let messageDocs = await Database.fetchMessageDocs(chatDocId);
+        this.appendCount = messageDocs.length;
         
         let drawChatBubblesRef = this.drawChatBubbles.bind(this);
         this.unsubscribeMsg = Database.executeOnMessageDocsChanges(chatDocId, drawChatBubblesRef);
@@ -222,13 +225,14 @@ export class Messages {
 
     /**
      * Draws message bubbles according to data from given 'messageDoc' document.
-     * If data is "added" meaning it's a first fetch from the Firestore the HTML
-     * elements are appended to 'chatContentElem', if data is "modified" then HTML
-     * elements are prepended to 'chatContentElem'. That's because 'chatContentElem'
-     * has CSS property of 'flex-direction: column-reverse'.
-     * @param messageDoc 
+     * If 'this.appendCount' is more than zero this means that it's a first fetch 
+     * from the Firestore database and the HTML elements are appended to 'chatContentElem', 
+     * if 'this.appendCount' equals zero that means that every element that was already in
+     * database is fetched and next HTML elements will prepended to 'chatContentElem'. 
+     * That's because 'chatContentElem' has CSS property of 'flex-direction: column-reverse'.
+     * @param messageDoc
      */
-    drawChatBubbles(messageDoc, changeType) {
+    drawChatBubbles(messageDoc) {
         let html = ``;
         if (messageDoc.data().sender == "user") {
             html = `<div class="bubbleRight">${messageDoc.data().text}</div>`;
@@ -237,9 +241,10 @@ export class Messages {
         }
 
         let chatContentElem = this.rightPanelElem.querySelector(".chatContent");
-        if (changeType == "added") {
+        if (this.appendCount > 0) {
             appendHtml(html, chatContentElem);
-        } else if (changeType == "modified") {
+            this.appendCount--;
+        } else {
             prependHtml(html, chatContentElem);
         }
     }
