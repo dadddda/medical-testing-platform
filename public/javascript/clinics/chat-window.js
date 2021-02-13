@@ -43,12 +43,12 @@ export class ChatWindow {
             </div>
             <div class="windowFooter">
                 <hr class="solid">
-                <div class="windowDashboard">
-                    <input class="windowDashboardInput" type="text">
-                    <button class="windowDashboardBtn" id="sendBtn">
-                        <img id="sendBtnImg" src="./svgs/send-msg-icon.svg">
+                <form class="chatDashboard" id="chatForm" novalidate>
+                    <input class="chatInput" type="text">
+                    <button class="chatBtn" type="submit">
+                        <img src="./svgs/send-msg-icon.svg">
                     </button>
-                </div>
+                </form>
             </div>
         `;
 
@@ -143,19 +143,24 @@ export class ChatWindow {
      * Initializes event listeners.
      */
     initListeners() {
-        this.chatWindowElem.addEventListener("click", this.mouseClickHandlerRef);
         let windowHeaderElem = this.chatWindowElem.querySelector(".windowHeader");
+        windowHeaderElem.addEventListener("click", this.mouseClickHandlerRef);
         windowHeaderElem.addEventListener("pointerdown", this.pointerDownHandlerRef);
+
+        this.chatFormHandlerRef = this.chatFormHandler.bind(this);
+        this.chatFormElem = document.getElementById("chatForm");
+        this.chatFormElem.addEventListener("submit", this.chatFormHandlerRef);
     }
 
     /**
      * Deinitializes event listeners.
      */
     deinitListeners() {
-        this.chatWindowElem.removeEventListener("click", this.mouseClickHandlerRef);
         let windowHeaderElem = this.chatWindowElem.querySelector(".windowHeader");
+        windowHeaderElem.removeEventListener("click", this.mouseClickHandlerRef);
         windowHeaderElem.removeEventListener("pointerdown", this.pointerDownHandlerRef);
 
+        if (this.chatFormElem) this.chatFormElem.removeEventListener("submit", this.chatFormHandlerRef);
         if (this.unsubscribeMsg) this.unsubscribeMsg();
     }
 
@@ -166,19 +171,24 @@ export class ChatWindow {
     async mouseClickHandler(event) {
         event.preventDefault();
         
-        switch (event.target.id) {
-            case "chatWindowCloseBtn":
-                this.closeChatWindow();
-                break;
-            case "sendBtn":
-            case "sendBtnImg":
-                let windowDashboardInputElem = this.chatWindowElem.querySelector(".windowDashboardInput");
-                let message = windowDashboardInputElem.value;
-                if (message.length != 0) {
-                    windowDashboardInputElem.value = "";
-                    await this.sendMessage(message);
-                }
-                break;
+        if (event.target.id == "chatWindowCloseBtn") this.closeChatWindow();
+    }
+
+    /**
+     * Handles submit events of chat content dashboard.
+     * @param {Event} event 
+     */
+    async chatFormHandler(event) {
+        event.preventDefault();
+
+        let chatInputElem = this.chatFormElem.querySelector(".chatInput");
+        let message = chatInputElem.value;
+
+        if (message.length != 0) {
+            chatInputElem.value = "";
+            chatInputElem.select();
+            chatInputElem.focus();
+            await this.sendMessage(message);
         }
     }
 

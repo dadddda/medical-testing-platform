@@ -61,18 +61,26 @@ div#chatWindow div.chatWindowContent > div.bubbleRight {
     animation: fade .2s ease-in-out;
 }
 
-div#chatWindow div.windowDashboard > input.windowDashboardInput {
+div#chatWindow div.windowFooter > form.chatDashboard {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    height: 30px;
+}
+
+div#chatWindow div.chatDashboard > input.chatInput {
     width: 100%;
     margin: 0 5px 0 0;
 }
 
-div#chatWindow div.windowDashboard > button.windowDashboardBtn {
+div#chatWindow div.chatDashboard > button.chatBtn {
     width: 50px;
     min-width: 50px;
     margin: 0 0 0 5px;
 }
 
-div#chatWindow div.windowDashboard > button.windowDashboardBtn img { margin: auto; }
+div#chatWindow div.chatDashboard > button.chatBtn img { margin: auto; }
 
 @media screen and (max-width: 425px) {
     div#chatWindow.window {

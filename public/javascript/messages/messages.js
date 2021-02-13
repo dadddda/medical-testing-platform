@@ -22,7 +22,6 @@ export class Messages {
         this.fetchChatsOnResize = true;
 
         this.leftPanelClickHandlerRef = this.leftPanelClickHandler.bind(this);
-        this.rightPanelClickHandlerRef = this.rightPanelClickHandler.bind(this);
         this.scrollHandlerRef = this.scrollHandler.bind(this);
         this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
     }
@@ -96,19 +95,23 @@ export class Messages {
             <div class="chatContent"></div>
             <div class="chatFooter">
                 <hr class="solid">
-                <div class="chatDashboard">
+                <form class="chatDashboard" id="chatForm" novalidate>
                     <input class="chatInput" type="text">
-                    <button class="chatBtn" id="chatBtn">
-                        <img id="sendBtnImg" src="./svgs/send-msg-icon.svg">
+                    <button class="chatBtn" type="submit">
+                        <img src="./svgs/send-msg-icon.svg">
                     </button>
-                </div>
+                </form>
             </div>
         `;
 
         appendHtml(html, this.rightPanelElem);
-        
+
         let messageDocs = await Database.fetchMessageDocs(chatDocId);
         this.appendCount = messageDocs.length;
+
+        this.chatFormHandlerRef = this.chatFormHandler.bind(this);
+        this.chatFormElem = document.getElementById("chatForm");
+        this.chatFormElem.addEventListener("submit", this.chatFormHandlerRef);
         
         let drawChatBubblesRef = this.drawChatBubbles.bind(this);
         this.unsubscribeMsg = Database.executeOnMessageDocsChanges(chatDocId, drawChatBubblesRef);
@@ -273,7 +276,6 @@ export class Messages {
      * Initializes event listeners.
      */
     initListeners() {
-        this.rightPanelElem.addEventListener("click", this.rightPanelClickHandlerRef);
         this.leftPanelElem.addEventListener("click", this.leftPanelClickHandlerRef);
         this.leftPanelElem.addEventListener("scroll", this.scrollHandlerRef);
         window.addEventListener("resize", this.windowResizeHandlerRef);
@@ -283,11 +285,11 @@ export class Messages {
      * Deinitializes event listeners.
      */
     deinitListeners() {
-        this.rightPanelElem.removeEventListener("click", this.rightPanelClickHandlerRef);
         this.leftPanelElem.removeEventListener("click", this.leftPanelClickHandlerRef);
         this.leftPanelElem.removeEventListener("scroll", this.scrollHandlerRef);
         window.removeEventListener("resize", this.windowResizeHandlerRef);
 
+        if (this.chatFormElem) this.chatFormElem.removeEventListener("submit", this.chatFormHandlerRef);
         if (this.unsubscribeMsg) this.unsubscribeMsg();
         if (this.unsubscribeChat) this.unsubscribeChat();
     }
@@ -309,8 +311,9 @@ export class Messages {
             if (activeChatBoxElem.id == chatBoxId) return;
 
             activeChatBoxElem.classList.remove("active");
-            this.rightPanelElem.style.opacity = 0;
+            this.chatFormElem.removeEventListener("submit", this.chatFormHandlerRef);
             this.unsubscribeMsg();
+            this.rightPanelElem.style.opacity = 0;
             customAnimationDelay = ANIMATION_DELAY;
         }
 
@@ -327,18 +330,19 @@ export class Messages {
     }
 
     /**
-     * Handles click events on the right panel.
+     * Handles submit events of chat content dashboard.
      * @param {Event} event 
      */
-    async rightPanelClickHandler(event) {
-        let chatBtnId = getClickedParentId(event.target, "chatBtn");
-        if (chatBtnId != "chatBtn") return;
+    async chatFormHandler(event) {
+        event.preventDefault();
 
-        let chatInputElem = this.rightPanelElem.querySelector(".chatInput");
+        let chatInputElem = this.chatFormElem.querySelector(".chatInput");
         let message = chatInputElem.value;
 
         if (message.length != 0) {
             chatInputElem.value = "";
+            chatInputElem.select();
+            chatInputElem.focus();
             await this.sendMessage(message);
         }
     }
