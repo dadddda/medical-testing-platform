@@ -23,6 +23,22 @@ export function appendHtml(html, element) {
 }
 
 /**
+ * Prepends given html to given element.
+ * @param {string} html 
+ * @param {HTMLElement} element
+ */
+export function prependHtml(html, element) {
+    let template = document.createElement("template");
+    html = html.trim();
+    template.innerHTML = html;
+
+    let templateChildren = template.content.childNodes;
+    for (let i = 0; i < templateChildren.length; i++) {
+        element.prepend(templateChildren[i]);
+    }
+}
+
+/**
  * Set's body opacity to 0 and replaces given URL to window.
  * @param {String} destination
  */

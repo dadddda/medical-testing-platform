@@ -48,6 +48,33 @@ export async function fetchChatDocs(sender, senderId, limit = 0) {
 }
 
 /**
+ * Executes given function every time a chat document, with given parameters, 
+ * is modified. Returns reference to later detach listener to database changes.
+ * @param {String} sender 
+ * @param {String} senderId 
+ * @param {Function} functionRef 
+ */
+export function executeOnChatDocsModify(sender, senderId, functionRef) {
+    if (sender != "user" && sender != "clinic") return;
+
+    let unsubscribe = CHATS_REF
+        .where(sender + "Id", "==", senderId)
+        .orderBy("latestMessageDate", "desc")
+        .onSnapshot({includeMetadataChanges: true}, (snapshot) => {
+            snapshot.docChanges({includeMetadataChanges: true}).forEach((change) => {
+                let changeType = change.type;
+                let changeSource = change.doc.metadata.hasPendingWrites ? "local" : "server";
+
+                if (changeType == "modified" && changeSource == "server") {
+                    functionRef(change.doc);
+                }
+            });
+        });
+
+    return unsubscribe;
+}
+
+/**
  * Returns one document from Firestore chats collection with given
  * user and clinic IDs.
  * @param {String} userId 
@@ -102,6 +129,34 @@ export async function fetchMessageDocs(chatDocId) {
 }
 
 /**
+ * Executes given function every time a new document is added to messages collection 
+ * of a chats document with given 'chatDocId'. Given function is also executed when this
+ * function is called for the first time to add content to HTML. Returns reference to later detach
+ * listener to database changes.
+ * @param {String} chatDocId 
+ * @param {Function} functionRef
+ */
+export function executeOnMessageDocsChanges(chatDocId, functionRef) {
+    let unsubscribe = firebase.firestore().collection("chats/" + chatDocId + "/messages");
+    unsubscribe = unsubscribe
+        .orderBy("date", "desc")
+        .onSnapshot({includeMetadataChanges: true}, (snapshot) => {
+            snapshot.docChanges({includeMetadataChanges: true}).forEach((change) => {
+                let changeType = change.type;
+                let changeSource = change.doc.metadata.hasPendingWrites ? "local" : "server";
+
+                if (changeType == "added" && changeSource == "server") {
+                    functionRef(change.doc, changeType);
+                } else if (changeType == "modified" && changeSource == "server") {
+                    functionRef(change.doc, changeType);
+                }
+            });
+        });
+
+    return unsubscribe;
+}
+
+/**
  * Returns document from path built from given chat document ID and message document ID.
  * @param {String} chatDocId 
  * @param {String} messageDocId 
@@ -139,12 +194,6 @@ async function createChatDoc(userId, clinicId) {
 export async function sendMessage(sender, message, chatDocId) {
     if (sender != "user" && sender != "clinic") return;
 
-    let key = (sender == "user") ? "clinicSeen" : "userSeen";
-    await CHATS_REF.doc(chatDocId).update({
-        latestMessageDate: firebase.firestore.FieldValue.serverTimestamp(),
-        [key]: false
-    });
-
     let messagesRef = firebase.firestore().collection("chats/" + chatDocId + "/messages");
     let latestMessageRef = await messagesRef.add({
         date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -152,8 +201,11 @@ export async function sendMessage(sender, message, chatDocId) {
         text: message
     });
 
+    let key = (sender == "user") ? "clinicSeen" : "userSeen";
     await CHATS_REF.doc(chatDocId).update({
-        latestMessageId: latestMessageRef.id
+        latestMessageId: latestMessageRef.id,
+        latestMessageDate: firebase.firestore.FieldValue.serverTimestamp(),
+        [key]: false
     });
 }
 
