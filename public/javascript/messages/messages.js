@@ -330,8 +330,9 @@ export class Messages {
      * @param {Event} event 
      */
     leftPanelClickHandler(event) {
-        let chatBoxId = getClickedParent(event.target, "chatBox").id;
-        if (chatBoxId == undefined) return;
+        let chatBox = getClickedParent(event.target, "chatBox");
+        if (chatBox == undefined) return;
+        let chatBoxId = chatBox.id;
 
         let activeChatBoxElem = document.querySelector(".chatBox.active");
         if (activeChatBoxElem != undefined) {
