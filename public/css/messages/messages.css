@@ -88,18 +88,13 @@ div.chatBox > div.boxHeader {
     height: max-content;
 }
 
-div.boxHeader > svg.svgDot {
+div.boxHeader > div.dot {
     display: flex;
-    width: 7px;
-    height: 7px;
+    min-width: 7px;
+    min-height: 7px;
     margin: 0 5px 0 0;
-}
-
-svg.svgDot > circle.svgCircle {
-    cx: 50%;
-    cy: 50%;
-    r: 3.5px;
-    fill:rgb(245, 50, 50);
+    border-radius: 100%;
+    background-color: rgb(245, 50, 50);
 }
 
 div.boxHeader > text.boxTitle {

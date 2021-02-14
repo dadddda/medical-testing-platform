@@ -178,25 +178,25 @@ export class Messages {
         let chatBoxElem = this.leftPanelElem.querySelector("#" + chatDoc.id);
         let chatBoxData = await this.getChatBoxData(chatDoc);
 
-        let svgDot = "";
+        let dot = "";
         if (this.currChatDocId == chatDoc.id 
                 && chatBoxElem.classList.contains("unread") 
-                && chatBoxData.svgDot.length == 0) {
+                && chatBoxData.dot.length == 0) {
             chatBoxElem.classList.remove("unread");
         } else if (this.currChatDocId != chatDoc.id
                 && !chatBoxElem.classList.contains("unread")
-                && chatBoxData.svgDot.length != 0) {
+                && chatBoxData.dot.length != 0) {
             chatBoxElem.classList.add("unread");
-            svgDot = chatBoxData.svgDot;
+            dot = chatBoxData.dot;
         } else if (this.currChatDocId == chatDoc.id
                 && !chatBoxElem.classList.contains("unread")
-                && chatBoxData.svgDot.length != 0) {
+                && chatBoxData.dot.length != 0) {
             await Database.markAsRead("user", this.currChatDocId);
         }
 
         chatBoxElem.id = chatBoxData.id;
         chatBoxElem.getElementsByClassName("boxHeader")[0].innerHTML = `
-            ${svgDot}
+            ${dot}
             <text class="boxTitle">${chatBoxData.clinicName}</text>
             <text class="boxDate">${chatBoxData.formattedDate}</text>
         `.trim();
@@ -214,9 +214,9 @@ export class Messages {
         let chatBoxData = await this.getChatBoxData(chatDoc);
 
         let html = `
-            <div class="chatBox${chatBoxData.svgDot.length == 0 ? "" : " unread"}" id="${chatBoxData.id}">
+            <div class="chatBox${chatBoxData.dot.length == 0 ? "" : " unread"}" id="${chatBoxData.id}">
                 <div class="boxHeader">
-                    ${chatBoxData.svgDot}
+                    ${chatBoxData.dot}
                     <text class="boxTitle">${chatBoxData.clinicName}</text>
                     <text class="boxDate">${chatBoxData.formattedDate}</text>
                 </div>
@@ -243,15 +243,11 @@ export class Messages {
         let clinicName = clinicDoc.data().name;
         let formattedDate = this.createDate(chatDoc.data().latestMessageDate.toMillis());
 
-        let svgDot = `
-            <svg class="svgDot" xmlns="http://www.w3.org/2000/svg">
-                <circle class="svgCircle"/>
-            </svg>
-        `;
+        let dot = `<div class="dot"></div>`;
 
         return {
             id: chatDoc.id,
-            svgDot: chatDoc.data().userSeen ? "" : svgDot,
+            dot: chatDoc.data().userSeen ? "" : dot,
             clinicName: clinicName,
             formattedDate: formattedDate,
             contentText: messageDoc.data().text
@@ -378,6 +374,8 @@ export class Messages {
      */
     rightPanelClickHandler(event) {
         if (event.target.classList.contains("responsiveCloseBtn")) {
+            this.currChatDocId = undefined;
+            
             let activeChatBoxElem = document.querySelector(".chatBox.active");
             activeChatBoxElem.classList.remove("active");
 
