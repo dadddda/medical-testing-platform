@@ -10,6 +10,7 @@ div.messages {
     justify-content: flex-start;
     width: 100%;
     height: 100%;
+    position: relative;
     animation: fade .2s ease-in-out;
 }
 
@@ -31,8 +32,9 @@ div.messages > div.leftPanel {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 320px;
+    width: 320px;
     height: 100%;
+    min-width: 320px;
     padding: 0 10px;
     background-color: rgb(240, 240, 240);
     overflow: auto;
@@ -45,7 +47,6 @@ div.leftPanel > div.chatBox {
     justify-content: flex-start;
     width: 100%;
     height: max-content;
-    min-width: 300px;
     position: relative;
     margin: 0 0 10px 0;
     padding: 5px 10px;
@@ -103,10 +104,10 @@ svg.svgDot > circle.svgCircle {
 
 div.boxHeader > text.boxTitle {
     display: block;
-    width: 180px;
+    width: 100%;
     height: max-content;
     position: relative;
-    margin: 0 auto 0 0;
+    margin: 0 5px 0 0;
     color: rgb(10, 10, 10);
     font-size: 1.1rem;
     overflow: hidden;
@@ -120,7 +121,7 @@ div.chatBox.unread > div.boxHeader > text.boxTitle {
 
 div.boxHeader > text.boxDate {
     display: flex;
-    width: max-content;
+    min-width: max-content;
     height: max-content;
     color: rgb(10, 10, 10);
     font-size: 0.85rem;
@@ -141,7 +142,7 @@ div.chatBox > div.boxContent {
 
 div.boxContent > text.contentText {
     display: block;
-    width: 280px;
+    width: 100%;
     height: max-content;
     color: rgb(90, 90, 90);
     font-size: 0.9rem;
@@ -187,7 +188,6 @@ div.rightPanel > div.chatContent:after {
 div.chatContent > div.bubbleLeft {
     display: flex;
     align-self: flex-start;
-    width: max-content;
     height: max-content;
     max-width: 75%;
     min-width: min-content;
@@ -203,7 +203,6 @@ div.chatContent > div.bubbleLeft {
 div.chatContent > div.bubbleRight {
     display: flex;
     align-self: flex-end;
-    width: max-content;
     height: max-content;
     max-width: 75%;
     min-width: min-content;
@@ -233,6 +232,24 @@ div.chatFooter > form.chatDashboard {
     justify-content: space-between;
     width: 100%;
     height: 30px;
+}
+
+form.chatDashboard > img.responsiveCloseBtn {
+    display: none;
+    width: 30px;
+    height: 30px;
+    margin: 0 10px 0 0;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: box-shadow .2s ease-in-out, opacity .2s ease-in-out;
+}
+
+form.chatDashboard > img.responsiveCloseBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: box-shadow .2s ease-in-out;
+    cursor: pointer;
 }
 
 form.chatDashboard > input.chatInput {
@@ -287,4 +304,76 @@ form.chatDashboard > button.chatBtn img {
     width: 30px;
     height: 30px;
     margin: auto;
+}
+
+@media screen and (max-width: 990px) {
+    div.infoContainer > text.infoText { font-size: 1.1rem; }
+
+    div.messages > div.leftPanel {
+        width: 270px;
+        min-width: 270px;
+    }
+}
+
+@media screen and (max-width: 682px) {
+    div.infoContainer > text.infoText { font-size: 1rem; }
+
+    div.messages > div.leftPanel {
+        width: 220px;
+        min-width: 220px;
+    }
+
+    div.boxHeader > text.boxTitle { font-size: 1rem; }
+    div.boxHeader > text.boxDate { font-size: 0.75rem; }
+    div.boxContent > text.contentText { font-size: 0.8rem; }
+
+    div.chatContent > div.bubbleLeft {
+        margin: 8.5px 0 0 0;
+        padding: 8.5px;
+        font-size: 1rem;
+    }
+    
+    div.chatContent > div.bubbleRight {
+        margin: 8.5px 0 0 0;
+        padding: 8.5px;
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 464px) {
+    div.messages > div.leftPanel {
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-width: 100%;
+    }
+
+    div.messages > div.rightPanel {
+        z-index: 2;
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+
+    form.chatDashboard > img.responsiveCloseBtn {
+        display: unset;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    div.chatContent > div.bubbleLeft {
+        margin: 7.5px 0 0 0;
+        padding: 7.5px;
+        font-size: 0.9rem;
+    }
+    
+    div.chatContent > div.bubbleRight {
+        margin: 7.5px 0 0 0;
+        padding: 7.5px;
+        font-size: 0.9rem;
+    }
 }

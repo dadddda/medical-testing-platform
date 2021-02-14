@@ -1,9 +1,10 @@
 // constants
 const TRIGGER_THRESHOLD = 0.8;
 const FETCH_AT_ONCE = 4;
+import {ANIMATION_DELAY, TIMEOUT_DELAY, MOBILE_L} from "../utils/utils.js";
 
 //functions
-import {ANIMATION_DELAY, TIMEOUT_DELAY, appendHtml, prependHtml, getClickedParent} from "../utils/utils.js";
+import {appendHtml, prependHtml, getClickedParent} from "../utils/utils.js";
 import * as Database from "../database.js";
 
 export class Messages {
@@ -22,6 +23,7 @@ export class Messages {
         this.fetchChatsOnResize = true;
 
         this.leftPanelClickHandlerRef = this.leftPanelClickHandler.bind(this);
+        this.rightPanelClickHandlerRef = this.rightPanelClickHandler.bind(this);
         this.scrollHandlerRef = this.scrollHandler.bind(this);
         this.windowResizeHandlerRef = this.windowResizeHandler.bind(this);
     }
@@ -81,7 +83,7 @@ export class Messages {
 
         for (let i = 0; i < chatDocs.length; i++) {
             let currDoc = chatDocs[i];
-            await this.drawChatBox(currDoc);
+            this.drawChatBox(currDoc);
         }
 
         this.latestDoc = chatDocs[chatDocs.length - 1];
@@ -108,6 +110,7 @@ export class Messages {
             <div class="chatFooter">
                 <hr class="solid">
                 <form class="chatDashboard" id="chatForm" novalidate>
+                    <img class="responsiveCloseBtn" src="./svgs/close-black.svg">
                     <input class="chatInput" type="text" placeholder="Type a message...">
                     <button class="chatBtn" type="submit">
                         <img src="./svgs/send-msg-icon.svg">
@@ -307,6 +310,7 @@ export class Messages {
     initListeners() {
         this.leftPanelElem.addEventListener("click", this.leftPanelClickHandlerRef);
         this.leftPanelElem.addEventListener("scroll", this.scrollHandlerRef);
+        this.rightPanelElem.addEventListener("click", this.rightPanelClickHandlerRef);
         window.addEventListener("resize", this.windowResizeHandlerRef);
     }
 
@@ -316,6 +320,7 @@ export class Messages {
     deinitListeners() {
         this.leftPanelElem.removeEventListener("click", this.leftPanelClickHandlerRef);
         this.leftPanelElem.removeEventListener("scroll", this.scrollHandlerRef);
+        this.rightPanelElem.removeEventListener("click", this.rightPanelClickHandlerRef);
         window.removeEventListener("resize", this.windowResizeHandlerRef);
 
         if (this.chatFormElem) this.chatFormElem.removeEventListener("submit", this.chatFormHandlerRef);
@@ -343,10 +348,16 @@ export class Messages {
             this.unsubscribeMsg();
             this.rightPanelElem.style.opacity = 0;
         } else {
-            this.rightPanelElem.querySelector(".infoContainer").style.opacity = 0;
-            setTimeout(() => {
-                this.rightPanelElem.querySelector(".infoContainer").style.display = "none";
-            }, ANIMATION_DELAY);
+            this.rightPanelElem.style.display = "flex";
+            this.rightPanelElem.style.backgroundColor = "rgb(250, 250, 250)";
+
+            let infoContainerElem = this.rightPanelElem.querySelector(".infoContainer");
+            if (infoContainerElem != undefined) {
+                infoContainerElem.style.opacity = 0;
+                setTimeout(() => {
+                    this.rightPanelElem.querySelector(".infoContainer").style.display = "none";
+                }, ANIMATION_DELAY);
+            }
         }
 
         let clickedChatBoxElem = document.getElementById(chatBoxId);
@@ -359,6 +370,24 @@ export class Messages {
             }
             await this.getMessages(chatBoxId);
         }, ANIMATION_DELAY);
+    }
+
+    /**
+     * Handles responsive close button click event.
+     * @param {Event} event 
+     */
+    rightPanelClickHandler(event) {
+        if (event.target.classList.contains("responsiveCloseBtn")) {
+            let activeChatBoxElem = document.querySelector(".chatBox.active");
+            activeChatBoxElem.classList.remove("active");
+
+            this.chatFormElem.removeEventListener("submit", this.chatFormHandlerRef);
+            this.unsubscribeMsg();
+            this.rightPanelElem.style.opacity = 0;
+            setTimeout(() => {
+                this.rightPanelElem.style.display = "none";
+            }, ANIMATION_DELAY);
+        }
     }
 
     /**
