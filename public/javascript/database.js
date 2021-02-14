@@ -2,6 +2,7 @@
 const CHATS_REF = firebase.firestore().collection("chats");
 const CLINICS_REF = firebase.firestore().collection("clinics");
 const SUPPORTED_TESTS_REF = firebase.firestore().collection("supportedTests");
+const ABOUT_US_REF = firebase.firestore().collection("aboutUs");
 
 // ---------------------------------------------------------------------- MESSAGES
 
@@ -249,4 +250,14 @@ export async function fetchSupportedTestDocs(limit = 0) {
     let supportedTests = await supportedTestsRef.get();
     
     return supportedTests.docs;
+}
+
+// ---------------------------------------------------------------------- ABOUT US
+
+/**
+ * Returns one document from Firestore about us collection.
+ */
+export async function fetchAboutUsDoc() {
+    let aboutUs = await ABOUT_US_REF.get();
+    return aboutUs.docs[0];
 }

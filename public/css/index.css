@@ -50,6 +50,7 @@ hr.solid {
     margin: 5px 0;
     border: 0;
     border-top: 2px solid rgb(180, 180, 180);
+    animation: fade .2s ease-in-out;
 }
 
 div.header {

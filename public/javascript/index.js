@@ -8,6 +8,7 @@ import {NewsFeed} from "./news-feed/news-feed.js";
 import {Clinics} from "./clinics/clinics.js";
 import {Messages} from "./messages/messages.js";
 import {SupportedTests} from "./supported-tests/supported-tests.js";
+import {AboutUs} from "./about-us/about-us.js";
 
 // functions
 import * as Database from "./database.js";
@@ -48,12 +49,7 @@ function headerLeftClickHandler() {
 function headerRightClickHandler(event) {
     let clickedElem = getClickedParent(event.target, "redirectBtn");
     
-    if (clickedElem.id == "accountBtn") {
-        // if (accountWindow != null) return;
-        // let accountWindowContainerElem = document.querySelector(".accountWindowContainer");
-        // accountWindow = new Account(accountWindowContainerElem);
-        // accountWindow.drawAccountWindow();
-    } else if (clickedElem.id == "logoutBtn") {
+    if (clickedElem.id == "logoutBtn") {
         firebase.auth().signOut()
         .then((user) => {
             // 'onAuthStateChanged()' handles login action
@@ -139,10 +135,14 @@ function initBtns() {
                         await supportedTestsObj.drawContent();
                         supportedTestsObj.initListeners();
 
+                        tempClass = supportedTestsObj;
                         break;
                     case "aboutUsBtn":
                         newElem.className = "aboutUs";
                         rightPanelElem.appendChild(newElem);
+
+                        let aboutUsObj = new AboutUs(newElem);
+                        await aboutUsObj.drawContent();
 
                         break;
                 }

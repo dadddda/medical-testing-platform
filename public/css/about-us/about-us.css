@@ -1,0 +1,110 @@
+div.aboutUs {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    animation: fade .2s ease-in-out;
+}
+
+div.aboutUs > div.aboutUsHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: max-content;
+    animation: fade .2s ease-in-out;
+}
+
+div.aboutUsHeader > div.headerTitle {
+    display: flex;
+    width: 100%;
+    height: max-content;
+    font-size: 3rem;
+}
+
+div.aboutUsHeader > div.headerSubtitle {
+    display: flex;
+    width: 100%;
+    height: max-content;
+    font-size: 1.5rem;
+}
+
+div.aboutUs > div.aboutUsContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    padding: 20px 40px 40px 40px;
+    overflow: auto;
+    animation: fade .2s ease-in-out;
+}
+
+div.aboutUsContent > img.contentImage {
+    width: 100%;
+    object-fit: contain;
+    border-radius: 2.5px;
+    animation: fade .2s ease-in-out;
+}
+
+div.aboutUsContent > div.contentText {
+    display: flex;
+    width: 100%;
+    height: max-content;
+    font-size: 1.1rem;
+    animation: fade .2s ease-in-out;
+}
+
+div.aboutUs > div.aboutUsFooter {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: max-content;
+    animation: fade .2s ease-in-out;
+}
+
+div.aboutUs > div.aboutUsFooter text {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 990px) {
+    div.aboutUsHeader > div.headerTitle { font-size: 2.5rem; }
+    div.aboutUsHeader > div.headerSubtitle { font-size: 1.25rem; }
+    div.aboutUs > div.aboutUsContent { padding: 10px 20px 20px 20px; }
+    div.aboutUsContent > div.contentText { font-size: 1rem; }
+    div.aboutUs > div.aboutUsFooter { font-size: 0.9rem; }
+    div.aboutUs > div.aboutUsFooter text { font-size: 0.9rem; }
+}
+
+@media screen and (max-width: 682px) {
+    div.aboutUsHeader > div.headerTitle { font-size: 2rem; }
+    div.aboutUsHeader > div.headerSubtitle { font-size: 1.1rem; }
+    div.aboutUs > div.aboutUsContent { padding: 7.5px 15px 15px 15px; }
+    div.aboutUsContent > div.contentText { font-size: 0.9rem; }
+    div.aboutUs > div.aboutUsFooter { font-size: 0.85rem; }
+    div.aboutUs > div.aboutUsFooter text { font-size: 0.85rem; }
+}
+
+@media screen and (max-width: 464px) {
+    div.aboutUsHeader > div.headerTitle { font-size: 1.75rem; }
+    div.aboutUsHeader > div.headerSubtitle { font-size: 1.1rem; }
+    div.aboutUs > div.aboutUsContent { padding: 5px 10px 10px 10px; }
+    div.aboutUsContent > div.contentText { font-size: 0.85rem; }
+    div.aboutUs > div.aboutUsFooter { font-size: 0.75rem; }
+    div.aboutUs > div.aboutUsFooter text { font-size: 0.75rem; }
+}
+
+@media screen and (max-width: 375px) {
+    div.aboutUsHeader > div.headerTitle { font-size: 1.5rem; }
+    div.aboutUsHeader > div.headerSubtitle { font-size: 1rem; }
+    div.aboutUs > div.aboutUsContent { padding: 2.5px 5px 5px 5px; }
+    div.aboutUsContent > div.contentText { font-size: 0.75rem; }
+    div.aboutUs > div.aboutUsFooter { font-size: 0.65rem; }
+    div.aboutUs > div.aboutUsFooter text { font-size: 0.65rem; }
+}
