@@ -200,7 +200,9 @@ export class Messages {
             <text class="boxTitle">${chatBoxData.clinicName}</text>
             <text class="boxDate">${chatBoxData.formattedDate}</text>
         `.trim();
-        chatBoxElem.getElementsByClassName("contentText")[0].innerHTML = chatBoxData.contentText;
+        let contentText = (chatBoxData.sender == "user") ? "You: " : "";
+        contentText += chatBoxData.contentText;
+        chatBoxElem.querySelector(".contentText").innerHTML = contentText;
 
         this.leftPanelElem.removeChild(chatBoxElem);
         this.leftPanelElem.prepend(chatBoxElem);
@@ -213,6 +215,9 @@ export class Messages {
     async createChatBox(chatDoc) {
         let chatBoxData = await this.getChatBoxData(chatDoc);
 
+        let contentText = (chatBoxData.sender == "user") ? "You: " : "";
+        contentText += chatBoxData.contentText;
+
         let html = `
             <div class="chatBox${chatBoxData.dot.length == 0 ? "" : " unread"}" id="${chatBoxData.id}">
                 <div class="boxHeader">
@@ -223,7 +228,7 @@ export class Messages {
                 <hr class="solid">
                 <div class="boxContent">
                     <text class="contentText">
-                        ${chatBoxData.contentText}
+                        ${contentText}
                     </text>
                 </div>
             </div>
@@ -250,6 +255,7 @@ export class Messages {
             dot: chatDoc.data().userSeen ? "" : dot,
             clinicName: clinicName,
             formattedDate: formattedDate,
+            sender: messageDoc.data().sender,
             contentText: messageDoc.data().text
         }
     }
@@ -375,7 +381,7 @@ export class Messages {
     rightPanelClickHandler(event) {
         if (event.target.classList.contains("responsiveCloseBtn")) {
             this.currChatDocId = undefined;
-            
+
             let activeChatBoxElem = document.querySelector(".chatBox.active");
             activeChatBoxElem.classList.remove("active");
 

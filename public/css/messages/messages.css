@@ -168,7 +168,7 @@ div.rightPanel > div.chatContent {
     justify-content: flex-start;
     width: 100%;
     height: 100%;
-    padding: 0 10px;
+    padding: 0 10px 10px 10px;
     overflow: auto;
     animation: fade .2s ease-in-out;
 }

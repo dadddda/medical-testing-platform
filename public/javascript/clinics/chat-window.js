@@ -95,6 +95,7 @@ export class ChatWindow {
             html = `<div class="bubbleRight">${messageDoc.data().text}</div>`;
         } else if (messageDoc.data().sender == "clinic") {
             html = `<div class="bubbleLeft">${messageDoc.data().text}</div>`;
+            Database.markAsRead("user", this.chatDoc.id);
         }
 
         let chatWindowContentElem = this.chatWindowElem.querySelector(".chatWindowContent");
