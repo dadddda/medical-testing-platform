@@ -1,0 +1,439 @@
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+    user-select: text;
+}
+
+*:active { -webkit-tap-highlight-color: transparent; }
+
+html {
+    touch-action: none;
+}
+
+body {
+    display: none;
+}
+
+html, body {
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(250, 250, 250);
+    overflow: hidden;
+    transition: opacity .2s ease-in-out;
+    animation: fade .2s ease-in-out;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(245, 50, 50);
+    border-radius: 5px;
+}
+
+hr.solid {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    border: 0;
+    border-top: 2px solid rgb(180, 180, 180);
+    animation: fade .2s ease-in-out;
+}
+
+div.header {
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: max-content;
+    min-width: min-content;
+    min-height: min-content;
+    padding: 10px 20px 10px 40px;
+    background: rgb(175, 0, 0);
+    background: linear-gradient(135deg, rgb(175, 0, 0) 0%, rgb(245, 35, 35) 100%);
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
+}
+
+div.header > button.headerLeft {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: max-content;
+    height: max-content;
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
+
+div.header > button.headerLeft:hover { cursor: pointer; }
+
+button.headerLeft > img.headerImg {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+button.headerLeft > div.headerText {
+    width: max-content;
+    font-size: 2rem;
+    color: rgb(235, 235, 235);
+}
+
+div.header > div.headerRight {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: max-content;
+    height: max-content;
+}
+
+div.headerRight > button.redirectBtn {
+    width: 110px;
+    height: 35px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    font-size: 1.1rem;
+    color: rgb(235, 235, 235);
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
+}
+
+div.headerRight > button.redirectBtn img {
+    display: none;
+    transition: filter .2s ease-in-out;
+}
+
+div.headerRight > button.redirectBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
+}
+
+div.headerRight > button.redirectBtn:focus {
+    background-color: rgb(245, 50, 50);
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
+}
+
+div.mainContent {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+div.mainContent > div.leftPanel {
+    z-index: 90;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: max-content;
+    height: 100%;
+    min-width: min-content;
+    min-height: min-content;
+    padding: 15px;
+    background: rgb(210, 210, 210);
+    background: linear-gradient(135deg, rgb(210, 210, 210) 0%, rgb(240, 240, 240) 100%);
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
+}
+
+div.leftPanel > div.leftPanelBtns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: max-content;
+    height: max-content;
+}
+
+div.leftPanelBtns > button.leftPanelBtn {
+    width: 170px;
+    height: 35px;
+    margin: 5px 0 5px 0;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    font-size: 1.1rem;
+    color: rgb(10, 10, 10);
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
+}
+
+div.leftPanelBtns > button#messagesBtn.leftPanelBtn {
+    position: relative;
+    overflow: hidden;
+}
+
+button#messagesBtn.leftPanelBtn > div.notificationDot {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 35px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    background-color: rgb(245, 50, 50);
+    transition: opacity .2s ease-in-out;
+    animation: fade .2s ease-in-out;
+}
+
+button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+    color: rgb(235, 235, 235);
+    font-size: 1rem;
+}
+
+div.leftPanelBtns > button.leftPanelBtn img {
+    display: none;
+    transition: filter .2s ease-in-out;
+}
+
+div.leftPanelBtns > button.leftPanelBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
+}
+
+div.leftPanelBtns > button.leftPanelBtn.active {
+    color: rgb(235, 235, 235);
+    background-color: rgb(245, 50, 50);
+    transition: box-shadow .2s ease-in-out, 
+                color .2s ease-in-out,
+                background-color .2s ease-in-out;
+}
+
+div.mainContent > div.rightPanel {
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transition: opacity .2s ease-in-out;
+}
+
+div.mainContent > div.rightPanel.hidden {
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+}
+
+div.rightPanel > div.welcomeScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    animation: fade .2s ease-in-out;
+}
+
+div.welcomeScreen > div.rightPanelTextBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: max-content;
+    margin: 5px;
+}
+
+div.rightPanelTextBox > text.greetings {
+    font-size: 3rem;
+    color: rgb(10, 10, 10);
+    text-align: center;
+}
+
+div.rightPanelTextBox > text.info {
+    font-size: 1.5rem;
+    color: rgb(120, 120, 120);
+    text-align: center;
+}
+
+div.footer {
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: max-content;
+    min-width: min-content;
+    min-height: min-content;
+    padding: 7px 0;
+    background: linear-gradient(135deg, rgb(170, 170, 170) 0%, rgb(200, 200, 200) 100%);
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
+}
+
+div.footer > text.footerText {
+    width: max-content;
+    font-size: 0.75rem;
+    color: rgb(10, 10, 10);
+    text-align: center;
+}
+
+@media screen and (max-width: 1132px) {
+    div.mainContent {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    div.mainContent > div.leftPanel {
+        width: 100%;
+        height: max-content;
+        padding: 0 15px;
+    }
+
+    div.leftPanel > div.leftPanelBtns {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    hr#leftPanelDivider1 { display: none; }
+    hr#leftPanelDivider2 { display: none; }
+
+    div.leftPanelBtns > button.leftPanelBtn {
+        width: 150px;
+        margin: 5px;
+    }
+
+    button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+        font-size: 0.9rem;
+    }
+    
+    div.mainContent > div.rightPanel { min-height: 0; }
+}
+
+@media screen and (max-width: 990px) {
+    div.mainContent { flex-direction: column-reverse; }
+
+    div.leftPanel > div.leftPanelBtns {
+        justify-content: space-around;
+        width: 100%;
+    }
+    
+    div.leftPanelBtns > button.leftPanelBtn {
+        width: 35px;
+    }
+
+    div.leftPanelBtns > button.leftPanelBtn img {
+        display: unset;
+        width: 35px;
+    }
+
+    div.leftPanelBtns > button#messagesBtn.leftPanelBtn {
+        overflow: visible;
+    }
+    
+    button#messagesBtn.leftPanelBtn > div.notificationDot {
+        width: 20px;
+        height: 20px;
+        top: -8px;
+        right: -8px;
+        border-radius: 100%;
+    }
+    
+    button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+        font-size: 0.85rem;
+    }
+
+    div.leftPanelBtns > button.leftPanelBtn.active img {
+        filter: brightness(0) saturate(100%) 
+                invert(100%) sepia(7%) saturate(281%) 
+                hue-rotate(183deg) brightness(116%) 
+                contrast(84%);
+    }
+
+    div.leftPanelBtns > button.leftPanelBtn span { display: none; }
+
+    div.rightPanel > div.welcomeScreen { padding: 30px; }
+    div.rightPanelTextBox > text.greetings { font-size: 2.5rem; }
+    div.rightPanelTextBox > text.info { font-size: 1.25rem; }
+
+    div.footer > text.footerText { font-size: 0.6rem; }
+}
+
+@media screen and (max-width: 682px) {
+    div.header { padding: 10px 10px 10px 20px; }
+
+    button.headerLeft > div.headerText span { display: none; }
+
+    button.headerLeft > div.headerText:after { content: "MTP"; }
+
+    div.headerRight button#accountBtn { width: 35px; }
+
+    div.headerRight button#accountBtn img {
+        display: unset;
+        width: 35px;
+    }
+
+    div.headerRight button#accountBtn span { display: none; }
+
+    div.headerRight button#logoutBtn { width: 90px; }
+
+    div.rightPanelTextBox > text.greetings { font-size: 2rem; }
+    div.rightPanelTextBox > text.info { font-size: 1rem; }
+}
+
+@media screen and (max-width: 464px) {
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    button#messagesBtn.leftPanelBtn > div.notificationDot {
+        width: 18px;
+        height: 18px;
+        top: -6px;
+        right: -6px;
+    }
+    
+    button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+        font-size: 0.75rem;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+    }
+
+    button#messagesBtn.leftPanelBtn > div.notificationDot {
+        width: 17px;
+        height: 17px;
+        top: -5px;
+        right: -5px;
+    }
+    
+    button#messagesBtn.leftPanelBtn > div.notificationDot > text {
+        font-size: 0.7rem;
+    }
+
+    div.rightPanelTextBox > text.greetings { font-size: 1.75rem; }
+    div.rightPanelTextBox > text.info { font-size: 0.9rem; }
+
+    div.footer > text.footerText { font-size: 0.55rem; }
+}

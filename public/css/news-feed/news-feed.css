@@ -1,0 +1,123 @@
+div.newsFeed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 0 0 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: auto;
+    animation: fade .2s ease-in-out;
+}
+
+div.newsFeed > div.news {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 700px;
+    height: max-content;
+    max-width: 100%;
+    margin-bottom: 40px;
+    padding: 15px;
+    border-radius: 2.5px;
+    opacity: 0;
+    background: rgb(220, 220, 220);
+    background: linear-gradient(135deg, rgb(220, 220, 220) -100%, rgb(250, 250, 250) 100%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    animation: fade .2s ease-in-out;
+    transition: opacity .2s ease-in-out;
+}
+
+div.news > div.newsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: max-content;
+    padding: 5px;
+}
+
+div.newsHeader > div.newsTitle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 80%;
+    height: max-content;
+    font-size: 1.75rem;
+}
+
+div.newsHeader > div.newsDate {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 20%;
+    height: max-content;
+    text-align: end;
+}
+
+div.news > img.newsHeaderImg {
+    width: 100%;
+    object-fit: contain;
+    border-radius: 2.5px;
+}
+
+div.news > div.newsContent {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: max-content;
+    padding: 5px;
+}
+
+div.news > div.moreBtnContainer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    width: 100%;
+    height: max-content;
+    padding: 5px;
+}
+
+div.moreBtnContainer > button.moreBtn {
+    width: 90px;
+    height: 30px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: rgb(235, 235, 235);
+    background-color: rgb(245, 50, 50);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: all .2s ease-in-out;
+}
+
+div.moreBtnContainer > button.moreBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 990px) {
+    div.newsFeed { padding: 15px 15px 0 15px; }
+    div.newsFeed > div.news { margin-bottom: 15px; }
+}
+
+@media screen and (max-width: 464px) {
+    div.newsFeed { padding: 10px 10px 0 10px; }
+    div.newsFeed > div.news { margin-bottom: 10px; }
+
+    div.newsHeader > div.newsTitle { font-size: 1.25rem; }
+    div.newsHeader > div.newsDate { font-size: 0.85rem; }
+    div.news > div.newsContent { font-size: 0.85rem; }
+}
+
+@media screen and (max-width: 375px) {
+    div.newsFeed { padding: 5px 5px 0 5px; }
+    div.newsFeed > div.news { margin-bottom: 5px; }
+
+    div.newsHeader > div.newsTitle { font-size: 1rem; }
+    div.newsHeader > div.newsDate { font-size: 0.75rem; }
+    div.news > div.newsContent { font-size: 0.75rem; }
+}

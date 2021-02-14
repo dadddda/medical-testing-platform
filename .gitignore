@@ -1,2 +1,8 @@
 # Visual Studio Code
 .vscode/
+
+# Local Files
+local/
+
+# Firebase Cache Files
+*.cache

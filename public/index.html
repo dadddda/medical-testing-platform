@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Medical Testing</title>
+    <meta name='viewport' content='width=device-width, user-scalable=no'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/index.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/window.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/news-feed/news-feed.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/news-feed/opened-news.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/clinics/clinics.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/clinics/clinic-window.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/clinics/chat-window.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/messages/messages.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/supported-tests/supported-tests.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./css/about-us/about-us.css'>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-storage.js"></script>
+</head>
+<body>
+    <div class="header">
+        <button class="headerLeft" id="headerLeftBtn">
+            <img class="headerImg" src="./svgs/logo.svg">
+            <div class="headerText">
+                <span>Medical Testing Platform</span>
+            </div>
+        </button>
+
+        <div class="headerRight">
+            <button class="redirectBtn" id="accountBtn">
+                <img src="./svgs/account-icon.svg">
+                <span>Account</span>
+            </button>
+            <button class="redirectBtn" id="logoutBtn">Log Out</button>
+        </div>
+    </div>
+
+    <div class="mainContent">
+        <div class="leftPanel">
+            <div class="leftPanelBtns" id="leftPanelBtns">
+                <button class="leftPanelBtn" id="newsFeedBtn">
+                    <img src="./svgs/news-icon.svg">
+                    <span>News Feed</span>
+                </button>
+                <button class="leftPanelBtn" id="clinicsBtn">
+                    <img src="./svgs/clinics-icon.svg">
+                    <span>Clinics</span>
+                </button>
+                <hr class="solid" id="leftPanelDivider1">
+                <button class="leftPanelBtn" id="testResultsBtn">
+                    <img src="./svgs/results-icon.svg">
+                    <span>Test Results</span>
+                </button>
+                <button class="leftPanelBtn" id="messagesBtn">
+                    <div class="notificationDot" id="notificationDot">
+                        <text id="notificationText">0</text>
+                    </div>
+                    <img src="./svgs/contact-icon.svg">
+                    <span>Messages</span>
+                </button>
+                <hr class="solid" id="leftPanelDivider2">
+                <button class="leftPanelBtn" id="supportedTestsBtn">
+                    <img src="./svgs/supported-tests-icon.svg">
+                    <span>Supported Tests</span>
+                </button>
+                <button class="leftPanelBtn" id="aboutUsBtn">
+                    <img src="./svgs/about-us-icon.svg">
+                    <span>About Us</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="rightPanel" id="rightPanel">
+            <div class="welcomeScreen">
+                <div class="rightPanelTextBox">
+                    <text class="greetings">
+                        Welcome to the Medical Testing Platform
+                    </text>
+                </div>
+                <div class="rightPanelTextBox">
+                    <text class="info">
+                        where you can register for a wide range of medical tests
+                        in your nearest clinic.
+                    </text>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <text class="footerText">
+            Copyright © 2021 Medical Testing Platform
+        </text>
+    </div>
+    
+    <script src='./javascript/firebase.js'></script>
+    <script type="module" src='./javascript/index.js'></script>
+</body>
+</html>

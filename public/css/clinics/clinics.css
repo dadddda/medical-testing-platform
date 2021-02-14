@@ -1,0 +1,280 @@
+div.clinics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    animation: fade .2s ease-in-out;
+}
+
+div.clinics > div.clinicsContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+div.clinicsContent div#clinicWindow { z-index: 4; }
+div.clinicsContent div#chatWindow { z-index: 5; }
+
+div.clinicsContent > div.mapContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+div.mapContainer > div.mapContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+div.mapContent > div.zoomContainer {
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+div.zoomContainer > div.zoomableContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transform-origin: top left;
+}
+
+div.zoomableContent > img.mapImg {
+    width: unset;
+    height: 95%;
+    position: absolute;
+    object-fit: contain;
+    opacity: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+    transition: opacity .2s ease-in-out;
+}
+
+div.zoomableContent > img.userPin {
+    z-index: 2;
+    height: 36px;
+    position: absolute;
+    object-fit: contain;
+    opacity: 0;
+    transform-origin: bottom center;
+    transition: opacity .2s ease-in-out;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+div.zoomableContent > img.userPin:hover { cursor: pointer; }
+
+div.zoomableContent > img.clinicPin {
+    height: 36px;
+    position: absolute;
+    object-fit: contain;
+    opacity: 0;
+    transform-origin: bottom center;
+    transition: opacity .2s ease-in-out;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+div.zoomableContent > img.clinicPin:hover { cursor: pointer; }
+
+div.mapContent > div.mapFooterDashboard {
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: max-content;
+    min-width: min-content;
+    padding: 0 65px;
+    position: absolute;
+    bottom: 20px;
+}
+
+div.mapFooterDashboard > div.footerDashboardLeft { display: flex; }
+
+div.footerDashboardLeft > div.searchFieldContainer {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    height: 30px;
+    margin: 0 5px;
+    padding: 0 5px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: rgb(245, 50, 50);
+    border-width: 2px;
+    background-color: rgb(240, 240, 240);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: box-shadow .2s ease-in-out;
+}
+
+div.footerDashboardLeft > div.searchFieldContainer:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: box-shadow .2s ease-in-out;
+}
+
+div.searchFieldContainer > label.searchFieldLabel {
+    width: max-content;
+    height: max-content;
+}
+
+div.searchFieldContainer > label.searchFieldLabel img { display: none; }
+
+div.searchFieldContainer > input.searchField {
+    width: 100%;
+    height: 100%;
+    padding-left: 5px;
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+div.footerDashboardLeft > button.actionBtnLng {
+    width: 60px;
+    height: 30px;
+    min-width: 60px;
+    margin: 0 5px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(245, 50, 50);
+    font-size: 1.05rem;
+    color: rgb(235, 235, 235);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: box-shadow .2s ease-in-out;
+}
+
+div.footerDashboardLeft > button.actionBtnLng img { display: none; }
+
+div.footerDashboardLeft > button.actionBtnLng:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: box-shadow .2s ease-in-out;
+    cursor: pointer;
+}
+
+div.mapFooterDashboard > div.footerDashboardRight { display: flex; }
+
+div.footerDashboardRight > img.actionBtnSqr {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(245, 50, 50);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    transition: box-shadow .2s ease-in-out;
+}
+
+div.footerDashboardRight > img.actionBtnSqr:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: box-shadow .2s ease-in-out;
+    cursor: pointer;
+}
+
+div.clinicsContent > div.filterContainer {
+    z-index: 3;
+    display: none;
+    flex-wrap: wrap;
+    width: 370px;
+    height: max-content;
+    max-height: calc(100% - 80px);
+    position: absolute;
+    bottom: 60px;
+    left: 70px;
+    padding: 7.5px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: rgb(245, 50, 50);
+    border-width: 2px;
+    background-color: rgb(240, 240, 240);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.04);
+    overflow: auto;
+    transition: opacity .2s ease-in-out, box-shadow .2s ease-in-out;
+    animation: fade .2s ease-in-out;
+}
+
+div.clinicsContent > div.filterContainer:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: box-shadow .2s ease-in-out;
+}
+
+div.filterContainer > div.checkboxField {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex: 0 0 50%;
+    height: min-content;
+    padding: 2.5px;
+    color: rgb(10, 10, 10);
+}
+
+div.checkboxField > input.checkboxInput {
+    display: flex;
+    margin-top: 3px;
+}
+
+div.checkboxField > label.checkboxLabel {
+    display: flex;
+    margin-left: 5px;
+    font-size: 0.9rem;
+}
+
+@media screen and (max-width: 682px) {
+    div.mapContent > div.mapFooterDashboard { padding: 0 25px; }
+
+    div.footerDashboardLeft > div.searchFieldContainer { width: 330px; }
+
+    div.footerDashboardLeft > button.actionBtnLng {
+        width: 30px;
+        min-width: 30px;
+    }
+
+    div.footerDashboardLeft > button.actionBtnLng img {
+        display: flex;
+        width: 30px;
+    }
+
+    div.footerDashboardLeft > button.actionBtnLng span { display: none; }
+
+    div.clinicsContent > div.filterContainer { left: 30px; }
+}
+
+@media screen and (max-width: 550px) {
+    div.mapFooterDashboard > div.footerDashboardLeft { width: 100%; }
+
+    div.footerDashboardLeft > div.searchFieldContainer { width: 100%; }
+
+    div.searchFieldContainer > label.searchFieldLabel img {
+        display: flex;
+        width: 30px;
+    }
+
+    div.searchFieldContainer > label.searchFieldLabel span { display: none; }
+
+    div.clinicsContent > div.filterContainer { max-width: calc(100% - 60px); }
+}
+
+@media screen and (max-width: 375px) {
+    div.mapContent > div.mapFooterDashboard { padding: 0 10px; }
+
+    div.clinicsContent > div.filterContainer { 
+        max-width: calc(100% - 30px);
+        min-width: 210px;
+        left: 15px;
+    }
+}

@@ -1,0 +1,106 @@
+div.newsFeed > div.openedNewsBackground {
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 25%;
+    background-color: rgb(10, 10, 10);
+    animation: fade .2s ease-in-out;
+    transition: opacity .2s ease-in-out;
+}
+
+div.newsFeed > div.openedNews {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 100px);
+    height: calc(100% - 100px);
+    max-width: 900px;
+    position: absolute;
+    top: 0;
+    margin: 50px auto;
+    padding: 15px;
+    border-radius: 2.5px;
+    background: rgb(220, 220, 220);
+    background: linear-gradient(135deg, rgb(220, 220, 220) -100%, rgb(250, 250, 250) 100%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    overflow: hidden;
+    animation: fade .2s ease-in-out;
+    transition: opacity .2s ease-in-out;
+}
+
+div.openedNews > div.openedNewsTitle {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    height: max-content;
+    padding: 5px;
+}
+
+div.openedNewsTitle > text.titleText {
+    font-size: 1.5rem;
+    color: rgb(10, 10, 10);
+}
+
+div.openedNewsTitle > img.actionBtn {
+    width: 30px;
+    height: 30px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    transition: all .2s ease-in-out;
+}
+
+div.openedNewsTitle > img.actionBtn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+div.openedNews > div.openedNewsContent {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    overflow: auto;
+}
+
+@media screen and (max-width: 990px) {
+    div.newsFeed > div.openedNews {
+        width: calc(100% - 50px);
+        height: calc(100% - 50px);
+        margin: 25px auto;
+        padding: 15px;
+    }
+}
+
+@media screen and (max-width: 464px) {
+    div.newsFeed > div.openedNews {
+        width: calc(100% - 40px);
+        height: calc(100% - 40px);
+        margin: 20px auto;
+        padding: 10px;
+    }
+
+    div.openedNewsTitle > text.titleText { font-size: 1.25rem; }
+    div.openedNews > div.openedNewsContent { font-size: 0.85rem; }
+}
+
+@media screen and (max-width: 375px) {
+    div.newsFeed > div.openedNews {
+        width: calc(100% - 30px);
+        height: calc(100% - 30px);
+        margin: 15px auto;
+        padding: 5px;
+    }
+
+    div.openedNewsTitle > text.titleText { font-size: 1rem; }
+    div.openedNews > div.openedNewsContent { font-size: 0.75rem; }
+}
