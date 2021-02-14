@@ -3,7 +3,7 @@ import {ANIMATION_DELAY} from "../utils/utils.js";
 
 // functions
 import {appendHtml} from "../utils/utils.js";
-import * as Database from "../database.js";
+import {fetchSupportedTestDocs} from "../database.js";
 
 export class SupportedTests {
 
@@ -32,7 +32,7 @@ export class SupportedTests {
 
         appendHtml(html, this.supportedTestsElem);
 
-        let supportedTestDocs = await Database.fetchSupportedTestDocs();
+        let supportedTestDocs = await fetchSupportedTestDocs();
         let testBoxes = this.supportedTestsElem.querySelector(".testBoxes");
         supportedTestDocs.forEach((doc) => {
             this.testBoxData.set(doc.id, doc.data().title);
