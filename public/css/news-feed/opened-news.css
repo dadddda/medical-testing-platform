@@ -87,7 +87,7 @@ div.openedNews > div.openedNewsContent {
     }
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 464px) {
     div.newsFeed > div.openedNews {
         width: calc(100% - 40px);
         height: calc(100% - 40px);

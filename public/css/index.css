@@ -396,7 +396,7 @@ div.footer > text.footerText {
     div.rightPanelTextBox > text.info { font-size: 1rem; }
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 464px) {
     ::-webkit-scrollbar {
         width: 5px;
         height: 5px;

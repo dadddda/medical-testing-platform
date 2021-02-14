@@ -291,7 +291,7 @@ div.formFooter > text.footerText {
     }
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 464px) {
     div.mainContent > div.contentWindow {
         height: 100%;
     }
