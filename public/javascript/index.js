@@ -18,6 +18,7 @@ import {getClickedParent} from "./utils/utils.js";
 let tempClass = null;
 let unreadMessages = 0;
 let chatDocMap = new Map();
+let leftPanelElem = null;
 
 /**
  * Initializes listeners and main page buttons if user is signed in.
@@ -28,7 +29,8 @@ firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         document.getElementById("headerLeftBtn").addEventListener("click", headerLeftClickHandler);
         document.querySelector(".headerRight").addEventListener("click", headerRightClickHandler);
-        initBtns();
+        leftPanelElem = document.querySelector(".leftPanel");
+        leftPanelElem.addEventListener("click", leftPanelClickHandler);
         document.body.style.display = "flex";
         Database.executeOnChatDocsChanges("user", user.uid, updateNotificationDot);
     } else {
@@ -65,90 +67,90 @@ function headerRightClickHandler(event) {
 }
 
 /**
- * Left navigation panel button listeners.
+ * Left navigation panel button click handler.
  */
-function initBtns() {
-    for (let i = 0; i < btns.length; i++) {
-        btns[i].addEventListener("click", function(event) {
-            let clickedBtn = getClickedParent(event.target, "leftPanelBtn");
+function leftPanelClickHandler(event) {
+    let clickedBtn = getClickedParent(event.target, "leftPanelBtn");
+    if (clickedBtn == undefined) return;
+    leftPanelElem.removeEventListener("click", leftPanelClickHandler);
 
-            let currActive = leftPanelBtns.getElementsByClassName("active");
-            if (currActive.length != 0) {
-                if (currActive[0].id == clickedBtn.id) return;
-                currActive[0].classList.remove("active");
-            }
-            clickedBtn.classList.add("active");
-
-            if (tempClass != null) {
-                tempClass.deinitListeners();
-                tempClass = null;
-            }
-            
-            let rightPanelElem = document.getElementById("rightPanel");
-            rightPanelElem.classList.add("hidden");
-            setTimeout(async function() {
-                rightPanelElem.removeChild(rightPanelElem.firstElementChild);
-                rightPanelElem.classList.remove("hidden");
-                let newElem = document.createElement("div");
-
-                switch (clickedBtn.id) {
-                    case "newsFeedBtn":
-                        newElem.className = "newsFeed";
-                        rightPanelElem.appendChild(newElem);
-
-                        let newsFeedObj = new NewsFeed(newElem);
-                        await newsFeedObj.getNews();
-                        newsFeedObj.initListeners();
-                        
-                        tempClass = newsFeedObj;
-                        break;
-                    case "clinicsBtn":
-                        newElem.className = "clinics";
-                        rightPanelElem.appendChild(newElem);
-
-                        let clinicsObj = new Clinics(newElem);
-                        clinicsObj.drawContent();
-                        clinicsObj.initListeners();
-                        
-                        tempClass = clinicsObj;
-                        break;
-                    case "testResultsBtn":
-                        newElem.className = "testResults";
-                        rightPanelElem.appendChild(newElem);
-                        
-                        break;
-                    case "messagesBtn":
-                        newElem.className = "messages";
-                        rightPanelElem.appendChild(newElem);
-
-                        let messagesObj = new Messages(newElem);
-                        await messagesObj.drawContent();
-                        messagesObj.initListeners();
-                        
-                        tempClass = messagesObj;
-                        break;
-                    case "supportedTestsBtn":
-                        newElem.className = "supportedTests";
-                        rightPanelElem.appendChild(newElem);
-
-                        let supportedTestsObj = new SupportedTests(newElem);
-                        await supportedTestsObj.drawContent();
-                        supportedTestsObj.initListeners();
-
-                        tempClass = supportedTestsObj;
-                        break;
-                    case "aboutUsBtn":
-                        newElem.className = "aboutUs";
-                        rightPanelElem.appendChild(newElem);
-
-                        let aboutUsObj = new AboutUs(newElem);
-                        await aboutUsObj.drawContent();
-
-                        break;
-                }
-            }, ANIMATION_DELAY);
-        });
+    let currActive = leftPanelBtns.getElementsByClassName("active");
+    if (currActive.length != 0) {
+        if (currActive[0].id == clickedBtn.id) return;
+        currActive[0].classList.remove("active");
     }
+    clickedBtn.classList.add("active");
+
+    if (tempClass != null) {
+        tempClass.deinitListeners();
+        tempClass = null;
+    }
+    
+    let rightPanelElem = document.getElementById("rightPanel");
+    rightPanelElem.classList.add("hidden");
+    setTimeout(async function() {
+        rightPanelElem.removeChild(rightPanelElem.firstElementChild);
+        rightPanelElem.classList.remove("hidden");
+        let newElem = document.createElement("div");
+
+        switch (clickedBtn.id) {
+            case "newsFeedBtn":
+                newElem.className = "newsFeed";
+                rightPanelElem.appendChild(newElem);
+
+                let newsFeedObj = new NewsFeed(newElem);
+                await newsFeedObj.getNews();
+                newsFeedObj.initListeners();
+                
+                tempClass = newsFeedObj;
+                break;
+            case "clinicsBtn":
+                newElem.className = "clinics";
+                rightPanelElem.appendChild(newElem);
+
+                let clinicsObj = new Clinics(newElem);
+                clinicsObj.drawContent();
+                clinicsObj.initListeners();
+                
+                tempClass = clinicsObj;
+                break;
+            case "testResultsBtn":
+                newElem.className = "testResults";
+                rightPanelElem.appendChild(newElem);
+                
+                break;
+            case "messagesBtn":
+                newElem.className = "messages";
+                rightPanelElem.appendChild(newElem);
+
+                let messagesObj = new Messages(newElem);
+                await messagesObj.drawContent();
+                messagesObj.initListeners();
+                
+                tempClass = messagesObj;
+                break;
+            case "supportedTestsBtn":
+                newElem.className = "supportedTests";
+                rightPanelElem.appendChild(newElem);
+
+                let supportedTestsObj = new SupportedTests(newElem);
+                await supportedTestsObj.drawContent();
+                supportedTestsObj.initListeners();
+
+                tempClass = supportedTestsObj;
+                break;
+            case "aboutUsBtn":
+                newElem.className = "aboutUs";
+                rightPanelElem.appendChild(newElem);
+
+                let aboutUsObj = new AboutUs(newElem);
+                await aboutUsObj.drawContent();
+
+                break;
+        }
+
+        leftPanelElem.addEventListener("click", leftPanelClickHandler);
+    }, ANIMATION_DELAY);
 }
 
 /**
