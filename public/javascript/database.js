@@ -1,8 +1,9 @@
 // constants
 const CHATS_REF = firebase.firestore().collection("chats");
 const CLINICS_REF = firebase.firestore().collection("clinics");
+const SUPPORTED_TESTS_REF = firebase.firestore().collection("supportedTests");
 
-// ---------------------------------------------------------------------- CHATS
+// ---------------------------------------------------------------------- MESSAGES
 
 /**
  * Returns documents from Firestore chats collection with given
@@ -233,4 +234,19 @@ export async function fetchClinicDoc(clinicId) {
     let clinicDoc = await CLINICS_REF.doc(clinicId).get();
     
     return clinicDoc;
+}
+
+// ---------------------------------------------------------------------- SUPPORTED TESTS
+
+/**
+ * Returns documents from Firestore supported tests collection.
+ * If limit is not specified every document is returned.
+ * @param {Number} limit 
+ */
+export async function fetchSupportedTestDocs(limit = 0) {
+    let supportedTestsRef = SUPPORTED_TESTS_REF;
+    if (limit > 0) supportedTestsRef = await supportedTestsRef.limit(limit);
+    let supportedTests = await supportedTestsRef.get();
+    
+    return supportedTests.docs;
 }

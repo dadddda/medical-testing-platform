@@ -7,9 +7,10 @@ import {ANIMATION_DELAY, fadeAndReplace} from "./utils/utils.js";
 import {NewsFeed} from "./news-feed/news-feed.js";
 import {Clinics} from "./clinics/clinics.js";
 import {Messages} from "./messages/messages.js";
-import * as Database from "./database.js";
+import {SupportedTests} from "./supported-tests/supported-tests.js";
 
 // functions
+import * as Database from "./database.js";
 import {getClickedParent} from "./utils/utils.js";
 
 // variables
@@ -25,7 +26,7 @@ let chatDocMap = new Map();
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         document.getElementById("headerLeftBtn").addEventListener("click", headerLeftClickHandler);
-        document.getElementById("logoutBtn").addEventListener("click", logoutClickHandler);
+        document.querySelector(".headerRight").addEventListener("click", headerRightClickHandler);
         initBtns();
         document.body.style.display = "flex";
         Database.executeOnChatDocsChanges("user", user.uid, updateNotificationDot);
@@ -42,20 +43,29 @@ function headerLeftClickHandler() {
 }
 
 /**
- * Event listener for logout button.
+ * Event listener for header right buttons.
  */
-function logoutClickHandler() {
-    firebase.auth().signOut()
-    .then((user) => {
-        // 'onAuthStateChanged()' handles login action
-    })
-    .catch((error) => {
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        
-        console.log(errorCode);
-        console.log(errorMessage);
-    });
+function headerRightClickHandler(event) {
+    let clickedElem = getClickedParent(event.target, "redirectBtn");
+    
+    if (clickedElem.id == "accountBtn") {
+        // if (accountWindow != null) return;
+        // let accountWindowContainerElem = document.querySelector(".accountWindowContainer");
+        // accountWindow = new Account(accountWindowContainerElem);
+        // accountWindow.drawAccountWindow();
+    } else if (clickedElem.id == "logoutBtn") {
+        firebase.auth().signOut()
+        .then((user) => {
+            // 'onAuthStateChanged()' handles login action
+        })
+        .catch((error) => {
+            let errorCode = error.code;
+            let errorMessage = error.message;
+            
+            console.log(errorCode);
+            console.log(errorMessage);
+        });
+    }
 }
 
 /**
@@ -91,7 +101,7 @@ function initBtns() {
                         rightPanelElem.appendChild(newElem);
 
                         let newsFeedObj = new NewsFeed(newElem);
-                        newsFeedObj.getNews();
+                        await newsFeedObj.getNews();
                         newsFeedObj.initListeners();
                         
                         tempClass = newsFeedObj;
@@ -125,6 +135,10 @@ function initBtns() {
                         newElem.className = "supportedTests";
                         rightPanelElem.appendChild(newElem);
 
+                        let supportedTestsObj = new SupportedTests(newElem);
+                        await supportedTestsObj.drawContent();
+                        supportedTestsObj.initListeners();
+
                         break;
                     case "aboutUsBtn":
                         newElem.className = "aboutUs";
@@ -147,7 +161,6 @@ function updateNotificationDot(chatDoc) {
 
     if (chatDocMap.has(chatDoc.id)) {
         let prevSeenStatus = chatDocMap.get(chatDoc.id);
-        console.log(prevSeenStatus, chatDoc.data().userSeen);
         if (prevSeenStatus == chatDoc.data().userSeen) return;
 
         if (chatDoc.data().userSeen) unreadMessages--;
