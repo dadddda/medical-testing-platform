@@ -34,6 +34,11 @@ export class ClinicWindow {
     drawClinicWindow(clinicInfo) {
         this.currClinicId = clinicInfo.id;
 
+        let mapsUrl = "https://www.google.com/maps/search/?api=1&query=";
+        mapsUrl += clinicInfo.name.replace(/\s/g, "+");
+        mapsUrl += ",+"
+        mapsUrl += clinicInfo.address.replace(/\s/g, "+");
+
         let html = `
             <div class="windowHeader">
                 <text class="windowHeaderText">${clinicInfo.name}</text>
@@ -42,7 +47,11 @@ export class ClinicWindow {
             <div class="windowContent">
                 <dl class="clinicDescription">
                     <dt class="categoryName">Address:</dt>
-                    <dd class="categoryDesc">${clinicInfo.address}</dd>
+                    <dd class="categoryDesc">
+                        <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer">
+                            ${clinicInfo.address}
+                        </a>
+                    </dd>
                     <dt class="categoryName">Phone: </dt>
                     <dd class="categoryDesc">${clinicInfo.phone}</dd>
                     <dt class="categoryName">Working Hours:</dt>
@@ -141,8 +150,6 @@ export class ClinicWindow {
      * @param {Event} event 
      */
     mouseClickHandler(event) {
-        event.preventDefault();
-
         switch (event.target.id) {
             case "clinicWindowCloseBtn":
                 this.closeClinicWindow();
